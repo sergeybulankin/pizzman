@@ -4,15 +4,14 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-body" v-for="product in products" :key="product.id">
-                        <div class="title">{{ product.title }}</div>
+                        <div class="title">{{ product.title }} - {{ product.id }}</div>
 
                         <div class="description">{{ product.description }}</div>
 
                         <div class="price">{{ product.price }}</div>
 
-                        <div v-for="cartId in cart">
-                            <div class="add-to-cart" @click="changeProduct(product.id)" v-if="cartId === product.id">{{ cartId }}</div>
-                        </div>
+                        <div class="add-to-cart" @click="changeProduct(product.id)">Добавить</div>
+
                     </div>
                 </div>
             </div>

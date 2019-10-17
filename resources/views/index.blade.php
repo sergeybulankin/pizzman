@@ -13,6 +13,13 @@
     </head>
     <body>
         <div class="content">
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="/cart">Корзина</a></li>
+            </ul>
+
+
+
             <div id="app">
                 <div style="margin-bottom: 50px;">
                     <cart></cart>

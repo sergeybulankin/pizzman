@@ -2,8 +2,8 @@
     <div>
         <h1>Корзина</h1>
         <div>{{ cart }}</div>
-        <div v-for="product in productsInCart" class="cart" :key="product.id">
-            <span class="delete-product-in-cart" @click="deleteProductFromCart(product.id)">X</span>
+        <div v-for="(product, index) in productsInCart" class="cart" :key="product.id">
+            <span class="delete-product-in-cart" @click="deleteProductFromCart(index)">X</span>
             <span>{{ product.product_title }}</span>
         </div>
         <div class="total">Всего товаров: {{ total }}</div>
@@ -33,7 +33,7 @@
                     .catch( error => { console.log(error) })
             },
             deleteProductFromCart(id) {
-                this.cart.clearAll();
+                this.cart.splice(id, 1);
             }
         }
     }

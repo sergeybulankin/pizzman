@@ -12,3 +12,4 @@
 */
 
 Route::get('/', 'ProductController@show');
+Route::get('/cart', 'CartController@show');
