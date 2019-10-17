@@ -1,9 +1,12 @@
 <template>
     <div>
         <h1>Корзина</h1>
-        <div>
-            <span v-for="product in cart">{{ product }}</span>
+        <div>{{ cart }}</div>
+        <div v-for="product in productsInCart" class="cart" :key="product.id">
+            <span class="delete-product-in-cart" @click="deleteProductFromCart(product.id)">X</span>
+            <span>{{ product.product_title }}</span>
         </div>
+        <div class="total">Всего товаров: {{ total }}</div>
     </div>
 </template>
 
@@ -11,21 +14,42 @@
     export default{
         data() {
             return {
-                cart: []
+                productsInCart: []
             }
         },
         mounted() {
-            if(localStorage.cart) {
-                this.cart = localStorage.cart;
-            }
+            this.selectedProductsInCart();
         },
         computed: {
-
+            total() {
+                this.selectedProductsInCart();
+                return this.cart.length;
+            }
         },
-        watch: {
-            cart() {
-                console.log('WATCH')
+        methods: {
+            selectedProductsInCart() {
+                axios.post('/api/selected-products-in-cart', {cart: this.cart})
+                    .then( res => { this.productsInCart = res.data })
+                    .catch( error => { console.log(error) })
+            },
+            deleteProductFromCart(id) {
+                this.cart.clearAll();
             }
         }
     }
 </script>
+
+
+<style>
+    .cart {
+        width: 350px;
+        padding: 15px;
+        background-color: #a6e1ec;
+    }
+    .delete-product-in-cart {
+        font-size: 15px;
+        font-weight: 600;
+        font-family: "Arial", sans-serif;
+        cursor: pointer;
+    }
+</style>

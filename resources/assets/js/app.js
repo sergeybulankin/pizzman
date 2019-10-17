@@ -9,6 +9,14 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import persistentState from 'vue-persistent-state';
+
+let cartState = {
+    cart: []
+};
+
+window.Vue.use(persistentState, cartState);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

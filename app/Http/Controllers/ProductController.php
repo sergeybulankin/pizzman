@@ -27,4 +27,20 @@ class ProductController extends Controller
     {
         return view('welcome');
     }
+
+
+    /**
+     * @param Request $request
+     * @return static
+     */
+    public function informationProductInCart(Request $request)
+    {
+        $products = [];
+
+        foreach ($request->cart as $key => $value) {
+            $products[] = Product::where('id', $value)->get();
+        }
+
+        return collect($products)->collapse();
+    }
 }

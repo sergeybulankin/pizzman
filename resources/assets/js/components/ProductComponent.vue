@@ -10,7 +10,9 @@
 
                         <div class="price">{{ product.price }}</div>
 
-                        <div class="add-to-cart" @click="changeProduct(product.id)">Добавить</div>
+                        <div v-for="cartId in cart">
+                            <div class="add-to-cart" @click="changeProduct(product.id)" v-if="cartId === product.id">{{ cartId }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -22,28 +24,29 @@
     export default {
         data() {
             return {
-                products: [],
-                cartId: ''
+                products: []
             }
         },
         created() {
             this.selectedAllProducts();
         },
-        mounted() {
-            if(localStorage.cart) {
-                this.cartId = localStorage.cart;
-            }
-        },
         methods: {
             selectedAllProducts() {
                 axios.get('/api/selected-all-products')
                     .then(res => { this.products = res.data.data })
-                    .catch(res => { console.log('ERROR') })
+                    .catch( error => { console.log(error) })
             },
 
             changeProduct(id) {
-                this.cartId = this.cartId + ',' +id;
-                localStorage.cart = this.cartId;
+                this.cart.push(id);
+            },
+
+            exist(id) {
+                $.each(this.cart, function(key, value) {
+                    if(value == id) {
+                        console.log(id)
+                    }
+                })
             }
         }
     }
