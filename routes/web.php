@@ -13,3 +13,4 @@
 
 Route::get('/', 'ProductController@show');
 Route::get('/cart', 'CartController@show');
+Route::get('/delivery', 'DeliveryController@show');

@@ -25,6 +25,7 @@ window.Vue.use(persistentState, cartState);
 
 Vue.component('products', require('./components/ProductComponent.vue'));
 Vue.component('cart', require('./components/CartComponent.vue'));
+Vue.component('cart-detail', require('./components/CartDetailComponent.vue'));
 
 const app = new Vue({
     el: '#app'

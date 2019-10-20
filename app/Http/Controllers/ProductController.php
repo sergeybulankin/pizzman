@@ -14,8 +14,11 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        
-        //return view('welcome', compact('products'));
+
+        $products->map(function ($field) {
+            $field['deleted_product_id_from_cart'] = 0;
+        });
+
         return ProductResource::collection($products);
     }
 
@@ -31,7 +34,7 @@ class ProductController extends Controller
 
     /**
      * @param Request $request
-     * @return static
+     * @return array|static
      */
     public function informationProductInCart(Request $request)
     {
@@ -41,6 +44,12 @@ class ProductController extends Controller
             $products[] = Product::where('id', $value)->get();
         }
 
-        return collect($products)->collapse();
+        $products = collect($products)->collapse();
+
+        $products->map(function ($field) {
+            $field['count'] = 1;
+        });
+
+        return $products;
     }
 }

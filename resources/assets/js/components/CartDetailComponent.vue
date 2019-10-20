@@ -1,10 +1,15 @@
 <template>
     <div>
         <h1>Корзина</h1>
-        <div>{{ cart }}</div>
         <div v-for="(product, index) in productsInCart" class="cart" :key="product.id">
-            <span class="delete-product-in-cart" @click="deleteProductFromCart(index, product.id)">X - {{ index }}</span>
+            <span class="delete-product-in-cart" @click="deleteProductFromCart(index)">X</span>
             <span>{{ product.product_title }}</span>
+
+            <span class="minus-count" @click="product.count--">-</span>
+            <span class="final-count">{{ product.count }}</span>
+            <span class="plus-count" @click="product.count++">+</span>
+
+            <span class="totalPriceProduct">{{ product.count * product.price }}</span>
         </div>
         <div class="total">Всего товаров: {{ totalProducts }} стоимостью <strong>{{ totalPrice }}</strong> рублей</div>
     </div>
@@ -30,7 +35,7 @@
                 let total = [];
 
                 this.productsInCart.forEach((key, value) => {
-                    total.push(key.price);
+                    total.push(key.price * key.count);
                 });
 
                 return total.reduce((total, num) => { return total + num }, 0);
@@ -43,11 +48,8 @@
                     .catch( error => { console.log(error) })
             },
 
-            deleteProductFromCart(index, id) {
-                this.cart.splice(index, 1);
-
-                $(".delete-product-id-" + id).css("display", "none");
-                $(".add-product-id-" + id).css("display", "block");
+            deleteProductFromCart(id) {
+                this.cart.splice(id, 1);
             }
         }
     }
@@ -65,5 +67,22 @@
         font-weight: 600;
         font-family: "Arial", sans-serif;
         cursor: pointer;
+    }
+    .minus-count {
+        padding-left: 50px;
+        font-size: 25px;
+        cursor: pointer;
+    }
+    .plus-count {
+        font-size: 25px;
+        cursor: pointer;
+    }
+    .final-count {
+        padding: 0 15px;
+        text-align: center;
+    }
+    .totalPriceProduct {
+        padding-left: 50px;
+        font-weight: 600;
     }
 </style>

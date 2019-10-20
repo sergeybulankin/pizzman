@@ -20,6 +20,7 @@ class ProductResource extends Resource
             'title' => $this->product_title,
             'description' => $this->product_description,
             'price' => $this->price,
+            'deleted_id' => $this->deleted_product_id_from_cart
         ];
     }
 }

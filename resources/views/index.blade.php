@@ -16,6 +16,7 @@
             <ul>
                 <li><a href="/">Главная</a></li>
                 <li><a href="/cart">Корзина</a></li>
+                <li><a href="/delivery">Доставка</a></li>
             </ul>
 
 
