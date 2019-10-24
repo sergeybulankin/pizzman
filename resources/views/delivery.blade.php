@@ -15,6 +15,7 @@
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=38ec5068-da01-4278-9dab-69c6ccfa0954" type="text/javascript"></script>
     <script src="js/search.js" type="text/javascript"></script>
     <script src="js/custom_view.js" type="text/javascript"></script>
+    <!------------------------------->
 
     <style>
         html, body {
@@ -25,7 +26,6 @@
             margin: 0;
             font-size: 13px;
             font-family: sans-serif;
-        //overflow: hidden;
         }
 
         #messageHeader {
@@ -43,47 +43,16 @@
         }
 
         #map {
-            height: 460px;
-            width: 676px;
+            height: 160px;
+            width: 376px;
             margin: 0px 12px 18px 12px;
             position: relative;
         }
 
-        #header {
-            height: 28px;
-            width: 376px;
-            margin: 12px 10px 12px 12px;
+        .content {
+            margin: 20px;
         }
 
-        #button {
-            display: inline-block;
-            font-size: 11px;
-            color: rgb(68,68,68);
-            text-decoration: none;
-            user-select: none;
-            padding: .2em 0.6em;
-            outline: none;
-            border: 1px solid rgba(0,0,0,.1);
-            border-radius: 2px;
-            background: rgb(245,245,245) linear-gradient(#f4f4f4, #f1f1f1);
-            transition: all .218s ease 0s;
-            height: 28px;
-            width: 74px;
-        }
-
-        #button:hover {
-            color: rgb(24,24,24);
-            border: 1px solid rgb(198,198,198);
-            background: #f7f7f7 linear-gradient(#f7f7f7, #f1f1f1);
-            box-shadow: 0 1px 2px rgba(0,0,0,.1);
-        }
-
-        #button:active {
-            color: rgb(51,51,51);
-            border: 1px solid rgb(204,204,204);
-            background: rgb(238,238,238) linear-gradient(rgb(238,238,238), rgb(224,224,224));
-            box-shadow: 0 1px 2px rgba(0,0,0,.1) inset;
-        }
 
         .input {
             height: 18px;
@@ -138,24 +107,65 @@
         #switcher li {
             line-height: 1.5
         }
+
+        .code {
+            display: none;
+        }
+
+        .btn {
+            width: 250px;
+            margin: 20px 0;
+            padding: 15px;
+            background: black;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <div class="content">
-    <input id="address" name="address" type="text" placeholder="Введите адрес" />
-    <div id="header">
-        <input type="text" id="suggest" name="hidden_address" class="input" placeholder="Введите адрес">
-        <button type="submit" id="button">Проверить</button>
-    </div>
-    <p id="notice">Адрес не найден</p>
-    <div id="map"></div>
-    <div id="footer">
-        <div id="messageHeader"></div>
-        <div id="message"></div>
-    </div>
-    <div id="viewContainer"></div>
-    <div id="time"></div>
+    <ul>
+        <li><a href="/">Главная</a></li>
+        <li><a href="/cart">Корзина</a></li>
+        <li><a href="/delivery">Доставка</a></li>
+    </ul>
+
+
+    <form action="/treatment" method="POST">
+        <div class="form">
+            <div style="margin-bottom: 50px;">
+                <input id="name" name="name" type="text" placeholder="Имя" /> <br />
+                <input type="text" name="phone" placeholder="Телефон" />
+            </div>
+
+            <div style="margin-top: 50px">
+                <input id="address" name="address" type="text" placeholder="Введите адрес" />
+                <input id="kv" name="kv" type="text" placeholder="Номер квартиры" /> <br />
+                <input type="hidden" id="suggest" name="hidden_address" class="input" placeholder="Введите адрес">
+            </div>
+
+
+            <p id="notice">Адрес не найден</p>
+            <div id="map"></div>
+            <div id="footer">
+                <div id="messageHeader"></div>
+                <div id="message"></div>
+            </div>
+            <div id="viewContainer"></div>
+            <div id="time"></div>
+
+            <div class="btn">Отправить</div>
+        </div>
+
+        <div class="code">
+            <input type="text" id="code" name="code" placeholder="СМС-КОД">
+            <input type="SUBMIT" value="Подтвердить">
+        </div>
+    </form>
+
+
 </div>
 
 
@@ -163,6 +173,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@19.8.0/dist/css/suggestions.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@19.8.0/dist/js/jquery.suggestions.min.js"></script>
+<!--------------------------->
+
+
+<script>
+    $("input[name='phone']").keyup(function() {
+        $(this).val($(this).val().replace(/^(\d{3})(\d{3})(\d)+$/, "($1)$2-$3"));
+    });
+</script>
+
+<script>
+    $('.btn').on('click', () => {
+        $('.form').css('display', 'none');
+        $('.code').css('display', 'block');
+    })
+</script>
 
 <script>
     // API-ключ

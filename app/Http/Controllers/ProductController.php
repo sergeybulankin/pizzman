@@ -15,10 +15,6 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
-        $products->map(function ($field) {
-            $field['deleted_product_id_from_cart'] = 0;
-        });
-
         return ProductResource::collection($products);
     }
 

@@ -14,13 +14,10 @@
                             <div class="add-to-cart" @click="changeProduct(product.id)">Добавить</div>
                         </div>
 
-                        <div v-if="product.deleted_id == 1">
-                            Товар уже в корзине
-                        </div>
-
                         <div :class="'delete-product-id-' + product.id">
                             <div class="delete-from-cart">Продукт в корзине</div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -40,7 +37,7 @@
         },
         mounted() {
             setTimeout (() => {
-                this.addCheck();
+                this.checkProductInCart();
             }, 1000 )
         },
         methods: {
@@ -57,10 +54,11 @@
                 $(".delete-product-id-" + id).css("display", "block");
             },
 
-            addCheck() {
+            checkProductInCart() {
                 this.cart.forEach((key, value) => {
-                    this.products[key - 1].deleted_id = 1;
-                })
+                    $(".add-product-id-" + key).css("display", "none");
+                    $(".delete-product-id-" + key).css("display", "block");
+                });
             }
         }
     }

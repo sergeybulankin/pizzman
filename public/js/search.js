@@ -6,8 +6,8 @@ function init() {
         map,
         placemark;
 
-    // При клике по кнопке запускаем верификацию введёных данных.
-    $('#button').bind('click', function (e) {
+
+    $("#address").on("input",function(e){
         $('#viewContainer').empty();
         geocode();
     });
@@ -15,7 +15,7 @@ function init() {
 
     function geocode() {
         // Забираем запрос из поля ввода.
-        var city = "Стерлитамак";
+        var city = "Стерлитамак, ";
         var request = city + $('#suggest').val();
 
         // Геокодируем введённые данные.
@@ -62,7 +62,7 @@ function init() {
 
     function showResult(obj) {
         // Удаляем сообщение об ошибке, если найденный адрес совпадает с поисковым запросом.
-        $('#suggest').removeClass('input_error');
+        $('#address').removeClass('input_error');
         $('#notice').css('display', 'none');
 
         var mapContainer = $('#map'),
@@ -87,7 +87,7 @@ function init() {
 
     function showError(message) {
         $('#notice').text(message);
-        $('#suggest').addClass('input_error');
+        $('#address').addClass('input_error');
         $('#notice').css('display', 'block');
         // Удаляем карту.
         if (map) {
@@ -98,13 +98,18 @@ function init() {
 
 
     function createMap(state, caption) {
-        var city = "Стерлитамак";
-        var pointA = "Стерлитамак, Ленина, 29а";
+        var city = "Стерлитамак, ";
+
+        var points = [
+            "Стерлитамак, Ленина, 29а", "Стерлитамак, Артема, 29а"
+        ];
+
+        var point = points[Math.floor(Math.random()*points.length)];
 
         // Создаем модель мультимаршрута.
         var multiRouteModel = new ymaps.multiRouter.MultiRouteModel([
                 city + caption,
-                pointA
+                point
             ]),
 
 
@@ -143,7 +148,7 @@ function init() {
             multiRoute = new ymaps.multiRouter.MultiRoute({
                 // Описание опорных точек мультимаршрута.
                 referencePoints: [
-                    pointA,
+                    point,
                     city + caption
                 ],
                 // Параметры маршрутизации.
@@ -191,7 +196,7 @@ function init() {
             custumRoute = new ymaps.multiRouter.MultiRoute({
                 // Описание опорных точек мультимаршрута.
                 referencePoints: [
-                    pointA,
+                    point,
                     city + caption
                 ],
                 // Параметры маршрутизации.

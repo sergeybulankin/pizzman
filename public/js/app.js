@@ -46432,7 +46432,7 @@ var content = __webpack_require__(58);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("7ee07b3e", content, false, {});
+var update = __webpack_require__(5)("5a09079e", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -46527,9 +46527,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -46544,7 +46541,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _this = this;
 
         setTimeout(function () {
-            _this.addCheck();
+            _this.checkProductInCart();
         }, 1000);
     },
 
@@ -46564,11 +46561,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $(".add-product-id-" + id).css("display", "none");
             $(".delete-product-id-" + id).css("display", "block");
         },
-        addCheck: function addCheck() {
-            var _this3 = this;
-
+        checkProductInCart: function checkProductInCart() {
             this.cart.forEach(function (key, value) {
-                _this3.products[key - 1].deleted_id = 1;
+                $(".add-product-id-" + key).css("display", "none");
+                $(".delete-product-id-" + key).css("display", "block");
             });
         }
     }
@@ -46616,14 +46612,6 @@ var render = function() {
                   [_vm._v("Добавить")]
                 )
               ]),
-              _vm._v(" "),
-              product.deleted_id == 1
-                ? _c("div", [
-                    _vm._v(
-                      "\n                        111\n                    "
-                    )
-                  ])
-                : _vm._e(),
               _vm._v(" "),
               _c("div", { class: "delete-product-id-" + product.id }, [
                 _c("div", { staticClass: "delete-from-cart" }, [
@@ -46710,7 +46698,7 @@ var content = __webpack_require__(64);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("2e56f2b0", content, false, {});
+var update = __webpack_require__(5)("0d235370", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -46919,7 +46907,7 @@ var content = __webpack_require__(69);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("3ee9cb84", content, false, {});
+var update = __webpack_require__(5)("1add39b8", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -46943,7 +46931,7 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, "\n.cart {\n    width: 350px;\n    padding: 15px;\n    background-color: #a6e1ec;\n}\n.delete-product-in-cart {\n    font-size: 15px;\n    font-weight: 600;\n    font-family: \"Arial\", sans-serif;\n    cursor: pointer;\n}\n.minus-count {\n    padding-left: 50px;\n    font-size: 25px;\n    cursor: pointer;\n}\n.plus-count {\n    font-size: 25px;\n    cursor: pointer;\n}\n.final-count {\n    padding: 0 15px;\n    text-align: center;\n}\n.totalPriceProduct {\n    padding-left: 50px;\n    font-weight: 600;\n}\n", ""]);
+exports.push([module.i, "\n.cart {\n    width: 350px;\n    padding: 15px;\n    background-color: #a6e1ec;\n}\n.delete-product-in-cart {\n    font-size: 15px;\n    font-weight: 600;\n    font-family: \"Arial\", sans-serif;\n    cursor: pointer;\n}\n.minus-count {\n    padding-left: 50px;\n    font-size: 25px;\n    cursor: pointer;\n}\n.plus-count {\n    font-size: 25px;\n    cursor: pointer;\n}\n.final-count {\n    padding: 0 15px;\n    text-align: center;\n}\n.totalPriceProduct {\n    padding-left: 50px;\n    font-weight: 600;\n}\n.btn button{\n    width: 250px;\n    background-color: black;\n    color: white;\n    margin: 15px 0;\n    padding: 15px;\n    text-align: center;\n    cursor: pointer;\n}\n", ""]);
 
 // exports
 
@@ -46971,11 +46959,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            productsInCart: []
+            productsInCart: [],
+
+            cartDetail: {
+                id: null,
+                u_id: Date.now(),
+                count: null
+            }
         };
     },
     mounted: function mounted() {
@@ -47011,6 +47016,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleteProductFromCart: function deleteProductFromCart(id) {
             this.cart.splice(id, 1);
+        },
+        sendCartInDelivery: function sendCartInDelivery() {
+            axios.post('/api/create-order', { order: this.cartDetail }).then(console.log('Заказ оформлен')).catch(function (error) {
+                console.log(error);
+            });
         }
     }
 });
@@ -47023,74 +47033,152 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("h1", [_vm._v("Корзина")]),
-      _vm._v(" "),
-      _vm._l(_vm.productsInCart, function(product, index) {
-        return _c("div", { key: product.id, staticClass: "cart" }, [
-          _c(
-            "span",
-            {
-              staticClass: "delete-product-in-cart",
+  return _c("div", [
+    _c("h1", [_vm._v("Корзина")]),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        attrs: { id: "form" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.sendCartInDelivery()
+          }
+        }
+      },
+      [
+        _vm._l(_vm.productsInCart, function(product, index) {
+          return _c("div", { key: product.id, staticClass: "cart" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: (_vm.cartDetail.id = product.id),
+                  expression: "cartDetail.id = product.id"
+                }
+              ],
+              attrs: { type: "hidden" },
+              domProps: { value: (_vm.cartDetail.id = product.id) },
               on: {
-                click: function($event) {
-                  return _vm.deleteProductFromCart(index)
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(
+                    (_vm.cartDetail.id = product),
+                    "id",
+                    $event.target.value
+                  )
                 }
               }
-            },
-            [_vm._v("X")]
-          ),
-          _vm._v(" "),
-          _c("span", [_vm._v(_vm._s(product.product_title))]),
-          _vm._v(" "),
-          _c(
-            "span",
-            {
-              staticClass: "minus-count",
+            }),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: (_vm.cartDetail.count = product.count),
+                  expression: "cartDetail.count = product.count"
+                }
+              ],
+              attrs: { type: "hidden" },
+              domProps: { value: (_vm.cartDetail.count = product.count) },
               on: {
-                click: function($event) {
-                  product.count--
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(
+                    (_vm.cartDetail.count = product),
+                    "count",
+                    $event.target.value
+                  )
                 }
               }
-            },
-            [_vm._v("-")]
-          ),
-          _vm._v(" "),
-          _c("span", { staticClass: "final-count" }, [
-            _vm._v(_vm._s(product.count))
-          ]),
-          _vm._v(" "),
-          _c(
-            "span",
-            {
-              staticClass: "plus-count",
-              on: {
-                click: function($event) {
-                  product.count++
+            }),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                staticClass: "delete-product-in-cart",
+                on: {
+                  click: function($event) {
+                    return _vm.deleteProductFromCart(index)
+                  }
                 }
-              }
-            },
-            [_vm._v("+")]
-          ),
-          _vm._v(" "),
-          _c("span", { staticClass: "totalPriceProduct" }, [
-            _vm._v(_vm._s(product.count * product.price))
+              },
+              [_vm._v("X")]
+            ),
+            _vm._v(" "),
+            _c("span", [_vm._v(_vm._s(product.product_title))]),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                staticClass: "minus-count",
+                on: {
+                  click: function($event) {
+                    product.count--
+                  }
+                }
+              },
+              [_vm._v("-")]
+            ),
+            _vm._v(" "),
+            product.count >= 1
+              ? _c("span", { staticClass: "final-count" }, [
+                  _vm._v(_vm._s(product.count))
+                ])
+              : _c("span", { staticClass: "final-count" }, [
+                  _vm._v(_vm._s((product.count = 1)))
+                ]),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                staticClass: "plus-count",
+                on: {
+                  click: function($event) {
+                    product.count++
+                  }
+                }
+              },
+              [_vm._v("+")]
+            ),
+            _vm._v(" "),
+            _c("span", { staticClass: "totalPriceProduct" }, [
+              _vm._v(_vm._s(product.count * product.price))
+            ])
           ])
-        ])
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "total" }, [
-        _vm._v("Всего товаров: " + _vm._s(_vm.totalProducts) + " стоимостью "),
-        _c("strong", [_vm._v(_vm._s(_vm.totalPrice))]),
-        _vm._v(" рублей")
-      ])
-    ],
-    2
-  )
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "total" }, [
+          _vm._v(
+            "Всего товаров: " + _vm._s(_vm.totalProducts) + " стоимостью "
+          ),
+          _c("strong", [_vm._v(_vm._s(_vm.totalPrice))]),
+          _vm._v(" рублей")
+        ]),
+        _vm._v(" "),
+        _vm._m(0)
+      ],
+      2
+    )
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "btn" }, [
+      _c("button", { attrs: { type: "submit" } }, [_vm._v("Оформить")])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
