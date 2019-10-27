@@ -2,46 +2,31 @@
     <div>
         <h1>Корзина</h1>
         <div>{{ cart }}</div>
-        <div v-for="(product, index) in productsInCart" class="cart" :key="product.id">
+        <div v-for="(product, index) in ALL_PRODUCTS_IN_CART" class="cart" :key="product.id">
             <span class="delete-product-in-cart" @click="deleteProductFromCart(index, product.id)">X - {{ index }}</span>
             <span>{{ product.product_title }}</span>
         </div>
-        <div class="total">Всего товаров: {{ totalProducts }} стоимостью <strong>{{ totalPrice }}</strong> рублей</div>
+        <div class="total">Всего товаров: {{ totalProducts }} стоимостью <strong>{{ TOTAL_PRICE }}</strong> рублей</div>
     </div>
 </template>
 
 <script>
+    import { mapGetters, mapActions } from 'vuex';
+
     export default{
-        data() {
-            return {
-                productsInCart: []
-            }
-        },
         mounted() {
-            this.selectedProductsInCart();
+            this.SELECTED_PRODUCTS_IN_CART(this.cart);
         },
         computed: {
+            ...mapGetters(['ALL_PRODUCTS_IN_CART', 'TOTAL_PRICE']),
+
             totalProducts() {
-                this.selectedProductsInCart();
+                this.SELECTED_PRODUCTS_IN_CART(this.cart);
                 return this.cart.length;
-            },
-
-            totalPrice() {
-                let total = [];
-
-                this.productsInCart.forEach((key, value) => {
-                    total.push(key.price);
-                });
-
-                return total.reduce((total, num) => { return total + num }, 0);
             }
         },
         methods: {
-            selectedProductsInCart() {
-                axios.post('/api/selected-products-in-cart', {cart: this.cart})
-                    .then( res => { this.productsInCart = res.data })
-                    .catch( error => { console.log(error) })
-            },
+            ...mapActions(['SELECTED_PRODUCTS_IN_CART']),
 
             deleteProductFromCart(index, id) {
                 this.cart.splice(index, 1);

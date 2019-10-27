@@ -4,9 +4,6 @@
         <form @submit.prevent="sendCartInDelivery()" id="form">
             <div v-for="(product, index) in productsInCart" class="cart" :key="product.id">
 
-                <input type="hidden" v-model="cartDetail.id = product.id">
-                <input type="hidden" v-model="cartDetail.count = product.count">
-
                 <span class="delete-product-in-cart" @click="deleteProductFromCart(index)">X</span>
                 <span>{{ product.product_title }}</span>
 
@@ -32,11 +29,7 @@
             return {
                 productsInCart: [],
 
-                cartDetail: {
-                    id: null,
-                    u_id: Date.now(),
-                    count: null
-                }
+                u_id: Date.now()
             }
         },
         mounted() {
@@ -70,8 +63,10 @@
             },
 
             sendCartInDelivery() {
-                axios.post('/api/create-order', {order: this.cartDetail})
-                    .then( console.log('Заказ оформлен') )
+                axios.post('/api/post-cart-in-delivery', {order: this.productsInCart, u_id: this.u_id})
+                    .then( console.log('Заказ оформлен'),
+                            setTimeout( () => window.location.href = '/delivery/' + this.u_id, 1000)
+                        )
                     .catch( error => { console.log(error) })
             }
         }

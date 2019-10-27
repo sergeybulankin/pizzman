@@ -17,6 +17,9 @@ let cartState = {
 
 window.Vue.use(persistentState, cartState);
 
+import store from './store/index';
+
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -28,5 +31,6 @@ Vue.component('cart', require('./components/CartComponent.vue'));
 Vue.component('cart-detail', require('./components/CartDetailComponent.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    store
 });

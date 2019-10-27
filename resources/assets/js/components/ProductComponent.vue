@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-body" v-for="(product, index) in products" :key="product.id">
+                    <div class="panel-body" v-for="(product, index) in ALL_PRODUCTS" :key="product.id">
                         <div class="title">{{ product.title }} - {{ product.id }}</div>
 
                         <div class="description">{{ product.description }}</div>
@@ -26,39 +26,24 @@
 </template>
 
 <script>
+    import { mapGetters, mapActions } from 'vuex';
+
     export default {
-        data() {
-            return {
-                products: []
-            }
-        },
         created() {
-            this.selectedAllProducts();
+            this.SELECTED_ALL_PRODUCTS();
         },
         mounted() {
-            setTimeout (() => {
-                this.checkProductInCart();
-            }, 1000 )
+            setTimeout (() => { this.CHECK_PRODUCT_IN_CART(this.cart) }, 1000)
         },
+        computed: mapGetters(['ALL_PRODUCTS']),
         methods: {
-            selectedAllProducts() {
-                axios.get('/api/selected-all-products')
-                    .then(res => { this.products = res.data.data })
-                    .catch( error => { console.log(error) });
-            },
+            ...mapActions(['SELECTED_ALL_PRODUCTS', 'CHECK_PRODUCT_IN_CART', 'CHANGE_PRODUCTS']),
 
             changeProduct(id) {
                 this.cart.push(id);
 
                 $(".add-product-id-" + id).css("display", "none");
                 $(".delete-product-id-" + id).css("display", "block");
-            },
-
-            checkProductInCart() {
-                this.cart.forEach((key, value) => {
-                    $(".add-product-id-" + key).css("display", "none");
-                    $(".delete-product-id-" + key).css("display", "block");
-                });
             }
         }
     }
