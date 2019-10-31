@@ -11,10 +11,20 @@ export default {
                 $(".add-product-id-" + key).css("display", "none");
                 $(".delete-product-id-" + key).css("display", "block");
             });
+        },
+
+        SELECTION_BY_CATEGORY(ctx, id) {
+            axios.post('/api/selection-by-category', {id: id})
+                .then( res => {ctx.commit('SELECTED_PRODUCTS_BY_CATEGORY', res.data.data)})
+                .catch (error => (console.log(error)));
         }
     },
     mutations: {
         FOOD_PlACEMENT_IN_STORAGE(state, products) {
+            state.products = products
+        },
+
+        SELECTED_PRODUCTS_BY_CATEGORY(state, products) {
             state.products = products
         }
     },

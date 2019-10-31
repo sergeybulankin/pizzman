@@ -13,20 +13,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::all()->where('category_id', 1);
 
         return ProductResource::collection($products);
     }
-
-
-    /**
-     * @return mixed
-     */
-    public function show()
-    {
-        return view('index');
-    }
-
 
     /**
      * @param Request $request
@@ -47,5 +37,17 @@ class ProductController extends Controller
         });
 
         return $products;
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function selectByCategory(Request $request)
+    {
+        $products = Product::with('category')->where('category_id', $request->id)->get();
+
+        return ProductResource::collection($products);
     }
 }

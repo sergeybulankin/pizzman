@@ -1,115 +1,106 @@
 <template>
     <div>
-        <h1>Корзина</h1>
-        <form @submit.prevent="sendCartInDelivery()" id="form">
-            <div v-for="(product, index) in productsInCart" class="cart" :key="product.id">
+        <form @submit.prevent="sendCart()" id="form" class="row">
+            <div class="col-lg-8 col-sm-12 col-xs-12">
+                <div class="d-flex pt-5">
+                    <table class="table shopping_basket">
+                        <thead>
+                        <tr>
+                            <td>Продукт</td>
+                            <td>Цена</td>
+                            <td>Количество</td>
+                            <td>Итого</td>
+                        </tr>
+                        </thead>
 
-                <span class="delete-product-in-cart" @click="deleteProductFromCart(index)">X</span>
-                <span>{{ product.product_title }}</span>
+                        <tbody>
+                            <tr  v-for="(product, index) in ALL_PRODUCTS_IN_CART" class="cart" :key="product.id">
+                                <td class="d-flex align-middle">
+                                    <div class="delete_icon">
+                                        <img src="images/delete_icon.svg" @click="deleteProductFromCart(index)">
+                                    </div>
+                                    <div class="photo-small">
+                                        <img src="images/demo.jpg" class="img-fluid">
+                                    </div>
+                                    <div class="description pl-3">
+                                        <a><b>{{ product.product_title }}</b></a><p><small>{{ product.product_description }}</small></p>
+                                    </div>
+                                </td>
+                                <td class="font-weight-bold align-middle">{{ product.price }}<i class="fa fa-rub"></i></td>
+                                <td class="align-middle">
+                                    <input type="number" value="1" min="1" max="30" step="1" style="display: none;"><div class="input-group  ">
+                                    <div class="input-group-prepend">
+                                        <button style="min-width: 2.5rem" class="btn btn-decrement btn-outline-secondary" type="button" @click="MINUS(index)"><strong>-</strong></button>
+                                    </div>
 
-                <span class="minus-count"  @click="product.count--">-</span>
-                <span class="final-count" v-if="product.count >= 1">{{ product.count }}</span>
-                <span class="final-count" v-else>{{ product.count = 1 }}</span>
-                <span class="plus-count" @click="product.count++">+</span>
+                                    <span class="final-count" v-if="product.count >= 1">{{ product.count }}</span>
+                                    <span class="final-count" v-else>{{ POSITIVE_NUMBERS(index) }}</span>
 
-                <span class="totalPriceProduct">{{ product.count * product.price }}</span>
+                                    <div class="input-group-append">
+                                    <button style="min-width: 2.5rem" class="btn btn-increment btn-outline-secondary" type="button" @click="PLUS(index)"><strong>+</strong></button>
+                                </div>
+                                </div></td>
+                                <td class="font-weight-bold align-middle">{{ product.count * product.price }} <i class="fa fa-rub"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
-            <div class="total">Всего товаров: {{ totalProducts }} стоимостью <strong>{{ totalPrice }}</strong> рублей</div>
 
-            <div class="btn">
-                <button type="submit">Оформить</button>
+            <div class="col-lg-4 col-sm-12 col-xs-12 pt-5">
+                <div id="cart_form" class="p-3">
+
+                    <div class="d-flex justify-content-between pt-3 pb-3">
+                        <h4 class="text-uppercase">Ваша корзина</h4><h4><small>Товаров - {{ totalProducts }} - 2.600 кг</small></h4>
+                    </div>
+
+                    <div class="d-flex justify-content-between pt-3 pb-3">
+                        <p>Товары({{ totalProducts }})</p> <p>{{ totalPrice }} <i class="fa fa-rub"></i></p>
+                    </div>
+                    <div class="d-flex justify-content-between subtutorial">
+                        <p><b>Итого:</b></p><p>{{ totalPrice }} <i class="fa fa-rub"></i></p>
+                    </div>
+                </div>
+
+                <button class="btn btn-default btn-block text-uppercase">перейти к оформление</button>
             </div>
         </form>
     </div>
 </template>
 
 <script>
-    export default{
-        data() {
-            return {
-                productsInCart: [],
+    import { mapGetters, mapActions, mapMutations } from 'vuex';
 
-                u_id: Date.now()
-            }
-        },
+    export default{
         mounted() {
-            this.selectedProductsInCart();
+            this.SELECTED_PRODUCTS_IN_CART(this.cart);
         },
         computed: {
+            ...mapGetters(['ALL_PRODUCTS_IN_CART', 'TOTAl_PRICE_CART']),
+
             totalProducts() {
-                this.selectedProductsInCart();
+                this.SELECTED_PRODUCTS_IN_CART(this.cart);
                 return this.cart.length;
             },
 
-            totalPrice() {
-                let total = [];
-
-                this.productsInCart.forEach((key, value) => {
-                    total.push(key.price * key.count);
-                });
-
-                return total.reduce((total, num) => { return total + num }, 0);
+            totalPrice(){
+                this.$store.dispatch('COUNTING_TOTAL_PRICE')
+                return this.$store.getters.TOTAl_PRICE_CART;
             }
+
         },
         methods: {
-            selectedProductsInCart() {
-                axios.post('/api/selected-products-in-cart', {cart: this.cart})
-                    .then( res => { this.productsInCart = res.data })
-                    .catch( error => { console.log(error) })
-            },
+            ...mapActions(['SELECTED_PRODUCTS_IN_CART', 'COUNTING_TOTAL_PRICE', 'SEND_CART_IN_DELIVERY']),
+            ...mapMutations(['MINUS', 'PLUS', 'TOTAL_PRICE', 'POSITIVE_NUMBERS', 'SEND_CART']),
 
             deleteProductFromCart(id) {
                 this.cart.splice(id, 1);
             },
 
-            sendCartInDelivery() {
-                axios.post('/api/post-cart-in-delivery', {order: this.productsInCart, u_id: this.u_id})
-                    .then( console.log('Заказ оформлен'),
-                            setTimeout( () => window.location.href = '/delivery/' + this.u_id, 1000)
-                        )
-                    .catch( error => { console.log(error) })
+            sendCart(){
+                this.SEND_CART_IN_DELIVERY(this.ALL_PRODUCTS_IN_CART)
             }
         }
     }
 </script>
-
-
-<style>
-    .cart {
-        width: 350px;
-        padding: 15px;
-        background-color: #a6e1ec;
-    }
-    .delete-product-in-cart {
-        font-size: 15px;
-        font-weight: 600;
-        font-family: "Arial", sans-serif;
-        cursor: pointer;
-    }
-    .minus-count {
-        padding-left: 50px;
-        font-size: 25px;
-        cursor: pointer;
-    }
-    .plus-count {
-        font-size: 25px;
-        cursor: pointer;
-    }
-    .final-count {
-        padding: 0 15px;
-        text-align: center;
-    }
-    .totalPriceProduct {
-        padding-left: 50px;
-        font-weight: 600;
-    }
-    .btn button{
-        width: 250px;
-        background-color: black;
-        color: white;
-        margin: 15px 0;
-        padding: 15px;
-        text-align: center;
-        cursor: pointer;
-    }
-</style>

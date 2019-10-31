@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'ProductController@show');
+Route::get('/', 'HomeController@show');
 Route::get('/cart', 'CartController@show');
 Route::get('/delivery/{u_id}', 'DeliveryController@show');
 

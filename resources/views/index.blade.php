@@ -1,39 +1,41 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>Главная</title>
+@extends('layout.index')
 
-        <script>
-            window.Laravel = { csrfToken: '{{ csrf_token() }}' };
-        </script>
-    </head>
-    <body>
-        <div class="content">
-            <ul>
-                <li><a href="/">Главная</a></li>
-                <li><a href="/cart">Корзина</a></li>
-                <li><a href="/delivery">Доставка</a></li>
-            </ul>
+    @section('search')
+        @include('components.search')
+    @endsection()
 
+    @section('call')
+        @include('components.call')
+    @endsection()
 
+    @section('modile-block')
+        @include('components.modile-block')
+    @endsection()
 
-            <div id="app">
-                <div style="margin-bottom: 50px;">
-                    <cart></cart>
-                </div>
+    @section('fixed-navbar')
+        @include('components.fixed-navbar')
+    @endsection()
 
-                <div>
-                    <h1>Пиццы</h1>
-                    <products></products>
-                </div>
-            </div>
-        </div>
+    @section('grey-navbar')
+        @include('components.grey-navbar')
+    @endsection()
 
+    @section('shortcut-navbar')
+        @include('components.shortcut-navbar')
+    @endsection()
 
-    <script src="js/app.js" type="text/javascript"></script>
-    </body>
-</html>
+    @section('category-navbar')
+        @include('components.category-navbar')
+    @endsection()
+
+    @section('video-block')
+        @include('components.video-block')
+    @endsection()
+
+    @section('catalog')
+        @include('components.catalog')
+    @endsection()
+
+    @section('footer')
+        @include('components.footer')
+    @endsection()

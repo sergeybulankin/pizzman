@@ -1,12 +1,37 @@
-<ul>
-    <li><a href="/">Главная</a></li>
-    <li><a href="/cart">Корзина</a></li>
-</ul>
+@extends('layout.index')
 
-<h1>CART</h1>
+    @section('search')
+        @include('components.search')
+    @endsection()
 
-<div id="app">
-    <cart-detail></cart-detail>
-</div>
+    @section('call')
+        @include('components.call')
+    @endsection()
 
-<script src="js/app.js" type="text/javascript"></script>
+    @section('modile-block')
+        @include('components.modile-block')
+    @endsection()
+
+    @section('fixed-navbar')
+        @include('components.fixed-navbar')
+    @endsection()
+
+    @section('grey-navbar')
+        @include('components.grey-navbar')
+    @endsection()
+
+    @section('shortcut-navbar')
+        @include('components.shortcut-navbar')
+    @endsection()
+
+    @section('category-navbar')
+        @include('components.category-navbar')
+    @endsection()
+
+    @section('cart-details')
+        @include('components.cart-details')
+    @endsection()
+
+    @section('footer')
+        @include('components.footer')
+    @endsection()
