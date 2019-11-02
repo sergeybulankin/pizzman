@@ -6,7 +6,6 @@ function init() {
         map,
         placemark;
 
-
     $("#address").on("input",function(e){
         $('#viewContainer').empty();
         geocode();
@@ -79,7 +78,8 @@ function init() {
         // Убираем контролы с карты.
         mapState.controls = [];
         // Создаём карту.
-        createMap(mapState, shortAddress);
+        //createMap(mapState, shortAddress);
+        definationPoint(mapState, shortAddress);
         // Выводим сообщение под картой.
         showMessage(address);
     }
@@ -97,14 +97,47 @@ function init() {
     }
 
 
-    function createMap(state, caption) {
+    // сравниваем расстоянием между точками доставки и клиентом
+    // и выбираем наиболее быстрый маршрут
+    function definationPoint(state, caption) {
         var city = "Стерлитамак, ";
 
         var points = [
-            "Стерлитамак, Ленина, 29а", "Стерлитамак, Артема, 29а"
+            "Стерлитамак, Ленина, 29а",
+            "Стерлитамак, Артема, 10"
         ];
 
-        var point = points[Math.floor(Math.random()*points.length)];
+        // координаты точки доставки
+        ymaps.geocode(city + caption).then(function (res) {
+            var pointDelivery = res.geoObjects.get(0).geometry.getCoordinates();
+
+            // координаты точек отправки
+            ymaps.geocode(points[0]).then(function (res) {
+                var point1 = res.geoObjects.get(0).geometry.getCoordinates();
+
+                ymaps.geocode(points[1]).then(function (res) {
+                    var point2 = res.geoObjects.get(0).geometry.getCoordinates();
+                    // Расстояние
+                    var one = ymaps.coordSystem.geo.getDistance(pointDelivery, point1);
+                    var two = ymaps.coordSystem.geo.getDistance(pointDelivery, point2);
+
+                    if (one >= two)
+                    {
+                        var point = points[1];
+                    } else {
+                        var point = points[0];
+                    }
+
+                    createMap(state, caption, point);
+                });
+
+            });
+        });
+    }
+
+
+    function createMap(state, caption, point) {
+        var city = "Стерлитамак, ";
 
         // Создаем модель мультимаршрута.
         var multiRouteModel = new ymaps.multiRouter.MultiRouteModel([
@@ -112,19 +145,18 @@ function init() {
                 point
             ]),
 
-
         // Создаём выпадающий список для выбора типа маршрута.
-            routeTypeSelector = new ymaps.control.ListBox({
-                data: {
-                    content: 'Способы доставки'
-                },
-                items: [
-                    new ymaps.control.ListBoxItem({data: {content: "Курьер"},state: {selected: true}})
-                ],
-                options: {
-                    itemSelectOnClick: false
-                }
-            });
+        routeTypeSelector = new ymaps.control.ListBox({
+            data: {
+                content: 'Способы доставки'
+            },
+            items: [
+                new ymaps.control.ListBoxItem({data: {content: "Курьер"},state: {selected: true}})
+            ],
+            options: {
+                itemSelectOnClick: false
+            }
+        });
 
 
         ymaps.modules.require([
@@ -161,12 +193,12 @@ function init() {
                 wayPointStartIconColor: "#333",
                 wayPointStartIconFillColor: "#B3B3B3",
                 wayPointStartIconLayout: "default#image",
-                wayPointStartIconImageHref: "images/pizza.png",
+                wayPointStartIconImageHref: "../images/pizza.png",
                 wayPointStartIconImageSize: [32, 32],
                 wayPointStartIconImageOffset: [-15, -15],
                 // Задаем собственную картинку для последней путевой точки.
                 wayPointFinishIconLayout: "default#image",
-                wayPointFinishIconImageHref: "images/user.png",
+                wayPointFinishIconImageHref: "../images/user.png",
                 wayPointFinishIconImageSize: [32, 32],
                 wayPointFinishIconImageOffset: [-15, -15],
 
@@ -209,12 +241,12 @@ function init() {
                     wayPointStartIconColor: "#333",
                     wayPointStartIconFillColor: "#B3B3B3",
                     wayPointStartIconLayout: "default#image",
-                    wayPointStartIconImageHref: "images/pizza.png",
+                    wayPointStartIconImageHref: "../images/pizza.png",
                     wayPointStartIconImageSize: [32, 32],
                     wayPointStartIconImageOffset: [-15, -15],
                     // Задаем собственную картинку для последней путевой точки.
                     wayPointFinishIconLayout: "default#image",
-                    wayPointFinishIconImageHref: "images/user.png",
+                    wayPointFinishIconImageHref: "../images/user.png",
                     wayPointFinishIconImageSize: [32, 32],
                     wayPointFinishIconImageOffset: [-15, -15],
 
@@ -243,7 +275,7 @@ function init() {
 
 
     function showMessage(message) {
-        $('#messageHeader').text('Данные получены:');
+        $('#messageHeader').text('Адрес получен');
         $('#message').text(message);
     }
 }

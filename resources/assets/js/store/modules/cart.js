@@ -13,7 +13,6 @@ export default {
         SEND_CART_IN_DELIVERY(ctx, cart, u_id = Date.now()) {
             axios.post('/api/post-cart-in-delivery', {order: cart, u_id: u_id })
                 .then(
-                    console.log(u_id),
                     setTimeout( () => window.location.href = '/delivery/' + u_id, 1000)
                     )
                     .catch( error => { console.log(error) })

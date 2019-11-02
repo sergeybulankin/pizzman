@@ -3,7 +3,7 @@
         <ul class="navbar-nav md-auto" v-for="(category, index) in ALL_CATEGORIES" :key="index">
             <li class="nav-item">
                 <a class="nav-link" href="#menu_link">
-                    <img src="images/pizza.svg">
+                    <img src="/images/pizza.svg">
                     <span>{{ category.name }}</span>
                 </a>
             </li>

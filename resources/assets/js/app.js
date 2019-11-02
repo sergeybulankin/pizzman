@@ -30,6 +30,8 @@ Vue.component('products', require('./components/ProductComponent.vue'));
 Vue.component('cart', require('./components/CartComponent.vue'));
 Vue.component('cart-detail', require('./components/CartDetailComponent.vue'));
 Vue.component('category-navbar', require('./components/CategoryComponent.vue'));
+Vue.component('search-address', require('./components/AddressComponent.vue'));
+Vue.component('call-me', require('./components/CallMeComponent.vue'));
 
 const app = new Vue({
     el: '#app',

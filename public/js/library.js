@@ -87,6 +87,17 @@ function delivery_type(el, type)
 
     $("#pickup,#courier").addClass("d-none");
     $("#"+type).removeClass("d-none");
+
+
+    //TODO исправить этот колхоз
+    var priceCurier = 65;
+    if (type != 'courier') {
+        var newPriceTotal = document.getElementById('totalPrice').textContent - priceCurier;
+        document.getElementById('totalPrice').innerHTML = newPriceTotal;
+    } else {
+        var newPriceTotal = document.getElementById('totalPrice').textContent + priceCurier;
+        document.getElementById('totalPrice').innerHTML = newPriceTotal;
+    }
 }
 
 function send_an_order(el)

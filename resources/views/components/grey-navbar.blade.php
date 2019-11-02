@@ -40,7 +40,11 @@
 
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="http://laravel.arimle.ru/login"><i class="fa fa-user"></i> Войти</a>
+                    @if(\Illuminate\Support\Facades\Auth::check())
+                        <a class="nav-link" href="/logout"><i class="fa fa-user"></i> Выйти</a>
+                    @else
+                        <a class="nav-link" href="/auth"><i class="fa fa-user"></i> Войти</a>
+                    @endif()
                 </li>
             </ul>
         </div>

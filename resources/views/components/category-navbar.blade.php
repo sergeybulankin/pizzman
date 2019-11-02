@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="pull-right">
-                    <a class="nav-link" href="/login" style="margin-right: 10px"><i class="fa fa-user"></i> Войти</a>
+                    <a class="nav-link" href="/auth" style="margin-right: 10px"><i class="fa fa-user"></i> Войти</a>
                 </div>
 
             </li>

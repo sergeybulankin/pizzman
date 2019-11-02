@@ -77,7 +77,7 @@
                                     </div>
 
                                     <div>
-                                        <a class="nav-link p-0" href="/login" onclick="close_modal(this)"><i class="fa fa-user"></i> Войти</a>
+                                        <a class="nav-link p-0" href="/auth" onclick="close_modal(this)"><i class="fa fa-user"></i> Войти</a>
                                     </div>
                                 </li>
                             </ul>

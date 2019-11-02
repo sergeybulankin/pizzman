@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6 col-md-12 col-sm-12 pb-5 text-lg-left text-md-center text-sm-center pl-5">
-                <img src="images/logo.png" width="200px"><br>
+                <img src="/images/logo.png" width="200px"><br>
 
                     <span class="phone">
                         <b><i class="fa fa-phone"></i> 8(917) 869-96-85</b>

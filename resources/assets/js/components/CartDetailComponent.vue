@@ -17,10 +17,10 @@
                             <tr  v-for="(product, index) in ALL_PRODUCTS_IN_CART" class="cart" :key="product.id">
                                 <td class="d-flex align-middle">
                                     <div class="delete_icon">
-                                        <img src="images/delete_icon.svg" @click="deleteProductFromCart(index)">
+                                        <img src="/images/delete_icon.svg" @click="deleteProductFromCart(index)">
                                     </div>
                                     <div class="photo-small">
-                                        <img src="images/demo.jpg" class="img-fluid">
+                                        <img src="/images/demo.jpg" class="img-fluid">
                                     </div>
                                     <div class="description pl-3">
                                         <a><b>{{ product.product_title }}</b></a><p><small>{{ product.product_description }}</small></p>

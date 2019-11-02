@@ -28,8 +28,6 @@
 
 <div id="app">
 
-
-
 @yield('search')
 
 @yield('call')
@@ -53,6 +51,8 @@
 @yield('catalog')
 
 @yield('cart-details')
+
+@yield('delivery')
 
 @yield('footer')
 
@@ -89,6 +89,9 @@
 
 @yield('dadata')
 
+@yield('delivery-scripts')
+
 <script src={{ asset('js/app.js') }} type="text/javascript"></script>
+
 </body>
 </html>

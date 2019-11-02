@@ -11,7 +11,7 @@ ymaps.modules.define('MultiRouteCustomView', [
         this.state = "init";
         this.stateChangeEvent = null;
         // Элемент, в который будет выводиться текст.
-        this.outputElement = $('<div></div>').appendTo('#viewContainer');
+        this.outputElement = $('<div></div>').appendTo('#timeDelivery');
 
         this.rebuildOutput();
 
@@ -63,7 +63,8 @@ ymaps.modules.define('MultiRouteCustomView', [
 
         processSuccessRequest: function (multiRouteModel, e) {
             var routes = multiRouteModel.getRoutes(),
-                result = ["Данные успешно получены."];
+                //result = ["Данные успешно получены."];
+                result = [];
             if (routes.length) {
                 //result.push("Всего маршрутов: " + routes.length + ".");
                 //for (var i = 0, l = routes.length; i < l; i++) {
@@ -89,9 +90,9 @@ ymaps.modules.define('MultiRouteCustomView', [
 
         processDrivingRoute: function (route) {
             //var result = ["Автомобильный маршрут."];
-            var result = [];
-            result.push(this.createCommonRouteOutput(route));
+            var result = [];            
             result.push(this.createCommonRouteTimeOutput(route)); // возвращаем только время
+            result.push(this.createCommonRouteOutput(route));
             return result.join("<br/>");
         },
 
@@ -110,14 +111,15 @@ ymaps.modules.define('MultiRouteCustomView', [
 
         // Метод, формирующий общую часть описания для всех типов маршрутов.
         createCommonRouteOutput: function (route) {
-            return "Протяженность маршрута: " + route.properties.get("distance").text + "<br/>" +
-                "Время в пути: " + route.properties.get("durationInTraffic").text + " + 30 минут готовки";
+            return "<div class='description-delivery'>(Протяженность маршрута: <strong>" + route.properties.get("distance").text + "</strong><br/>" +
+                "Время в пути: <strong>" + route.properties.get("durationInTraffic").text + "</strong> + 30 минут готовки)</div>";
         },
 
         // Метод, возвращающий только время
         createCommonRouteTimeOutput: function (route) {
             timeDurationTraffic = (route.properties.get("durationInTraffic").value / 60) + 30; // добавляем время готовки
-            return "Общее время доставки: " + timeDurationTraffic.toFixed() + " минут";
+            //return "Общее время доставки: " + timeDurationTraffic.toFixed() + " минут";
+            return timeDurationTraffic.toFixed() + " минут";
         },
 
         // Метод, строящий список текстовых описаний для

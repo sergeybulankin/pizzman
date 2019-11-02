@@ -16,3 +16,10 @@ Route::get('/cart', 'CartController@show');
 Route::get('/delivery/{u_id}', 'DeliveryController@show');
 
 Route::post('/treatment', 'OrderController@treatment');
+
+Auth::routes();
+
+
+Route::get('/auth', 'HomeController@auth')->name('auth');
+Route::get('/account', 'HomeController@account')->middleware('auth');
+Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');

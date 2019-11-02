@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 
 class DeliveryController extends Controller
 {
-    
+    /**
+     * @param Request $request
+     */
     public function storeCartInOrder(Request $request)
     {
         $cart = $request->order;
@@ -25,10 +27,25 @@ class DeliveryController extends Controller
     }
 
 
+    /**
+     * @param $u_id
+     * @param Order $order
+     * @return mixed
+     */
     public function show($u_id, Order $order)
     {
-        $cart = $order->all()->where('u_id', '=', $u_id);
+        $cart = $order->with('product')->where('u_id', $u_id)->get();
 
-        return view('delivery', compact('cart'));
+        $totalPrice = 0;
+
+        $courierPrice = 65;
+
+        $productsCount = count($cart);
+
+        foreach ($cart as $key => $value){
+            $totalPrice = $totalPrice + ($value->product->price * $value->count);
+        }
+
+        return view('delivery', compact('cart', 'totalPrice', 'courierPrice', 'productsCount'));
     }
 }
