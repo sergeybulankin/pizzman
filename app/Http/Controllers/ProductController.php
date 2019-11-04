@@ -19,6 +19,8 @@ class ProductController extends Controller
     }
 
     /**
+     * Выбираем всю информацию о товаре из таблицы исходя из localStorage
+     *
      * @param Request $request
      * @return array|static
      */
@@ -41,6 +43,8 @@ class ProductController extends Controller
 
 
     /**
+     * Выборка товаров по категории
+     *
      * @param Request $request
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */

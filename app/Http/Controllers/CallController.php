@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 class CallController extends Controller
 {
     /**
+     * Добавляем номер телефона и имя пользователя в БД
+     * 
      * @param Request $request
      */
     public function store(Request $request)

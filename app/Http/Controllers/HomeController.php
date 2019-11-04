@@ -17,12 +17,17 @@ class HomeController extends Controller
     }
 
 
+    /**
+     * @return mixed
+     */
     public function show()
     {
         return view('index');
     }
 
-
+    /**
+     * @return mixed
+     */
     public function account()
     {
         return view('account');

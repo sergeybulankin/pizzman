@@ -1,7 +1,7 @@
 <div class="container" id="checkout">
     <h1 class="text-center text-uppercase font-weight-bold">Оформление заказа</h1>
 
-    <form action="/treatment" method="POST">
+    <form method="POST" id="form">
         <div class="row pt-5">
             <div class="col-lg-8">
 
@@ -15,22 +15,22 @@
                     @if (Auth::check())
                         <div class="form-group col-lg-6">
                             <label for="exampleInputEmail1">Ваше имя</label>
-                            <input type="phone" class="form-control" id="name" placeholder="{{ Auth::user()->email }}" disabled>
+                            <input type="phone" class="form-control" id="name"  name="name" placeholder="{{ Auth::user()->email }}" disabled>
                         </div>
 
                         <div class="form-group col-lg-6">
                             <label for="exampleInputEmail1">Телефон</label>
-                            <input type="text" class="form-control" id="phone" placeholder="{{ Auth::user()->name }}" disabled>
+                            <input type="text" class="form-control" id="phone" name="phone" placeholder="{{ Auth::user()->name }}" disabled>
                         </div>
                     @else
                         <div class="form-group col-lg-6">
                             <label for="exampleInputEmail1">Ваше имя</label>
-                            <input type="phone" class="form-control" id="name">
+                            <input type="phone" class="form-control" id="name" name="name">
                         </div>
 
                         <div class="form-group col-lg-6">
                             <label for="exampleInputEmail1">Телефон</label>
-                            <input type="text" class="form-control" id="phone">
+                            <input type="text" class="form-control" id="phone" name="phone">
                         </div>
                     @endif()
                 </div>
@@ -175,25 +175,38 @@
 
                 </div>
 
-                <button class="btn btn-default btn-block text-uppercase" onclick="send_an_order(this)">отправить заказ</button>
 
-                <div id="sms" class="d-none">
-                    <div class="alert alert-primary" role="alert">
-                        На указанный номер телефона был отправлен секретый код, введите его в поле ниже для подтверждения заказа.
-                        Этот секретный код будет вашем паролем для авторизации на нашем сайте.
-                    </div>
+                @if(Auth::check())
+                    <button class="btn btn-default btn-block text-uppercase" onclick="confirm(this)">отправить заказ</button>
+                @else
+                    <button class="btn btn-default btn-block text-uppercase" onclick="send_an_order(this, phone.value)">отправить заказ</button>
 
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <input type="text" class="form-control" id="name" placeholder="код из смс">
+                    <div id="sms" class="d-none">
+                        <div class="alert alert-primary" role="alert">
+                            На указанный номер телефона был отправлен секретый код, введите его в поле ниже для подтверждения заказа.
+                            Этот секретный код будет вашем паролем для авторизации на нашем сайте.
                         </div>
 
-                        <div class="col-lg-12">
-                            <button class="btn btn-default btn-block text-uppercase col-lg-12" onclick="confirm(this)">подвердить</button>
-                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <input type="text" class="form-control" id="name" name="sms" placeholder="код из смс">
+                            </div>
 
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-block text-uppercase col-lg-12" onclick="confirm(this, sms.value)">подвердить</button>
+                            </div>
+
+                        </div>
                     </div>
-                </div>
+
+                    <div id="repeatSms" class="repeat-sms">
+                        <div class="alert alert-primary" role="alert">
+                            Номер телефона некоректен. Введите нормально номер телефона и повторите попытку
+                        </div>
+                        <button class="btn btn-default btn-block text-uppercase" type="button" onclick="send_an_order(this, phone.value)">отправить заказ</button>
+                    </div>
+                @endif()
+
 
                 <div id="answer" class="d-none">
                     <div class="alert alert-success" role="alert">

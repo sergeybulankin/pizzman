@@ -100,17 +100,41 @@ function delivery_type(el, type)
     }
 }
 
-function send_an_order(el)
-{
-    $(el).remove();
-    $("#sms").removeClass("d-none");
+function send_an_order(el, phone) {
+    var validate = sendSms(phone);
+
+    if(validate != null) {
+        $.get("/sms", {phone: phone});
+
+        $(el).remove();
+        $("#sms").removeClass("d-none");
+        $("#repeatSms").remove();
+    }
+    else {
+        //TODO косяк с удадением и отпрвкой формы
+        $(el).remove();
+        $("#repeatSms").css("display", "block");
+    }
 }
 
-function confirm(el)
+
+// проверяем правильность номера телефона
+// если все хорошо - отправляем смс-код
+function sendSms(phone) {
+    const regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+
+    return phone.match(regex);
+}
+
+
+function confirm(el, sms)
 {
     $(el).remove();
     $("#sms").remove();
+    $("#repeatSms").remove();
     $("#answer").removeClass("d-none");
+
+    $.get('/checkSms', {sms: sms});
 }
 
 function update_star(el)

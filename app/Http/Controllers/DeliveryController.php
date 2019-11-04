@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 class DeliveryController extends Controller
 {
     /**
+     * Добавляем данные из корзины в таблицу заказов
+     * Если все добавилось удачно, то перенаправим на страницу заказа
+     * с уникальным номером в виде даты/времени добавления (см. vue-компонент)
+     *
      * @param Request $request
      */
     public function storeCartInOrder(Request $request)
@@ -28,6 +32,8 @@ class DeliveryController extends Controller
 
 
     /**
+     * Показываем форму с добавленным заказом
+     *
      * @param $u_id
      * @param Order $order
      * @return mixed

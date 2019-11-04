@@ -6939,6 +6939,10 @@ button.bg-dark:focus {
   content: "";
 }
 
+.repeat-sms {
+  display: none;
+}
+
 .d-none {
   display: none !important;
 }

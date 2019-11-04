@@ -179,6 +179,7 @@ return [
 
 
         Fomvasss\Dadata\DadataServiceProvider::class,
+        Nutnet\LaravelSms\ServiceProvider::class,
 
     ],
 
