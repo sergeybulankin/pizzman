@@ -29,7 +29,9 @@
 
             <div class="d-flex justify-content-around">
                 <a href="/cart"><button class="btn btn-default">Корзина</button></a>
-                <a href="http://laravel.arimle.ru/checkout"><button class="btn btn-success">Оформить заказ</button></a>
+                <form @submit.prevent="sendCart()" id="form" class="row">
+                    <button class="btn btn-success">Оформить заказ</button>
+                </form>
             </div>
 
         </div>
@@ -57,13 +59,17 @@
             }
         },
         methods: {
-            ...mapActions(['SELECTED_PRODUCTS_IN_CART']),
+            ...mapActions(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY']),
 
             deleteProductFromCart(index, id) {
                 this.cart.splice(index, 1);
 
                 $(".delete-product-id-" + id).css("display", "none");
                 $(".add-product-id-" + id).css("display", "block");
+            },
+
+            sendCart(){
+                this.SEND_CART_IN_DELIVERY(this.ALL_PRODUCTS_IN_CART)
             }
         }
     }

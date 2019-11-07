@@ -23,7 +23,11 @@ Route::get('selected-categories', 'CategoryController@index');
 Route::post('post-cart-in-delivery', 'DeliveryController@storeCartInOrder');
 
 Route::get('selected-all-products', 'ProductController@index');
+Route::get('catalog-products', 'ProductController@catalog');
 Route::post('selection-by-category', 'ProductController@selectByCategory');
 Route::post('selected-products-in-cart', 'ProductController@informationProductInCart');
 
 Route::post('insert-call-me-number', 'CallController@store');
+
+Route::post('add-to-favorite', 'FavoriteController@store');
+Route::get('select-all-favorite', 'FavoriteController@index');

@@ -31,9 +31,61 @@
                 @endif()
                 </div>
             </form>
+
+
+
+
+
+                <div class="d-flex justify-content-center">
+                    <div class="col-lg-4">
+
+                        <form id="register_form">
+                            <div id="phone_form">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Номер телефона*</label>
+                                    <input type="phone" name="phone" class="form-control">
+                                </div>
+
+                                <h5>*<small>Ваш номер телефона - это логин. Пароль, который Вы получите по смс - пароль.</small></h5>
+                                <!--<button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" onclick="sign_up(phone.value)">зарегистрироваться</button>-->
+                                <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="sign_up(phone.value)">зарегистрироваться</button>
+                            </div>
+
+                            <div id="password_form" class="d-none">
+                                <h5><small>На указанный номер телефона был отправлен пароль, введите его в поле ниже.</small></h5>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Пароль (код из смс)</label>
+                                    <input type="phone" name="code" class="form-control">
+                                </div>
+
+                                <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="confirmCode(code.value)">подтвердить</button>
+                            </div>
+
+
+                            <div id="repeatPhone" class="repeat-sms">
+                                <div class="alert alert-primary" role="alert">
+                                    Номер телефона некоректен. Введите нормально номер телефона и повторите попытку
+                                </div>
+                                <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="sign_up(phone.value)">зарегистрироваться</button>
+                            </div>
+
+                            <div id="repeatSms" class="repeat-sms">
+                                <div class="alert alert-primary" role="alert">
+                                    Ошибка смс-кода. неправильно введен
+                                </div>
+                                <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="sign_up(phone.value)">зарегистрироваться</button>
+                            </div>
+
+                            <div class="alert alert-success d-none" role="alert">Поздравляем! Регистрация прошла успешно! Пожалуйста, авторизуйтесь.</div>
+                        </form>
+                    </div>
+                </div>
+
+
+
         </div> <!--tab-pizza-->
 
-        <div class="tab-pane fade" id="nav-authorization" role="tabpanel" aria-labelledby="nav-authorization-tab">
+        <!--<div class="tab-pane fade" id="nav-authorization" role="tabpanel" aria-labelledby="nav-authorization-tab">
             <div class="d-flex justify-content-center">
                 <div class="col-lg-4">
 
@@ -61,6 +113,6 @@
                     <div class="alert alert-success d-none" role="alert">Поздравляем! Регистрация прошла успешно! Пожалуйста, авторизуйтесь.</div>
                 </div>
             </div>
-        </div>
+        </div>-->
     </div><!--tab-content-->
 </div>

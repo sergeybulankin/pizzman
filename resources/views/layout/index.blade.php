@@ -28,11 +28,11 @@
 
 <div id="app">
 
+@yield('mobile-block')
+
 @yield('search')
 
 @yield('call')
-
-@yield('mobile-block')
 
 @yield('fixed-navbar')
 

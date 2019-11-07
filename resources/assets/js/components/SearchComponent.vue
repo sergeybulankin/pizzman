@@ -1,21 +1,110 @@
 <template>
-    <div>
-        <h1>search</h1>
-        <div>
-            {{ ALL_PRODUCTS }}
-        </div>
-    </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content pb-5">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="d-flex justify-content-center">
+                    <div class="search-block pb-3">
+                        <p>Что Вы желаете найти?</p>
+                        <input type="text" name="search-product" placeholder="Введите блюдо..." v-model="filter">
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row">
+                        <div v-for="(product, index) in searchByName" :key="product.id">
+                            <div class="one-food">
+                                <div id="recommend">рекомендуем</div>
+                                <div class="c-product">
+                                    <img src="images/demo.jpg"  class="img-fluid">
+                                    <div class="search-heart">
+                                        <button class="success left"><i class="fa fa-search"></i></button>
+                                        <button class="success right"><i class="fa fa-heart"></i></button>
+                                    </div>
+                                </div>
+                                <div class="c-product-info">
+                                    <a class="product_title">{{ product.title }}</a>
+                                    <div class="c-markers">
+                                  <span>
+                                      <img data-toggle="tooltip" data-placement="top" title="Вегетарианская" src="images/demo1-1944807851-1.svg" alt="Vegetarian">
+                                  </span>
+                                        <span class="fa fa-info" data-toggle="popover" title="Пищевая ценность" data-content="Масса:340г<br>Калорийность: 1000<br>Белки:130<br>Углеводы:120"></span>
+                                    </div>
+
+                                    <h5><small>{{ product.description }}</small></h5>
+                                </div>
+
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="options" id="option1" autocomplete="off" checked> добавка 1
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="options" id="option2" autocomplete="off"> добавка 2
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="options" id="option3" autocomplete="off"> добавка 3
+                                    </label>
+                                </div>
+
+                                <a class="product_title">{{ product.prict }}</a>
+
+                                <div :class="'add-product-id-' + product.id">
+                                    <button class="btn btn-block btn-success btn-add_to-cart" @click="changeProduct(product.id)"><i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Добавить в корзину</button>
+                                </div>
+
+                                <div :class="'delete-product-id-' + product.id">
+                                    <div class="delete-from-cart">Продукт в корзине</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--container-->
+            </div><!--modal-body-->
+
+        </div><!--modal-content-->
+    </div><!--modal-dialog-->
 </template>
 
 <script>
     import { mapGetters, mapActions } from 'vuex';
 
     export default {
-        created() {
-            this.SELECTED_ALL_PRODUCTS();
+        data() {
+            return {
+                filter: ''
+            }
         },
-        computed: mapGetters(['ALL_PRODUCTS']),
-        methods: mapActions(['SELECTED_ALL_PRODUCTS'])
+        created() {
+            this.CATALOG_PRODUCTS();
+        },
+        mounted() {
+            setTimeout (() => { this.CHECK_PRODUCT_IN_CART(this.cart) }, 1000)
+        },
+        computed: {
+            ...mapGetters(['CATALOG']),
 
+            searchByName: function() {
+                var filter = this.filter.trim().toLowerCase();
+                if (filter === '') return this.CATALOG;
+                return this.CATALOG.filter(function(s) {
+                    return s.title.toLowerCase().indexOf(filter) > -1;
+                });
+            }
+        },
+        methods: {
+            ...mapActions(['CATALOG_PRODUCTS', 'CHECK_PRODUCT_IN_CART']),
+
+            changeProduct(id) {
+                this.cart.push(id);
+
+                $(".add-product-id-" + id).css("display", "none");
+                $(".delete-product-id-" + id).css("display", "block");
+            },
+        }
     }
 </script>

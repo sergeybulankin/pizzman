@@ -1,32 +1,7 @@
 <!-- МЕНЮ при прокрутке НАЧАЛО-->
 <div class="navbar navbar-expand-lg header_fixed_main header_menu fixed-top d-none">
     <div class="navbar-collapse justify-content-md-center ">
-        <ul class="navbar-nav md-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="http://laravel.arimle.ru/#menu_link">
-                    <img src="images/pizza.svg">
-                    <span>Пицца</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="http://laravel.arimle.ru/#menu_link">
-                    <img src="images/burgers.svg">
-                    <span>Выпечка</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="http://laravel.arimle.ru/#menu_link">
-                    <img src="images/deserts.svg">
-                    <span>Десерты</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="http://laravel.arimle.ru/#menu_link">
-                    <img src="images/drinks.svg">
-                    <span>Напитки</span>
-                </a>
-            </li>
-        </ul>
+        <category-navbar></category-navbar>
 
         <!--Корзина-->
         <div class="navbar-nav pl-5">

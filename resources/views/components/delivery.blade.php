@@ -167,7 +167,7 @@
                         <tbody>
                         <tr>
                             <td class="font-weight-bold" id="totalPrice"><p>{{ $totalPrice + $courierPrice }}<i class="fa fa-rub mr-0"></i></p></td>
-                            <td class="font-weight-bold text-right" id="timeDelivery"><p></p></td>
+                            <td class="font-weight-bold text-right"><div id="timeDelivery"></div></td>
                         </tr>
                         </tbody>
                     </table>

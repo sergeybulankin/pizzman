@@ -50,16 +50,29 @@ function close_cart(btn)
     $(btn).parents("div").find("#cart_info").addClass("d-none");
 }
 
-function sign_up()
+function sign_up(phone)
 {
-    $("#phone_form").addClass("d-none");
-    $("#password_form").removeClass("d-none");
+    var validate = sendSms(phone);
+
+    if(validate != null) {
+        $.get("/sms", {phone: phone});
+
+        $("#phone_form").addClass("d-none");
+        $("#password_form").removeClass("d-none");
+        $("#repeatSms").css("display", "none");
+    }
+    else {
+        $("#repeatPhone").css("display", "block");
+    }
+
 }
 
-function confirm()
+function confirmCode(code)
 {
     $("#password_form").addClass("d-none");
     $(".alert.alert-success").removeClass("d-none");
+    var x = get_cookie("key_sms");
+    //$.get('/checkSms', {sms: code});
 }
 
 function update_active(el)
@@ -161,4 +174,18 @@ function close_modal(el)
 {
     $(el).parents(".modal").modal('hide');
     console.log(123);
+}
+
+
+
+
+
+function get_cookie(cookie_name)
+{
+    var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)' );
+
+    if ( results )
+        return ( unescape ( results[2] ) );
+    else
+        return null;
 }

@@ -7,7 +7,7 @@ function init() {
         placemark;
 
     $("#address").on("input",function(e){
-        $('#viewContainer').empty();
+        $('#timeDelivery').empty();
         geocode();
     });
 

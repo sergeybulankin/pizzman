@@ -25,11 +25,12 @@
                                     <img src="images/demo.jpg"  class="img-fluid">
                                     <div class="search-heart">
                                         <button class="success left"><i class="fa fa-search"></i></button>
-                                        <button class="success right"><i class="fa fa-heart"></i></button>
+                                        <button class="success right" @click="changeFavorite(product.id)" :class="'favorite-' + product.id"><i class="fa fa-heart"></i></button>
+                                        <button class="success right" @click="deleteFavorite(product.id)" :class="'delete-favorite-' + product.id"><i class="fa fa-heart"></i></button>
                                     </div>
                                 </div>
                                 <div class="c-product-info">
-                                    <a class="product_title">{{ product.title }}</a>
+                                    <a class="product_title">{{ product.title }} </a>
                                     <div class="c-markers">
                                     <span>
                                         <img data-toggle="tooltip" data-placement="top" title="Вегетарианская" src="images/demo1-1944807851-1.svg" alt="Vegetarian">
@@ -77,19 +78,26 @@
     export default {
         created() {
             this.SELECTED_ALL_PRODUCTS();
+            this.SELECT_ALL_FAVORITE();
         },
         mounted() {
             setTimeout (() => { this.CHECK_PRODUCT_IN_CART(this.cart) }, 1000)
+            setTimeout (() => { this.CHECK_PRODUCT_IN_FAVORITE(this.ALL_FAVORITE) }, 1000)
         },
-        computed: mapGetters(['ALL_PRODUCTS', 'ALL_CATEGORIES']),
+        computed: mapGetters(['ALL_PRODUCTS', 'ALL_CATEGORIES', 'ALL_FAVORITE']),
         methods: {
-            ...mapActions(['SELECTED_ALL_PRODUCTS', 'CHECK_PRODUCT_IN_CART', 'CHANGE_PRODUCTS', 'SELECTED_ALL_CATEGORIES', 'SELECTION_BY_CATEGORY']),
+            ...mapActions(['SELECTED_ALL_PRODUCTS', 'CHECK_PRODUCT_IN_CART', 'CHECK_PRODUCT_IN_FAVORITE', 'SELECTED_ALL_CATEGORIES', 'SELECTION_BY_CATEGORY', 'ADD_TO_FAVORITE', 'SELECT_ALL_FAVORITE']),
 
             changeProduct(id) {
                 this.cart.push(id);
-
                 $(".add-product-id-" + id).css("display", "none");
                 $(".delete-product-id-" + id).css("display", "block");
+            },
+
+            changeFavorite(id) {
+                this.ADD_TO_FAVORITE(id);
+                $("#favorite-" + id).css("display", "none");
+                $("#delete-favorite-" + id).css("display", "block");
             },
 
             selectProducts(id) {
@@ -149,5 +157,11 @@
     }
     [class^="delete-product-id-"] {
         display: none;
+    }
+
+    [class^="delete-favorite-"] {
+        display: none;
+        border: 1px solid black;
+        background: red;
     }
 </style>

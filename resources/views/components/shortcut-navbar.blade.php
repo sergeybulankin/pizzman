@@ -8,7 +8,7 @@
         </div>
 
         <div class="col-lg-4 header__logo">
-            <a href="http://laravel.arimle.ru"><img src="../images/logo.png"/></a>
+            <a href="/"><img src="../images/logo.png"/></a>
         </div>
 
         <div class="col-lg-4 d-flex justify-content-end">
