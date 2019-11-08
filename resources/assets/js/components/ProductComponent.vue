@@ -26,7 +26,7 @@
                                     <div class="search-heart">
                                         <button class="success left"><i class="fa fa-search"></i></button>
                                         <button class="success right" @click="changeFavorite(product.id)" :class="'favorite-' + product.id"><i class="fa fa-heart"></i></button>
-                                        <button class="success right" @click="deleteFavorite(product.id)" :class="'delete-favorite-' + product.id"><i class="fa fa-heart"></i></button>
+                                        <button class="success right" @click="deleteFavorite(product.id)" :class="'delete-favorite-' + product.id"><i class="fa fa-trash-o"></i></button>
                                     </div>
                                 </div>
                                 <div class="c-product-info">
@@ -86,7 +86,7 @@
         },
         computed: mapGetters(['ALL_PRODUCTS', 'ALL_CATEGORIES', 'ALL_FAVORITE']),
         methods: {
-            ...mapActions(['SELECTED_ALL_PRODUCTS', 'CHECK_PRODUCT_IN_CART', 'CHECK_PRODUCT_IN_FAVORITE', 'SELECTED_ALL_CATEGORIES', 'SELECTION_BY_CATEGORY', 'ADD_TO_FAVORITE', 'SELECT_ALL_FAVORITE']),
+            ...mapActions(['SELECTED_ALL_PRODUCTS', 'CHECK_PRODUCT_IN_CART', 'CHECK_PRODUCT_IN_FAVORITE', 'SELECTION_BY_CATEGORY', 'ADD_TO_FAVORITE', 'SELECT_ALL_FAVORITE', 'DELETE_OF_FAVORITE']),
 
             changeProduct(id) {
                 this.cart.push(id);
@@ -96,8 +96,14 @@
 
             changeFavorite(id) {
                 this.ADD_TO_FAVORITE(id);
-                $("#favorite-" + id).css("display", "none");
-                $("#delete-favorite-" + id).css("display", "block");
+                $(".favorite-" + id).css("display", "none");
+                $(".delete-favorite-" + id).css("display", "block");
+            },
+
+            deleteFavorite(id) {
+                this.DELETE_OF_FAVORITE(id);
+                $(".favorite-" + id).css("display", "black");
+                $(".delete-favorite-" + id).css("display", "none");
             },
 
             selectProducts(id) {
@@ -161,7 +167,5 @@
 
     [class^="delete-favorite-"] {
         display: none;
-        border: 1px solid black;
-        background: red;
     }
 </style>

@@ -18,7 +18,7 @@
             </a>
 
             <!--Избранное-->
-            <a class="" href="http://laravel.arimle.ru/favorites"><span class="count">2</span><i class="fa fa-heart "></i></a>
+            <favorite></favorite>
 
             <!--Корзина-->
             <cart></cart>
