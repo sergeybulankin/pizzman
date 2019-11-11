@@ -44,12 +44,12 @@
             }
         },
         mounted() {
-            var $address = $('#address'),
-                $hidden_address = $('#suggest');
-
-            $address.on('input', function () {
+            var $address = $('#address');
+            var $hidden_address = $('#suggest');
+            function onChange() {
                 $hidden_address.val($address.val());
-            });
+            };
+            $('#address').change(onChange).keyup(onChange);
         },
         components: { VueSuggestions }
     }

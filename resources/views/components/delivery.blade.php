@@ -62,25 +62,25 @@
 
                 <div class="row w-100 ml-0">
                     <div class="col-lg-6">
-                        <button class="btn btn-secondary btn-success btn-block " onclick="delivery_type(this,'pickup')">самовывоз</button>
+                        <button class="btn btn-secondary btn-success btn-block" type="button" onclick="delivery_type(this,'pickup', {{ $totalPrice }})">самовывоз</button>
                     </div>
 
                     <div class="col-lg-6">
-                        <button class="btn btn-secondary btn-success btn-block active" onclick="delivery_type(this,'courier')">курьерская доставка</button>
+                        <button class="btn btn-secondary btn-success btn-block active" type="button" onclick="delivery_type(this,'courier', {{ $totalPrice }})">курьерская доставка</button>
                     </div>
                 </div>
 
                 <div class="row w-100 ml-0 d-none pt-3" id="pickup">
                     <div class="col-lg-4">
-                        <button class="btn btn-secondary btn-success btn-block active" onclick="update_active(this)">Адрес №1</button>
+                        <button class="btn btn-secondary btn-success btn-block active" type="button" onclick="update_active(this)">Адрес №1</button>
                     </div>
 
                     <div class="col-lg-4">
-                        <button class="btn btn-secondary btn-success btn-block " onclick="update_active(this)">Адрес №2</button>
+                        <button class="btn btn-secondary btn-success btn-block " type="button" onclick="update_active(this)">Адрес №2</button>
                     </div>
 
                     <div class="col-lg-4">
-                        <button class="btn btn-secondary btn-success btn-block " onclick="update_active(this)">Адрес №3</button>
+                        <button class="btn btn-secondary btn-success btn-block " type="button" onclick="update_active(this)">Адрес №3</button>
                     </div>
                 </div>
 
@@ -151,7 +151,7 @@
                         <tbody>
                         <tr>
                             <td class="font-weight-bold"><p>Курьером</p></td>
-                            <td class="font-weight-bold text-right">{{ $courierPrice }} <i class="fa fa-rub"></i></td>
+                            <td class="font-weight-bold text-right" id="curierPrice">{{ $courierPrice }} <i class="fa fa-rub"></i></td>
                         </tr>
                         </tbody>
                     </table>
@@ -177,9 +177,32 @@
 
 
                 @if(Auth::check())
-                    <button class="btn btn-default btn-block text-uppercase" onclick="confirm(this)">отправить заказ</button>
+                    <button class="btn btn-default btn-block text-uppercase" type="button" onclick="send_order()">отправить заказ</button>
                 @else
-                    <button class="btn btn-default btn-block text-uppercase" onclick="send_an_order(this, phone.value)">отправить заказ</button>
+                    <div id="repeatSms" class="repeat-sms">
+                        <div class="alert alert-primary" role="alert">
+                            Номер телефона некоректен. Введите нормально номер телефона и повторите попытку
+                        </div>
+                    </div>
+
+                    <button class="btn btn-default btn-block text-uppercase" type="button" onclick="send_an_order(this, phone.value)">отправить заказ</button>
+
+                    <div id="answerError" class="d-none">
+                        <div class="alert alert-success" role="alert">
+                            Код не правильный
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <input type="text" class="form-control" id="name" name="sms" placeholder="код из смс">
+                            </div>
+
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirm(this, sms.value)">подвердить</button>
+                            </div>
+
+                        </div>
+                    </div>
 
                     <div id="sms" class="d-none">
                         <div class="alert alert-primary" role="alert">
@@ -193,17 +216,10 @@
                             </div>
 
                             <div class="col-lg-12">
-                                <button class="btn btn-default btn-block text-uppercase col-lg-12" onclick="confirm(this, sms.value)">подвердить</button>
+                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirm(this, sms.value)">подвердить</button>
                             </div>
 
                         </div>
-                    </div>
-
-                    <div id="repeatSms" class="repeat-sms">
-                        <div class="alert alert-primary" role="alert">
-                            Номер телефона некоректен. Введите нормально номер телефона и повторите попытку
-                        </div>
-                        <button class="btn btn-default btn-block text-uppercase" type="button" onclick="send_an_order(this, phone.value)">отправить заказ</button>
                     </div>
                 @endif()
 

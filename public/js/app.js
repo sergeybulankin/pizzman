@@ -49083,12 +49083,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     mounted: function mounted() {
-        var $address = $('#address'),
-            $hidden_address = $('#suggest');
-
-        $address.on('input', function () {
+        var $address = $('#address');
+        var $hidden_address = $('#suggest');
+        function onChange() {
             $hidden_address.val($address.val());
-        });
+        };
+        $('#address').change(onChange).keyup(onChange);
     },
 
     components: { VueSuggestions: __WEBPACK_IMPORTED_MODULE_0_vue_suggestions___default.a }

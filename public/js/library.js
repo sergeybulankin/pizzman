@@ -94,22 +94,22 @@ function type_of_readiness(el,type)
     }
 }
 
-function delivery_type(el, type)
+function delivery_type(el, type, totalPrice)
 {
     update_active(el);
 
     $("#pickup,#courier").addClass("d-none");
     $("#"+type).removeClass("d-none");
 
-
-    //TODO исправить этот колхоз
     var priceCurier = 65;
     if (type != 'courier') {
-        var newPriceTotal = document.getElementById('totalPrice').textContent - priceCurier;
-        document.getElementById('totalPrice').innerHTML = newPriceTotal;
+        document.getElementById('curierPrice').innerHTML = "<p>" + 0 + " <i class='fa fa-rub mr-0'></i></p>";
+        document.getElementById('timeDelivery').innerHTML = "";
+        document.getElementById('totalPrice').innerHTML = "<p>" + totalPrice + "<i class='fa fa-rub mr-0'></i></p>";
     } else {
-        var newPriceTotal = document.getElementById('totalPrice').textContent + priceCurier;
-        document.getElementById('totalPrice').innerHTML = newPriceTotal;
+        var finalPrice = totalPrice + priceCurier;
+        document.getElementById('curierPrice').innerHTML = "<p>" + priceCurier + " <i class='fa fa-rub mr-0'></i></p>";
+        document.getElementById('totalPrice').innerHTML = "<p>" + finalPrice + "<i class='fa fa-rub mr-0'></i></p>";
     }
 }
 
@@ -124,8 +124,6 @@ function send_an_order(el, phone) {
         $("#repeatSms").remove();
     }
     else {
-        //TODO косяк с удадением и отпрвкой формы
-        $(el).remove();
         $("#repeatSms").css("display", "block");
     }
 }
@@ -142,12 +140,21 @@ function sendSms(phone) {
 
 function confirm(el, sms)
 {
-    $(el).remove();
-    $("#sms").remove();
-    $("#repeatSms").remove();
-    $("#answer").removeClass("d-none");
-
-    $.get('/checkSms', {sms: sms});
+    $.ajax({
+        url: "/checkSms",
+        method: "GET",
+        data: {'sms': sms},
+        success: function(){
+            $(el).remove();
+            $("#repeatSms").remove();
+            $("#answerError").addClass("d-none");
+            $("#answer").removeClass("d-none");
+        },
+        error: function () {
+            $("#sms").remove();
+            $("#answerError").removeClass("d-none");
+        }
+    })
 }
 
 function update_star(el)
@@ -167,6 +174,11 @@ function update_star(el)
             $(this).addClass("fa-star-o");
         }
     })
+}
+
+
+function send_order() {
+    console.log('order is added');
 }
 
 

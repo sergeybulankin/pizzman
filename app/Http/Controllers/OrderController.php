@@ -48,8 +48,6 @@ class OrderController extends Controller
 
     public function store()
     {
-        $request = new Request();
-
-        dd($request->all());
+        return "YEP!";
     }
 }
