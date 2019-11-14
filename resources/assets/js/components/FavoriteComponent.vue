@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a class="/favorite">
+        <a href="/favorites">
             <span class="count">{{ counts }}</span><i class="fa fa-heart "></i>
         </a>
     </div>
@@ -10,17 +10,14 @@
     import { mapGetters, mapActions } from 'vuex';
 
     export default {
-        mounted() {
-            this.COUNT_PRODUCTS_IN_FAVORITE()
-        },
         computed: {
-            ...mapGetters(['COUNT', 'ALL_FAVORITE']),
+            ...mapGetters(['COUNT']),
 
             counts() {
-                this.COUNT_PRODUCTS_IN_FAVORITE(this.ALL_FAVORITE);
-                return this.COUNT;
+                this.COUNT_FAVORITE();
+                return this.COUNT
             }
         },
-        methods: mapActions(['COUNT_PRODUCTS_IN_FAVORITE'])
+        methods: mapActions(['COUNT_FAVORITE'])
     }
 </script>

@@ -13194,6 +13194,7 @@ Vue.component('search-address', __webpack_require__(77));
 Vue.component('call-me', __webpack_require__(86));
 Vue.component('search', __webpack_require__(89));
 Vue.component('favorite', __webpack_require__(92));
+Vue.component('favorite-page', __webpack_require__(95));
 
 var app = new Vue({
   el: '#app',
@@ -47626,12 +47627,12 @@ var debug = "development" !== 'production';
         CHECK_PRODUCT_IN_FAVORITE: function CHECK_PRODUCT_IN_FAVORITE(ctx, favorite) {
             favorite.forEach(function (key, value) {
                 $(".favorite-" + key.product).css("display", "none");
-                $(".delete-favorite-" + key.id).css("display", "block");
+                $(".delete-favorite-" + key.product).css("display", "block");
             });
         },
-        COUNT_PRODUCTS_IN_FAVORITE: function COUNT_PRODUCTS_IN_FAVORITE(ctx, favorite) {
-            axios.get('/api/count-favorites', { favorite: favorite }).then(function (response) {
-                ctx.commit('COUNT_PRODUCTS_IN_FAVORITE_MUTATION', response.data);
+        COUNT_FAVORITE: function COUNT_FAVORITE(ctx) {
+            axios.get('/api/count-favorites').then(function (response) {
+                ctx.commit('COUNT_FAVORITE_MUTATION', response.data);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -47647,8 +47648,8 @@ var debug = "development" !== 'production';
         SELECT_ALL_FAVORITE_MUTATION: function SELECT_ALL_FAVORITE_MUTATION(state, favorite) {
             state.favorite = favorite;
         },
-        COUNT_PRODUCTS_IN_FAVORITE_MUTATION: function COUNT_PRODUCTS_IN_FAVORITE_MUTATION(state, favorite) {
-            state.count = favorite;
+        COUNT_FAVORITE_MUTATION: function COUNT_FAVORITE_MUTATION(state, count) {
+            return state.count = count;
         }
     },
     state: {
@@ -47751,7 +47752,7 @@ exports = module.exports = __webpack_require__(14)(false);
 
 
 // module
-exports.push([module.i, "\n.panel {\n    display: flex;\n    flex-wrap: wrap;\n}\n.panel-body {\n    background-color: yellow;\n    width: 300px;\n    margin: 30px 0 0 30px;\n    padding: 15px;\n    flex-direction: row;\n}\n.title {\n    margin: 10px 0;\n    font-size: 30px;\n    font-weight: 600;\n}\n.description {\n    margin: 15px 0;\n    font-size: 15px;\n}\n.price {\n    font-size: 20px;\n    color: red;\n}\n.add-to-cart {\n    margin: 20px 0 0 0;\n    background: black;\n    padding: 10px;\n    text-align: center;\n    color: white;\n    cursor: pointer;\n}\n.delete-from-cart {\n    margin: 20px 0 0 0;\n    background: #a2a2a2;\n    padding: 10px;\n    text-align: center;\n    color: white;\n    cursor: pointer;\n}\n.add-to-cart:hover {\n    background-color: white;\n    color: black;\n}\n[class^=\"delete-product-id-\"] {\n    display: none;\n}\n[class^=\"delete-favorite-\"] {\n    display: none;\n}\n", ""]);
+exports.push([module.i, "\n.delete-from-cart {\n    margin: 20px 0 0 0;\n    background: #a2a2a2;\n    padding: 10px;\n    text-align: center;\n    color: white;\n    cursor: pointer;\n}\n.add-to-cart:hover {\n    background-color: white;\n    color: black;\n}\n[class^=\"delete-product-id-\"] {\n    display: none;\n}\n[class^=\"favorite-\"] {\n    display: block;\n}\n[class^=\"delete-favorite-\"] {\n    display: none;\n}\n", ""]);
 
 // exports
 
@@ -47868,10 +47869,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -47891,7 +47888,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }, 1000);
     },
 
-    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['ALL_PRODUCTS', 'ALL_CATEGORIES', 'ALL_FAVORITE']),
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['ALL_PRODUCTS', 'ALL_CATEGORIES', 'ALL_FAVORITE']), {
+        checkUser: function checkUser() {
+            // window.Laravel.user - записывается в хэдэре,
+            // если пользователь авторизовался
+            return window.Laravel.user;
+        }
+    }),
     methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_ALL_PRODUCTS', 'CHECK_PRODUCT_IN_CART', 'CHECK_PRODUCT_IN_FAVORITE', 'SELECTION_BY_CATEGORY', 'ADD_TO_FAVORITE', 'SELECT_ALL_FAVORITE', 'DELETE_OF_FAVORITE']), {
         changeProduct: function changeProduct(id) {
             this.cart.push(id);
@@ -47994,24 +47997,33 @@ var render = function() {
                         _c("div", { staticClass: "search-heart" }, [
                           _vm._m(0, true),
                           _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "success right",
-                              class: "favorite-" + product.id,
-                              on: {
-                                click: function($event) {
-                                  return _vm.changeFavorite(product.id)
-                                }
-                              }
-                            },
-                            [_c("i", { staticClass: "fa fa-heart" })]
-                          ),
+                          _vm.checkUser == 0
+                            ? _c(
+                                "button",
+                                {
+                                  attrs: {
+                                    "data-toggle": "modal",
+                                    "data-target": "#modal-form-auth"
+                                  }
+                                },
+                                [_c("i", { staticClass: "fa fa-heart" })]
+                              )
+                            : _c(
+                                "button",
+                                {
+                                  class: "favorite-" + product.id,
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.changeFavorite(product.id)
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "fa fa-heart" })]
+                              ),
                           _vm._v(" "),
                           _c(
                             "button",
                             {
-                              staticClass: "success right",
                               class: "delete-favorite-" + product.id,
                               on: {
                                 click: function($event) {
@@ -54247,17 +54259,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        this.COUNT_PRODUCTS_IN_FAVORITE();
-    },
-
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['COUNT', 'ALL_FAVORITE']), {
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['COUNT']), {
         counts: function counts() {
-            this.COUNT_PRODUCTS_IN_FAVORITE(this.ALL_FAVORITE);
+            this.COUNT_FAVORITE();
             return this.COUNT;
         }
     }),
-    methods: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['COUNT_PRODUCTS_IN_FAVORITE'])
+    methods: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['COUNT_FAVORITE'])
 });
 
 /***/ }),
@@ -54269,7 +54277,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("a", { staticClass: "/favorite" }, [
+    _c("a", { attrs: { href: "/favorites" } }, [
       _c("span", { staticClass: "count" }, [_vm._v(_vm._s(_vm.counts))]),
       _c("i", { staticClass: "fa fa-heart " })
     ])
@@ -54284,6 +54292,374 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-3fde291a", module.exports)
   }
 }
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(98)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(96)
+/* template */
+var __vue_template__ = __webpack_require__(97)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/FavoritePageComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-74924c4b", Component.options)
+  } else {
+    hotAPI.reload("data-v-74924c4b", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 96 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    created: function created() {
+        this.SELECT_ALL_FAVORITE();
+    },
+
+    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['ALL_FAVORITE']),
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECT_ALL_FAVORITE', 'DELETE_OF_FAVORITE', 'CHECK_PRODUCT_IN_CART']), {
+        deleteFavorite: function deleteFavorite(id) {
+            this.DELETE_OF_FAVORITE(id);
+            $(".favorite-" + id).css("display", "black");
+            $(".delete-favorite-" + id).css("display", "none");
+        },
+        changeProduct: function changeProduct(id) {
+            this.cart.push(id);
+            $(".add-product-id-" + id).css("display", "none");
+            $(".delete-product-id-" + id).css("display", "block");
+        }
+    })
+});
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "row" },
+    _vm._l(_vm.ALL_FAVORITE, function(favorite, index) {
+      return _c(
+        "div",
+        {
+          staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12",
+          attrs: { index: index }
+        },
+        [
+          _c("div", { staticClass: "one-food" }, [
+            _c("div", { attrs: { id: "recommend" } }, [_vm._v("рекомендуем")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "c-product" }, [
+              _c("img", {
+                staticClass: "img-fluid",
+                attrs: { src: "images/demo.jpg" }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "search-heart" }, [
+                _vm._m(0, true),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    class: "delete-favorite-" + favorite.product_id,
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteFavorite(favorite.product_id)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fa fa-trash-o" })]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "c-product-info" }, [
+              _c("a", { staticClass: "product_title" }, [
+                _vm._v(" " + _vm._s(favorite.title) + " ")
+              ]),
+              _vm._v(" "),
+              _vm._m(1, true),
+              _vm._v(" "),
+              _c("h5", [_c("small", [_vm._v(_vm._s(favorite.description))])])
+            ]),
+            _vm._v(" "),
+            _vm._m(2, true),
+            _vm._v(" "),
+            _c("a", { staticClass: "product_title" }, [
+              _vm._v(_vm._s(favorite.price) + " Р")
+            ]),
+            _vm._v(" "),
+            _c("div", { class: "add-product-id-" + favorite.product_id }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-block btn-success btn-add_to-cart",
+                  on: {
+                    click: function($event) {
+                      return _vm.changeProduct(favorite.product_id)
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fa fa-shopping-cart" }),
+                  _vm._v("   Добавить в корзину")
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { class: "delete-product-id-" + favorite.product_id }, [
+              _c("div", { staticClass: "delete-from-cart" }, [
+                _vm._v("Продукт в корзине")
+              ])
+            ])
+          ])
+        ]
+      )
+    }),
+    0
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "success left" }, [
+      _c("i", { staticClass: "fa fa-search" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "c-markers" }, [
+      _c("span", [
+        _c("img", {
+          attrs: {
+            "data-toggle": "tooltip",
+            "data-placement": "top",
+            title: "",
+            src:
+              "https://parkofideas.com/foodz/demo4/wp-content/uploads/2019/03/demo1-1944807851-1.svg",
+            alt: "Vegetarian",
+            "data-original-title": "Вегетарианская"
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("span", {
+        staticClass: "fa fa-info",
+        attrs: {
+          "data-toggle": "popover",
+          title: "",
+          "data-content":
+            "Масса:340г<br>Калорийность: 1000<br>Белки:130<br>Углеводы:120",
+          "data-original-title": "Пищевая ценность"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "btn-group btn-group-toggle",
+        attrs: { "data-toggle": "buttons" }
+      },
+      [
+        _c("label", { staticClass: "btn btn-secondary active" }, [
+          _c("input", {
+            attrs: {
+              type: "radio",
+              name: "options",
+              id: "option1",
+              autocomplete: "off",
+              checked: ""
+            }
+          }),
+          _vm._v(" добавка 1\n                ")
+        ]),
+        _vm._v(" "),
+        _c("label", { staticClass: "btn btn-secondary" }, [
+          _c("input", {
+            attrs: {
+              type: "radio",
+              name: "options",
+              id: "option2",
+              autocomplete: "off"
+            }
+          }),
+          _vm._v(" добавка 2\n                ")
+        ]),
+        _vm._v(" "),
+        _c("label", { staticClass: "btn btn-secondary" }, [
+          _c("input", {
+            attrs: {
+              type: "radio",
+              name: "options",
+              id: "option3",
+              autocomplete: "off"
+            }
+          }),
+          _vm._v(" добавка 3\n                ")
+        ])
+      ]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-74924c4b", module.exports)
+  }
+}
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(99);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(15)("328edc6a", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-74924c4b\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FavoritePageComponent.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-74924c4b\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FavoritePageComponent.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(14)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.delete-from-cart {\n    margin: 20px 0 0 0;\n    background: #a2a2a2;\n    padding: 10px;\n    text-align: center;\n    color: white;\n    cursor: pointer;\n}\n[class^=\"delete-product-id-\"] {\n    display: none;\n}\n[class^=\"favorite-\"] {\n    display: block;\n}\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);

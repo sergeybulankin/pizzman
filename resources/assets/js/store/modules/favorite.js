@@ -21,14 +21,14 @@ export default {
         CHECK_PRODUCT_IN_FAVORITE(ctx, favorite) {
             favorite.forEach((key, value) => {
                 $(".favorite-" + key.product).css("display", "none");
-                $(".delete-favorite-" + key.id).css("display", "block");
+                $(".delete-favorite-" + key.product).css("display", "block");
             });
         },
 
-        COUNT_PRODUCTS_IN_FAVORITE(ctx, favorite) {
-            axios.get('/api/count-favorites', {favorite: favorite})
-                .then(response => { ctx.commit('COUNT_PRODUCTS_IN_FAVORITE_MUTATION', response.data) })
-                .catch(error => { console.log(error) })
+        COUNT_FAVORITE(ctx) {
+            axios.get('/api/count-favorites')
+                .then(response => { ctx.commit('COUNT_FAVORITE_MUTATION', response.data) })
+                .catch( error => {console.log(error)} )
         }
     },
     mutations: {
@@ -44,8 +44,8 @@ export default {
             state.favorite = favorite
         },
 
-        COUNT_PRODUCTS_IN_FAVORITE_MUTATION(state, favorite) {
-            state.count = favorite
+        COUNT_FAVORITE_MUTATION(state, count) {
+            return state.count = count
         }
     },
     state: {

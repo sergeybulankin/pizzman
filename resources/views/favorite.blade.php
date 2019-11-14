@@ -8,10 +8,6 @@
         @include('components.call')
     @endsection()
 
-    @section('favorite-auth')
-        @include('components.favorite-auth')
-    @endsection()
-
     @section('modile-block')
         @include('components.modile-block')
     @endsection()
@@ -32,12 +28,8 @@
         @include('components.category-navbar')
     @endsection()
 
-    @section('video-block')
-        @include('components.video-block')
-    @endsection()
-
-    @section('catalog')
-        @include('components.catalog')
+    @section('cart-details')
+        @include('components.favorites')
     @endsection()
 
     @section('footer')

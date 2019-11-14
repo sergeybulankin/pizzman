@@ -5,11 +5,6 @@
                 <div v-for="(category, index) in ALL_CATEGORIES" :key="index">
                     <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true" @click="selectProducts(category.id)">{{ category.name }}</a>
                 </div>
-                <!--<a class="nav-item nav-link active" id="nav-pizza-tab" data-toggle="tab" href="#nav-pizza" role="tab" aria-controls="nav-pizza" aria-selected="true">
-                    Пицца</a>
-                <a class="nav-item nav-link" id="nav-baking-tab" data-toggle="tab" href="#nav-baking" role="tab" aria-controls="nav-baking" aria-selected="false">Выпечка</a>
-                <a class="nav-item nav-link" id="nav-dessert-tab" data-toggle="tab" href="#nav-dessert" role="tab" aria-controls="nav-dessert" aria-selected="false">Десерты</a>
-                <a class="nav-item nav-link" id="nav-drink-tab" data-toggle="tab" href="#nav-drink" role="tab" aria-controls="nav-drink" aria-selected="false">Напитки</a>-->
             </div>
         </nav>
 
@@ -25,8 +20,9 @@
                                     <img src="images/demo.jpg"  class="img-fluid">
                                     <div class="search-heart">
                                         <button class="success left"><i class="fa fa-search"></i></button>
-                                        <button class="success right" @click="changeFavorite(product.id)" :class="'favorite-' + product.id"><i class="fa fa-heart"></i></button>
-                                        <button class="success right" @click="deleteFavorite(product.id)" :class="'delete-favorite-' + product.id"><i class="fa fa-trash-o"></i></button>
+                                        <button data-toggle="modal" data-target="#modal-form-auth"  v-if="checkUser == 0"><i class="fa fa-heart"></i></button>
+                                        <button @click="changeFavorite(product.id)" :class="'favorite-' + product.id" v-else><i class="fa fa-heart"></i></button>
+                                        <button @click="deleteFavorite(product.id)" :class="'delete-favorite-' + product.id"><i class="fa fa-trash-o"></i></button>
                                     </div>
                                 </div>
                                 <div class="c-product-info">
@@ -84,7 +80,15 @@
             setTimeout (() => { this.CHECK_PRODUCT_IN_CART(this.cart) }, 1000)
             setTimeout (() => { this.CHECK_PRODUCT_IN_FAVORITE(this.ALL_FAVORITE) }, 1000)
         },
-        computed: mapGetters(['ALL_PRODUCTS', 'ALL_CATEGORIES', 'ALL_FAVORITE']),
+        computed: {
+            ...mapGetters(['ALL_PRODUCTS', 'ALL_CATEGORIES', 'ALL_FAVORITE']),
+
+            checkUser() {
+                // window.Laravel.user - записывается в хэдэре,
+                // если пользователь авторизовался
+                return window.Laravel.user;
+            }
+        },
         methods: {
             ...mapActions(['SELECTED_ALL_PRODUCTS', 'CHECK_PRODUCT_IN_CART', 'CHECK_PRODUCT_IN_FAVORITE', 'SELECTION_BY_CATEGORY', 'ADD_TO_FAVORITE', 'SELECT_ALL_FAVORITE', 'DELETE_OF_FAVORITE']),
 
@@ -117,38 +121,6 @@
 
 
 <style>
-    .panel {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .panel-body {
-        background-color: yellow;
-        width: 300px;
-        margin: 30px 0 0 30px;
-        padding: 15px;
-        flex-direction: row;
-    }
-    .title {
-        margin: 10px 0;
-        font-size: 30px;
-        font-weight: 600;
-    }
-    .description {
-        margin: 15px 0;
-        font-size: 15px;
-    }
-    .price {
-        font-size: 20px;
-        color: red;
-    }
-    .add-to-cart {
-        margin: 20px 0 0 0;
-        background: black;
-        padding: 10px;
-        text-align: center;
-        color: white;
-        cursor: pointer;
-    }
     .delete-from-cart {
         margin: 20px 0 0 0;
         background: #a2a2a2;
@@ -163,6 +135,10 @@
     }
     [class^="delete-product-id-"] {
         display: none;
+    }
+
+    [class^="favorite-"] {
+        display: block;
     }
 
     [class^="delete-favorite-"] {

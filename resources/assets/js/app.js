@@ -34,6 +34,7 @@ Vue.component('search-address', require('./components/AddressComponent.vue'));
 Vue.component('call-me', require('./components/CallMeComponent.vue'));
 Vue.component('search', require('./components/SearchComponent.vue'));
 Vue.component('favorite', require('./components/FavoriteComponent.vue'));
+Vue.component('favorite-page', require('./components/FavoritePageComponent.vue'));
 
 const app = new Vue({
     el: '#app',

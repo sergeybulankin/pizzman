@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Favorite;
 use App\Http\Resources\FavoriteResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
@@ -13,9 +14,14 @@ class FavoriteController extends Controller
      */
     public function index()
     {
-        $favorites = Favorite::all();
+        $favorites = Favorite::with('product')->where('user_id', Auth::user()->id)->get();
 
         return FavoriteResource::collection($favorites);
+    }
+
+    public function show()
+    {
+        return view('favorite');
     }
 
     /**
@@ -34,14 +40,14 @@ class FavoriteController extends Controller
      */
     public function delete(Request $request)
     {
-        Favorite::where('product_id', $request->product)->where('user_id', 1)->delete();
+        Favorite::where('product_id', $request->product)->where('user_id', Auth::user()->id)->delete();
     }
 
     /**
      * @return mixed
      */
     public function count() {
-        $count = Favorite::where('user_id', 1)->get()->count();
+        $count = Favorite::where('user_id', Auth::user()->id)->get()->count();
 
         return $count;
     }

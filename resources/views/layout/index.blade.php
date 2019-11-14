@@ -14,7 +14,10 @@
     <link href={{ asset('css/style.css') }} type="text/css" rel="stylesheet">
 
     <script>
-        window.Laravel = { csrfToken: '{{ csrf_token() }}' };
+        window.Laravel = {
+            csrfToken: '{{ csrf_token() }}',
+            user: '{{ (Auth::user()) ? Auth::user()->id : 0 }}'
+        };
     </script>
     <script
             src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -33,6 +36,8 @@
 @yield('search')
 
 @yield('call')
+
+@yield('favorite-auth')
 
 @yield('fixed-navbar')
 
