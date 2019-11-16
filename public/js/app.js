@@ -70,7 +70,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(7);
+var bind = __webpack_require__(9);
 var isBuffer = __webpack_require__(24);
 
 /*global toString:true*/
@@ -12288,10 +12288,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(9);
+    adapter = __webpack_require__(11);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(9);
+    adapter = __webpack_require__(11);
   }
   return adapter;
 }
@@ -12362,479 +12362,10 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function bind(fn, thisArg) {
-  return function wrap() {
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-    return fn.apply(thisArg, args);
-  };
-};
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(0);
-var settle = __webpack_require__(27);
-var buildURL = __webpack_require__(29);
-var parseHeaders = __webpack_require__(30);
-var isURLSameOrigin = __webpack_require__(31);
-var createError = __webpack_require__(10);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(32);
-
-module.exports = function xhrAdapter(config) {
-  return new Promise(function dispatchXhrRequest(resolve, reject) {
-    var requestData = config.data;
-    var requestHeaders = config.headers;
-
-    if (utils.isFormData(requestData)) {
-      delete requestHeaders['Content-Type']; // Let the browser set it
-    }
-
-    var request = new XMLHttpRequest();
-    var loadEvent = 'onreadystatechange';
-    var xDomain = false;
-
-    // For IE 8/9 CORS support
-    // Only supports POST and GET calls and doesn't returns the response headers.
-    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
-    if ("development" !== 'test' &&
-        typeof window !== 'undefined' &&
-        window.XDomainRequest && !('withCredentials' in request) &&
-        !isURLSameOrigin(config.url)) {
-      request = new window.XDomainRequest();
-      loadEvent = 'onload';
-      xDomain = true;
-      request.onprogress = function handleProgress() {};
-      request.ontimeout = function handleTimeout() {};
-    }
-
-    // HTTP basic authentication
-    if (config.auth) {
-      var username = config.auth.username || '';
-      var password = config.auth.password || '';
-      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
-    }
-
-    request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), true);
-
-    // Set the request timeout in MS
-    request.timeout = config.timeout;
-
-    // Listen for ready state
-    request[loadEvent] = function handleLoad() {
-      if (!request || (request.readyState !== 4 && !xDomain)) {
-        return;
-      }
-
-      // The request errored out and we didn't get a response, this will be
-      // handled by onerror instead
-      // With one exception: request that using file: protocol, most browsers
-      // will return status as 0 even though it's a successful request
-      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
-        return;
-      }
-
-      // Prepare the response
-      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
-      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
-      var response = {
-        data: responseData,
-        // IE sends 1223 instead of 204 (https://github.com/axios/axios/issues/201)
-        status: request.status === 1223 ? 204 : request.status,
-        statusText: request.status === 1223 ? 'No Content' : request.statusText,
-        headers: responseHeaders,
-        config: config,
-        request: request
-      };
-
-      settle(resolve, reject, response);
-
-      // Clean up request
-      request = null;
-    };
-
-    // Handle low level network errors
-    request.onerror = function handleError() {
-      // Real errors are hidden from us by the browser
-      // onerror should only fire if it's a network error
-      reject(createError('Network Error', config, null, request));
-
-      // Clean up request
-      request = null;
-    };
-
-    // Handle timeout
-    request.ontimeout = function handleTimeout() {
-      reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED',
-        request));
-
-      // Clean up request
-      request = null;
-    };
-
-    // Add xsrf header
-    // This is only done if running in a standard browser environment.
-    // Specifically not if we're in a web worker, or react-native.
-    if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(33);
-
-      // Add xsrf header
-      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
-          cookies.read(config.xsrfCookieName) :
-          undefined;
-
-      if (xsrfValue) {
-        requestHeaders[config.xsrfHeaderName] = xsrfValue;
-      }
-    }
-
-    // Add headers to the request
-    if ('setRequestHeader' in request) {
-      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
-        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
-          // Remove Content-Type if data is undefined
-          delete requestHeaders[key];
-        } else {
-          // Otherwise add header to the request
-          request.setRequestHeader(key, val);
-        }
-      });
-    }
-
-    // Add withCredentials to request if needed
-    if (config.withCredentials) {
-      request.withCredentials = true;
-    }
-
-    // Add responseType to request if needed
-    if (config.responseType) {
-      try {
-        request.responseType = config.responseType;
-      } catch (e) {
-        // Expected DOMException thrown by browsers not compatible XMLHttpRequest Level 2.
-        // But, this can be suppressed for 'json' type as it can be parsed by default 'transformResponse' function.
-        if (config.responseType !== 'json') {
-          throw e;
-        }
-      }
-    }
-
-    // Handle progress if needed
-    if (typeof config.onDownloadProgress === 'function') {
-      request.addEventListener('progress', config.onDownloadProgress);
-    }
-
-    // Not all browsers support upload events
-    if (typeof config.onUploadProgress === 'function' && request.upload) {
-      request.upload.addEventListener('progress', config.onUploadProgress);
-    }
-
-    if (config.cancelToken) {
-      // Handle cancellation
-      config.cancelToken.promise.then(function onCanceled(cancel) {
-        if (!request) {
-          return;
-        }
-
-        request.abort();
-        reject(cancel);
-        // Clean up request
-        request = null;
-      });
-    }
-
-    if (requestData === undefined) {
-      requestData = null;
-    }
-
-    // Send the request
-    request.send(requestData);
-  });
-};
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var enhanceError = __webpack_require__(28);
-
-/**
- * Create an Error with the specified message, config, error code, request and response.
- *
- * @param {string} message The error message.
- * @param {Object} config The config.
- * @param {string} [code] The error code (for example, 'ECONNABORTED').
- * @param {Object} [request] The request.
- * @param {Object} [response] The response.
- * @returns {Error} The created error.
- */
-module.exports = function createError(message, config, code, request, response) {
-  var error = new Error(message);
-  return enhanceError(error, config, code, request, response);
-};
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function isCancel(value) {
-  return !!(value && value.__CANCEL__);
-};
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * A `Cancel` is an object that is thrown when an operation is canceled.
- *
- * @class
- * @param {string=} message The message.
- */
-function Cancel(message) {
-  this.message = message;
-}
-
-Cancel.prototype.toString = function toString() {
-  return 'Cancel' + (this.message ? ': ' + this.message : '');
-};
-
-Cancel.prototype.__CANCEL__ = true;
-
-module.exports = Cancel;
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-if (false) {
-  module.exports = require('./vue.common.prod.js')
-} else {
-  module.exports = __webpack_require__(41)
-}
-
-
-/***/ }),
-/* 14 */
 /***/ (function(module, exports) {
 
 /*
@@ -12916,7 +12447,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 15 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -13144,6 +12675,475 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(0);
+var settle = __webpack_require__(27);
+var buildURL = __webpack_require__(29);
+var parseHeaders = __webpack_require__(30);
+var isURLSameOrigin = __webpack_require__(31);
+var createError = __webpack_require__(12);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(32);
+
+module.exports = function xhrAdapter(config) {
+  return new Promise(function dispatchXhrRequest(resolve, reject) {
+    var requestData = config.data;
+    var requestHeaders = config.headers;
+
+    if (utils.isFormData(requestData)) {
+      delete requestHeaders['Content-Type']; // Let the browser set it
+    }
+
+    var request = new XMLHttpRequest();
+    var loadEvent = 'onreadystatechange';
+    var xDomain = false;
+
+    // For IE 8/9 CORS support
+    // Only supports POST and GET calls and doesn't returns the response headers.
+    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
+    if ("development" !== 'test' &&
+        typeof window !== 'undefined' &&
+        window.XDomainRequest && !('withCredentials' in request) &&
+        !isURLSameOrigin(config.url)) {
+      request = new window.XDomainRequest();
+      loadEvent = 'onload';
+      xDomain = true;
+      request.onprogress = function handleProgress() {};
+      request.ontimeout = function handleTimeout() {};
+    }
+
+    // HTTP basic authentication
+    if (config.auth) {
+      var username = config.auth.username || '';
+      var password = config.auth.password || '';
+      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
+    }
+
+    request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), true);
+
+    // Set the request timeout in MS
+    request.timeout = config.timeout;
+
+    // Listen for ready state
+    request[loadEvent] = function handleLoad() {
+      if (!request || (request.readyState !== 4 && !xDomain)) {
+        return;
+      }
+
+      // The request errored out and we didn't get a response, this will be
+      // handled by onerror instead
+      // With one exception: request that using file: protocol, most browsers
+      // will return status as 0 even though it's a successful request
+      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
+        return;
+      }
+
+      // Prepare the response
+      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
+      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
+      var response = {
+        data: responseData,
+        // IE sends 1223 instead of 204 (https://github.com/axios/axios/issues/201)
+        status: request.status === 1223 ? 204 : request.status,
+        statusText: request.status === 1223 ? 'No Content' : request.statusText,
+        headers: responseHeaders,
+        config: config,
+        request: request
+      };
+
+      settle(resolve, reject, response);
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle low level network errors
+    request.onerror = function handleError() {
+      // Real errors are hidden from us by the browser
+      // onerror should only fire if it's a network error
+      reject(createError('Network Error', config, null, request));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle timeout
+    request.ontimeout = function handleTimeout() {
+      reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED',
+        request));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Add xsrf header
+    // This is only done if running in a standard browser environment.
+    // Specifically not if we're in a web worker, or react-native.
+    if (utils.isStandardBrowserEnv()) {
+      var cookies = __webpack_require__(33);
+
+      // Add xsrf header
+      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
+          cookies.read(config.xsrfCookieName) :
+          undefined;
+
+      if (xsrfValue) {
+        requestHeaders[config.xsrfHeaderName] = xsrfValue;
+      }
+    }
+
+    // Add headers to the request
+    if ('setRequestHeader' in request) {
+      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
+        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
+          // Remove Content-Type if data is undefined
+          delete requestHeaders[key];
+        } else {
+          // Otherwise add header to the request
+          request.setRequestHeader(key, val);
+        }
+      });
+    }
+
+    // Add withCredentials to request if needed
+    if (config.withCredentials) {
+      request.withCredentials = true;
+    }
+
+    // Add responseType to request if needed
+    if (config.responseType) {
+      try {
+        request.responseType = config.responseType;
+      } catch (e) {
+        // Expected DOMException thrown by browsers not compatible XMLHttpRequest Level 2.
+        // But, this can be suppressed for 'json' type as it can be parsed by default 'transformResponse' function.
+        if (config.responseType !== 'json') {
+          throw e;
+        }
+      }
+    }
+
+    // Handle progress if needed
+    if (typeof config.onDownloadProgress === 'function') {
+      request.addEventListener('progress', config.onDownloadProgress);
+    }
+
+    // Not all browsers support upload events
+    if (typeof config.onUploadProgress === 'function' && request.upload) {
+      request.upload.addEventListener('progress', config.onUploadProgress);
+    }
+
+    if (config.cancelToken) {
+      // Handle cancellation
+      config.cancelToken.promise.then(function onCanceled(cancel) {
+        if (!request) {
+          return;
+        }
+
+        request.abort();
+        reject(cancel);
+        // Clean up request
+        request = null;
+      });
+    }
+
+    if (requestData === undefined) {
+      requestData = null;
+    }
+
+    // Send the request
+    request.send(requestData);
+  });
+};
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var enhanceError = __webpack_require__(28);
+
+/**
+ * Create an Error with the specified message, config, error code, request and response.
+ *
+ * @param {string} message The error message.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ * @param {Object} [request] The request.
+ * @param {Object} [response] The response.
+ * @returns {Error} The created error.
+ */
+module.exports = function createError(message, config, code, request, response) {
+  var error = new Error(message);
+  return enhanceError(error, config, code, request, response);
+};
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function isCancel(value) {
+  return !!(value && value.__CANCEL__);
+};
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
+}
+
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
+
+Cancel.prototype.__CANCEL__ = true;
+
+module.exports = Cancel;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+if (false) {
+  module.exports = require('./vue.common.prod.js')
+} else {
+  module.exports = __webpack_require__(41)
+}
+
+
+/***/ }),
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13168,7 +13168,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 __webpack_require__(18);
 
-window.Vue = __webpack_require__(13);
+window.Vue = __webpack_require__(15);
 
 
 
@@ -33009,7 +33009,7 @@ module.exports = __webpack_require__(23);
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(7);
+var bind = __webpack_require__(9);
 var Axios = __webpack_require__(25);
 var defaults = __webpack_require__(6);
 
@@ -33044,9 +33044,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(12);
+axios.Cancel = __webpack_require__(14);
 axios.CancelToken = __webpack_require__(39);
-axios.isCancel = __webpack_require__(11);
+axios.isCancel = __webpack_require__(13);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -33199,7 +33199,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(10);
+var createError = __webpack_require__(12);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -33634,7 +33634,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(36);
-var isCancel = __webpack_require__(11);
+var isCancel = __webpack_require__(13);
 var defaults = __webpack_require__(6);
 var isAbsoluteURL = __webpack_require__(37);
 var combineURLs = __webpack_require__(38);
@@ -33794,7 +33794,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(12);
+var Cancel = __webpack_require__(14);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -46092,7 +46092,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(8)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(10)))
 
 /***/ }),
 /* 44 */
@@ -47410,7 +47410,7 @@ if (typeof JSON !== "object") {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_product__ = __webpack_require__(58);
@@ -47464,8 +47464,8 @@ var debug = "development" !== 'production';
         },
         CHECK_PRODUCT_IN_CART: function CHECK_PRODUCT_IN_CART(ctx, cart) {
             cart.forEach(function (key, value) {
-                $(".add-product-id-" + key).css("display", "none");
-                $(".delete-product-id-" + key).css("display", "block");
+                $(".add-product-id-" + key.id).css("display", "none");
+                $(".delete-product-id-" + key.id).css("display", "block");
             });
         },
         SELECTION_BY_CATEGORY: function SELECTION_BY_CATEGORY(ctx, id) {
@@ -47544,8 +47544,14 @@ var debug = "development" !== 'production';
         TOTAL_PRICE: function TOTAL_PRICE(state) {
             var total = [];
 
-            state.productsInCart.forEach(function (key, value) {
-                total.push(key.price * key.count);
+            state.productsInCart.forEach(function (entry) {
+                entry.food.forEach(function (food) {
+                    total.push(food.price * entry.count);
+                });
+
+                entry.additive.forEach(function (additive) {
+                    total.push(additive.price * entry.count);
+                });
             });
             state.total_price = total.reduce(function (total, num) {
                 return total + num;
@@ -47575,14 +47581,14 @@ var debug = "development" !== 'production';
     actions: {
         SELECTED_ALL_CATEGORIES: function SELECTED_ALL_CATEGORIES(ctx) {
             axios.get('/api/selected-categories').then(function (res) {
-                ctx.commit('CATEGORIES', res.data.data);
+                ctx.commit('CATEGORIES_MUTATION', res.data.data);
             }).catch(function (error) {
                 console.log(error);
             });
         }
     },
     mutations: {
-        CATEGORIES: function CATEGORIES(state, category) {
+        CATEGORIES_MUTATION: function CATEGORIES_MUTATION(state, category) {
             state.categories = category;
         }
     },
@@ -47728,7 +47734,7 @@ var content = __webpack_require__(64);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(15)("7ee07b3e", content, false, {});
+var update = __webpack_require__(8)("7ee07b3e", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -47747,7 +47753,7 @@ if(false) {
 /* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(14)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -47869,6 +47875,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -47896,15 +47915,32 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }
     }),
     methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_ALL_PRODUCTS', 'CHECK_PRODUCT_IN_CART', 'CHECK_PRODUCT_IN_FAVORITE', 'SELECTION_BY_CATEGORY', 'ADD_TO_FAVORITE', 'SELECT_ALL_FAVORITE', 'DELETE_OF_FAVORITE']), {
+
+        // если пользователь под своим аккаунтом,
+        // то записываем все в БД,
+        // но показываем все действия все равно из localStorage
+        // Если пользователь не под аккаунтов, то в БД не пишем
         changeProduct: function changeProduct(id) {
-            this.cart.push(id);
+            var additive_id = document.getElementsByClassName('additive-' + id)[0].value;
+            this.cart.push({ id: id, additive_id: additive_id });
             $(".add-product-id-" + id).css("display", "none");
             $(".delete-product-id-" + id).css("display", "block");
+
+            if (this.checkUser == 1) {
+                console.log('YEP!');
+            }
         },
         changeFavorite: function changeFavorite(id) {
             this.ADD_TO_FAVORITE(id);
             $(".favorite-" + id).css("display", "none");
             $(".delete-favorite-" + id).css("display", "block");
+        },
+
+
+        // передаем из цикла добавок id
+        // чтобы было что добавлять в корзину и заказы
+        changeAdditive: function changeAdditive(id, product_id) {
+            $('#additive' + product_id).val(id);
         },
         deleteFavorite: function deleteFavorite(id) {
             this.DELETE_OF_FAVORITE(id);
@@ -47951,7 +47987,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v(_vm._s(category.name))]
+              [_vm._v(_vm._s(category.name) + "\n                ")]
             )
           ])
         }),
@@ -47984,19 +48020,19 @@ var render = function() {
                   },
                   [
                     _c("div", { staticClass: "one-food" }, [
-                      _c("div", { attrs: { id: "recommend" } }, [
-                        _vm._v("рекомендуем")
-                      ]),
+                      product.recommend == true
+                        ? _c("div", { attrs: { id: "recommend" } }, [
+                            _vm._v("рекомендуем")
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
                       _c("div", { staticClass: "c-product" }, [
                         _c("img", {
                           staticClass: "img-fluid",
-                          attrs: { src: "images/demo.jpg" }
+                          attrs: { src: product.image }
                         }),
                         _vm._v(" "),
                         _c("div", { staticClass: "search-heart" }, [
-                          _vm._m(0, true),
-                          _vm._v(" "),
                           _vm.checkUser == 0
                             ? _c(
                                 "button",
@@ -48036,22 +48072,100 @@ var render = function() {
                         ])
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "c-product-info" }, [
-                        _c("a", { staticClass: "product_title" }, [
-                          _vm._v(_vm._s(product.title) + " ")
-                        ]),
-                        _vm._v(" "),
-                        _vm._m(1, true),
-                        _vm._v(" "),
-                        _c("h5", [
-                          _c("small", [_vm._v(_vm._s(product.description))])
-                        ])
-                      ]),
+                      _c(
+                        "div",
+                        { staticClass: "c-product-info" },
+                        [
+                          _c("a", { staticClass: "product_title" }, [
+                            _vm._v(_vm._s(product.name) + " ")
+                          ]),
+                          _vm._v(" "),
+                          _c("span", [
+                            _vm._v(" Масса: " + _vm._s(product.weight) + "г"),
+                            _c("br"),
+                            _vm._v("Калорийность: " + _vm._s(product.calories)),
+                            _c("br"),
+                            _vm._v("Белки: " + _vm._s(product.protein)),
+                            _c("br"),
+                            _vm._v(
+                              "Углеводы: " + _vm._s(product.carbohydrates) + " "
+                            ),
+                            _c("br"),
+                            _vm._v(" "),
+                            _c("br")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(product.types, function(type, index_type) {
+                            return _c("span", { key: index_type }, [
+                              _vm._v(
+                                " " +
+                                  _vm._s(type.name) +
+                                  " " +
+                                  _vm._s(product.id)
+                              )
+                            ])
+                          }),
+                          _vm._v(" "),
+                          _vm._m(0, true),
+                          _vm._v(" "),
+                          _c("h5", [
+                            _c("small", [_vm._v(_vm._s(product.structure))])
+                          ])
+                        ],
+                        2
+                      ),
                       _vm._v(" "),
-                      _vm._m(2, true),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "btn-group btn-group-toggle",
+                          attrs: { "data-toggle": "buttons" }
+                        },
+                        _vm._l(product.additives, function(
+                          additive,
+                          additive_index
+                        ) {
+                          return _c(
+                            "label",
+                            {
+                              key: additive_index,
+                              staticClass: "btn btn-secondary",
+                              on: {
+                                click: function($event) {
+                                  return _vm.changeAdditive(
+                                    additive.id,
+                                    product.id
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("input", {
+                                attrs: {
+                                  type: "checkbox",
+                                  name: "options",
+                                  id: "option" + additive.id,
+                                  autocomplete: "off"
+                                }
+                              }),
+                              _vm._v(
+                                " " +
+                                  _vm._s(additive.name) +
+                                  "\n                                "
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        class: "additive-" + product.id,
+                        attrs: { type: "text", id: "additive" + product.id }
+                      }),
                       _vm._v(" "),
                       _c("a", { staticClass: "product_title" }, [
-                        _vm._v(_vm._s(product.price))
+                        _vm._v(_vm._s(product.price) + " P")
                       ]),
                       _vm._v(" "),
                       _c("div", { class: "add-product-id-" + product.id }, [
@@ -48068,7 +48182,9 @@ var render = function() {
                           },
                           [
                             _c("i", { staticClass: "fa fa-shopping-cart" }),
-                            _vm._v("   Добавить в корзину")
+                            _vm._v(
+                              "   Добавить в корзину\n                                "
+                            )
                           ]
                         )
                       ]),
@@ -48091,14 +48207,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "success left" }, [
-      _c("i", { staticClass: "fa fa-search" })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -48126,56 +48234,6 @@ var staticRenderFns = [
         }
       })
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "btn-group btn-group-toggle",
-        attrs: { "data-toggle": "buttons" }
-      },
-      [
-        _c("label", { staticClass: "btn btn-secondary active" }, [
-          _c("input", {
-            attrs: {
-              type: "radio",
-              name: "options",
-              id: "option1",
-              autocomplete: "off",
-              checked: ""
-            }
-          }),
-          _vm._v(" добавка 1\n                                ")
-        ]),
-        _vm._v(" "),
-        _c("label", { staticClass: "btn btn-secondary" }, [
-          _c("input", {
-            attrs: {
-              type: "radio",
-              name: "options",
-              id: "option2",
-              autocomplete: "off"
-            }
-          }),
-          _vm._v(" добавка 2\n                                ")
-        ]),
-        _vm._v(" "),
-        _c("label", { staticClass: "btn btn-secondary" }, [
-          _c("input", {
-            attrs: {
-              type: "radio",
-              name: "options",
-              id: "option3",
-              autocomplete: "off"
-            }
-          }),
-          _vm._v(" добавка 3\n                                ")
-        ])
-      ]
-    )
   }
 ]
 render._withStripped = true
@@ -48192,6 +48250,10 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(100)
+}
 var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(69)
@@ -48200,7 +48262,7 @@ var __vue_template__ = __webpack_require__(70)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -48243,6 +48305,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -48350,88 +48417,119 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "d-none", attrs: { id: "cart_info" } }, [
-        _c(
-          "ul",
-          _vm._l(_vm.ALL_PRODUCTS_IN_CART, function(product, index) {
-            return _c("li", { key: product.id, staticClass: "d-flex" }, [
-              _c("div", { staticClass: "delete_icon" }, [
-                _c("img", {
-                  attrs: { src: "images/delete_icon.svg" },
-                  on: {
-                    click: function($event) {
-                      return _vm.deleteProductFromCart(index, product.id)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _vm._m(0, true),
-              _vm._v(" "),
-              _c("div", { staticClass: "description" }, [
-                _c("a", [_c("b", [_vm._v(_vm._s(product.product_title))])]),
-                _c("p", [
-                  _c("small", [
-                    _vm._v("1x" + _vm._s(product.price) + " "),
-                    _c("i", { staticClass: "fa fa-rub" })
-                  ])
-                ])
-              ])
+      _c(
+        "div",
+        { staticClass: "d-none", attrs: { id: "cart_info" } },
+        [
+          _vm._l(_vm.ALL_PRODUCTS_IN_CART, function(item, index) {
+            return _c("ul", { key: item.id }, [
+              _c(
+                "li",
+                [
+                  _vm._l(item.food, function(product, index) {
+                    return _c(
+                      "div",
+                      { key: product.id, staticClass: "d-flex" },
+                      [
+                        _c("div", { staticClass: "delete_icon" }, [
+                          _c("img", {
+                            attrs: { src: "images/delete_icon.svg" },
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteProductFromCart(
+                                  index,
+                                  product.id
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "photo-small" }, [
+                          _c("img", {
+                            staticClass: "img-fluid",
+                            attrs: { src: product.image }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "description" }, [
+                          _c("a", [_c("b", [_vm._v(_vm._s(product.name))])]),
+                          _c("p", [
+                            _c("small", [
+                              _vm._v("1x" + _vm._s(product.price) + " "),
+                              _c("i", { staticClass: "fa fa-rub" })
+                            ])
+                          ])
+                        ])
+                      ]
+                    )
+                  }),
+                  _vm._v(" "),
+                  _vm._l(item.additive, function(additive, additive_index) {
+                    return _c(
+                      "span",
+                      { key: additive_index, staticClass: "description" },
+                      [
+                        _c("a", [_c("b", [_vm._v(_vm._s(additive.name))])]),
+                        _c("p", [
+                          _c("small", [
+                            _vm._v(_vm._s(additive.price) + " "),
+                            _c("i", { staticClass: "fa fa-rub" })
+                          ])
+                        ])
+                      ]
+                    )
+                  })
+                ],
+                2
+              )
             ])
           }),
-          0
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "d-flex justify-content-between subtutorial" },
-          [
-            _c("strong", [_vm._v("Итого:")]),
-            _vm._v(" "),
-            _c("p", [
-              _c("b", [
-                _vm._v(_vm._s(_vm.totalPrice) + " "),
-                _c("i", { staticClass: "fa fa-rub mr-0" })
-              ])
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "d-flex justify-content-around" }, [
-          _vm._m(1),
           _vm._v(" "),
           _c(
-            "form",
-            {
-              staticClass: "row",
-              attrs: { id: "form" },
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  return _vm.sendCart()
-                }
-              }
-            },
+            "div",
+            { staticClass: "d-flex justify-content-between subtutorial" },
             [
-              _c("button", { staticClass: "btn btn-success" }, [
-                _vm._v("Оформить заказ")
+              _c("strong", [_vm._v("Итого:")]),
+              _vm._v(" "),
+              _c("p", [
+                _c("b", [
+                  _vm._v(_vm._s(_vm.totalPrice) + " "),
+                  _c("i", { staticClass: "fa fa-rub mr-0" })
+                ])
               ])
             ]
-          )
-        ])
-      ])
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "d-flex justify-content-around" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "form",
+              {
+                staticClass: "row",
+                attrs: { id: "form" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.sendCart()
+                  }
+                }
+              },
+              [
+                _c("button", { staticClass: "btn btn-success" }, [
+                  _vm._v("Оформить заказ")
+                ])
+              ]
+            )
+          ])
+        ],
+        2
+      )
     ]
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "photo-small" }, [
-      _c("img", { staticClass: "img-fluid", attrs: { src: "images/demo.jpg" } })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -48648,16 +48746,17 @@ var render = function() {
                         })
                       ]),
                       _vm._v(" "),
-                      _vm._m(1, true),
+                      _c("div", { staticClass: "photo-small" }, [
+                        _c("img", {
+                          staticClass: "img-fluid",
+                          attrs: { src: product.image }
+                        })
+                      ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "description pl-3" }, [
-                        _c("a", [
-                          _c("b", [_vm._v(_vm._s(product.product_title))])
-                        ]),
+                        _c("a", [_c("b", [_vm._v(_vm._s(product.name))])]),
                         _c("p", [
-                          _c("small", [
-                            _vm._v(_vm._s(product.product_description))
-                          ])
+                          _c("small", [_vm._v(_vm._s(product.structure))])
                         ])
                       ])
                     ]),
@@ -48773,7 +48872,7 @@ var render = function() {
               "div",
               { staticClass: "d-flex justify-content-between subtutorial" },
               [
-                _vm._m(2),
+                _vm._m(1),
                 _c("p", [
                   _vm._v(_vm._s(_vm.totalPrice) + " "),
                   _c("i", { staticClass: "fa fa-rub" })
@@ -48807,17 +48906,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("td", [_vm._v("Итого")])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "photo-small" }, [
-      _c("img", {
-        staticClass: "img-fluid",
-        attrs: { src: "/images/demo.jpg" }
-      })
     ])
   },
   function() {
@@ -49014,7 +49102,7 @@ var content = __webpack_require__(79);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(15)("12609c10", content, false, {});
+var update = __webpack_require__(8)("12609c10", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -49033,7 +49121,7 @@ if(false) {
 /* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(14)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
@@ -53907,8 +53995,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
 
 
 
@@ -53934,6 +54020,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         searchByName: function searchByName() {
             var filter = this.filter.trim().toLowerCase();
             if (filter === '') return this.CATALOG;
+
             return this.CATALOG.filter(function (s) {
                 return s.title.toLowerCase().indexOf(filter) > -1;
             });
@@ -53945,6 +54032,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             $(".add-product-id-" + id).css("display", "none");
             $(".delete-product-id-" + id).css("display", "block");
+        },
+
+
+        // передаем из цикла добавок id
+        // чтобы было что добавлять в корзину и заказы
+        changeAdditive: function changeAdditive(id, product_id) {
+            $('#additive' + product_id).val(id);
         }
     })
 });
@@ -54007,24 +54101,78 @@ var render = function() {
                       _vm._v("рекомендуем")
                     ]),
                     _vm._v(" "),
-                    _vm._m(1, true),
+                    _c("div", { staticClass: "c-product" }, [
+                      _c("img", {
+                        staticClass: "img-fluid",
+                        attrs: { src: product.image }
+                      }),
+                      _vm._v(" "),
+                      _vm._m(1, true)
+                    ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "c-product-info" }, [
                       _c("a", { staticClass: "product_title" }, [
-                        _vm._v(_vm._s(product.title))
+                        _vm._v(_vm._s(product.name))
                       ]),
                       _vm._v(" "),
                       _vm._m(2, true),
                       _vm._v(" "),
                       _c("h5", [
-                        _c("small", [_vm._v(_vm._s(product.description))])
+                        _c("small", [_vm._v(_vm._s(product.structure))])
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(3, true),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "btn-group btn-group-toggle",
+                        attrs: { "data-toggle": "buttons" }
+                      },
+                      _vm._l(product.additives, function(
+                        additive,
+                        additive_index
+                      ) {
+                        return _c(
+                          "label",
+                          {
+                            key: additive_index,
+                            staticClass: "btn btn-secondary",
+                            on: {
+                              click: function($event) {
+                                return _vm.changeAdditive(
+                                  additive.id,
+                                  product.id
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("input", {
+                              attrs: {
+                                type: "checkbox",
+                                name: "options",
+                                id: "option" + additive.id,
+                                autocomplete: "off"
+                              }
+                            }),
+                            _vm._v(
+                              " " +
+                                _vm._s(additive.name) +
+                                "\n                                "
+                            )
+                          ]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      class: "additive-" + product.id,
+                      attrs: { type: "text", id: "additive" + product.id }
+                    }),
                     _vm._v(" "),
                     _c("a", { staticClass: "product_title" }, [
-                      _vm._v(_vm._s(product.prict))
+                      _vm._v(_vm._s(product.price))
                     ]),
                     _vm._v(" "),
                     _c("div", { class: "add-product-id-" + product.id }, [
@@ -54086,20 +54234,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "c-product" }, [
-      _c("img", {
-        staticClass: "img-fluid",
-        attrs: { src: "images/demo.jpg" }
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "search-heart" }, [
-        _c("button", { staticClass: "success left" }, [
-          _c("i", { staticClass: "fa fa-search" })
-        ]),
-        _vm._v(" "),
-        _c("button", { staticClass: "success right" }, [
-          _c("i", { staticClass: "fa fa-heart" })
-        ])
+    return _c("div", { staticClass: "search-heart" }, [
+      _c("button", { staticClass: "success right" }, [
+        _c("i", { staticClass: "fa fa-heart" })
       ])
     ])
   },
@@ -54130,56 +54267,6 @@ var staticRenderFns = [
         }
       })
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "btn-group btn-group-toggle",
-        attrs: { "data-toggle": "buttons" }
-      },
-      [
-        _c("label", { staticClass: "btn btn-secondary active" }, [
-          _c("input", {
-            attrs: {
-              type: "radio",
-              name: "options",
-              id: "option1",
-              autocomplete: "off",
-              checked: ""
-            }
-          }),
-          _vm._v(" добавка 1\n                                ")
-        ]),
-        _vm._v(" "),
-        _c("label", { staticClass: "btn btn-secondary" }, [
-          _c("input", {
-            attrs: {
-              type: "radio",
-              name: "options",
-              id: "option2",
-              autocomplete: "off"
-            }
-          }),
-          _vm._v(" добавка 2\n                                ")
-        ]),
-        _vm._v(" "),
-        _c("label", { staticClass: "btn btn-secondary" }, [
-          _c("input", {
-            attrs: {
-              type: "radio",
-              name: "options",
-              id: "option3",
-              autocomplete: "off"
-            }
-          }),
-          _vm._v(" добавка 3\n                                ")
-        ])
-      ]
-    )
   }
 ]
 render._withStripped = true
@@ -54300,13 +54387,13 @@ if (false) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(98)
+  __webpack_require__(96)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(96)
+var __vue_script__ = __webpack_require__(98)
 /* template */
-var __vue_template__ = __webpack_require__(97)
+var __vue_template__ = __webpack_require__(99)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -54346,6 +54433,46 @@ module.exports = Component.exports
 
 /***/ }),
 /* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(97);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(8)("328edc6a", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-74924c4b\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FavoritePageComponent.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-74924c4b\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FavoritePageComponent.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(7)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.delete-from-cart {\n    margin: 20px 0 0 0;\n    background: #a2a2a2;\n    padding: 10px;\n    text-align: center;\n    color: white;\n    cursor: pointer;\n}\n[class^=\"delete-product-id-\"] {\n    display: none;\n}\n[class^=\"favorite-\"] {\n    display: block;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54430,7 +54557,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 });
 
 /***/ }),
-/* 97 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -54622,23 +54749,23 @@ if (false) {
 }
 
 /***/ }),
-/* 98 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(99);
+var content = __webpack_require__(101);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(15)("328edc6a", content, false, {});
+var update = __webpack_require__(8)("2e56f2b0", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-74924c4b\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FavoritePageComponent.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-74924c4b\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FavoritePageComponent.vue");
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55d75696\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CartComponent.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-55d75696\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CartComponent.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -54648,15 +54775,15 @@ if(false) {
 }
 
 /***/ }),
-/* 99 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(14)(false);
+exports = module.exports = __webpack_require__(7)(false);
 // imports
 
 
 // module
-exports.push([module.i, "\n.delete-from-cart {\n    margin: 20px 0 0 0;\n    background: #a2a2a2;\n    padding: 10px;\n    text-align: center;\n    color: white;\n    cursor: pointer;\n}\n[class^=\"delete-product-id-\"] {\n    display: none;\n}\n[class^=\"favorite-\"] {\n    display: block;\n}\n", ""]);
+exports.push([module.i, "\nli {\n    list-style: none;\n}\n", ""]);
 
 // exports
 

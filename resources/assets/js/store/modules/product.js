@@ -14,8 +14,8 @@ export default {
 
         CHECK_PRODUCT_IN_CART(ctx, cart) {
             cart.forEach((key, value) => {
-                $(".add-product-id-" + key).css("display", "none");
-                $(".delete-product-id-" + key).css("display", "block");
+                $(".add-product-id-" + key.id).css("display", "none");
+                $(".delete-product-id-" + key.id).css("display", "block");
             });
         },
 

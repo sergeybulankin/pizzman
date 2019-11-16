@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ProductResource;
-use App\Product;
+use App\Category;
+use App\FoodAdditive;
+use App\Http\Resources\FoodResource;
+use App\Food;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class FoodController extends Controller
 {
 
     /**
@@ -14,9 +16,9 @@ class ProductController extends Controller
      */
     public function catalog()
     {
-        $products = Product::all();
+        $foods = Food::all();
 
-        return ProductResource::collection($products);
+        return FoodResource::collection($foods);
     }
 
     /**
@@ -24,9 +26,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all()->where('category_id', 1);
+        $category = Category::orderBy('id', 'ASC')->first();
 
-        return ProductResource::collection($products);
+        $foods = Food::with('type', 'additive')->where('category_id', $category->id)->get();
+
+        return FoodResource::collection($foods);
     }
 
     /**
@@ -37,19 +41,19 @@ class ProductController extends Controller
      */
     public function informationProductInCart(Request $request)
     {
-        $products = [];
+        $foods = [];
 
         foreach ($request->cart as $key => $value) {
-            $products[] = Product::where('id', $value)->get();
+            $foods[] = FoodAdditive::with('food', 'additive')->where('food_id', $value['id'])->where('additive_id', $value['additive_id'])->get();
         }
 
-        $products = collect($products)->collapse();
+        $foods = collect($foods)->collapse();
 
-        $products->map(function ($field) {
+        $foods->map(function ($field) {
             $field['count'] = 1;
         });
 
-        return $products;
+        return $foods;
     }
 
 
@@ -61,8 +65,8 @@ class ProductController extends Controller
      */
     public function selectByCategory(Request $request)
     {
-        $products = Product::with('category')->where('category_id', $request->id)->get();
+        $foods = Food::with('category')->where('category_id', $request->id)->get();
 
-        return ProductResource::collection($products);
+        return FoodResource::collection($foods);
     }
 }

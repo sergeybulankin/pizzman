@@ -20,10 +20,10 @@
                                         <img src="/images/delete_icon.svg" @click="deleteProductFromCart(index)">
                                     </div>
                                     <div class="photo-small">
-                                        <img src="/images/demo.jpg" class="img-fluid">
+                                        <img :src="product.image" class="img-fluid">
                                     </div>
                                     <div class="description pl-3">
-                                        <a><b>{{ product.product_title }}</b></a><p><small>{{ product.product_description }}</small></p>
+                                        <a><b>{{ product.name }}</b></a><p><small>{{ product.structure }}</small></p>
                                     </div>
                                 </td>
                                 <td class="font-weight-bold align-middle">{{ product.price }}<i class="fa fa-rub"></i></td>

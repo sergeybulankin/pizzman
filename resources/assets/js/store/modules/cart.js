@@ -39,8 +39,14 @@ export default {
         TOTAL_PRICE(state) {
             let total = [];
 
-            state.productsInCart.forEach((key, value) => {
-                total.push(key.price*key.count);
+            state.productsInCart.forEach((entry) => {
+                entry.food.forEach((food) => {
+                    total.push(food.price*entry.count);
+                })
+
+                entry.additive.forEach((additive) => {
+                    total.push(additive.price*entry.count);
+                })
             });
             state.total_price = total.reduce((total, num) => { return total + num }, 0);
         }

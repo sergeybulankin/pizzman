@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Product;
+use App\PizzmanAddressFood;
 
-class ProductSeeder extends Seeder
+class PizzmanAddressFoodSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +12,6 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        factory(Product::class, 10)->create();
+        factory(PizzmanAddressFood::class, 10)->create();
     }
 }

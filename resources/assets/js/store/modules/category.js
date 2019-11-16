@@ -2,12 +2,12 @@ export default {
     actions: {
         SELECTED_ALL_CATEGORIES(ctx) {
             axios.get('/api/selected-categories')
-                .then( res => { ctx.commit('CATEGORIES', res.data.data) } )
+                .then( res => { ctx.commit('CATEGORIES_MUTATION', res.data.data) } )
                 .catch( error => {console.log(error)} )
         }
     },
     mutations: {
-        CATEGORIES(state, category) {
+        CATEGORIES_MUTATION(state, category) {
             state.categories = category
         }
     },

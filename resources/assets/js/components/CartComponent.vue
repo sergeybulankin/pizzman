@@ -7,18 +7,23 @@
         </a>
 
         <div id='cart_info' class="d-none">
-            <ul>
-                <li class="d-flex" v-for="(product, index) in ALL_PRODUCTS_IN_CART" :key="product.id">
-                    <div class="delete_icon">
-                        <img src="images/delete_icon.svg" @click="deleteProductFromCart(index, product.id)"/>
-                    </div>
+            <ul v-for="(item, index) in ALL_PRODUCTS_IN_CART" :key="item.id">
+                <li>
+                    <div class="d-flex" v-for="(product, index) in item.food" :key="product.id">
+                        <div class="delete_icon">
+                            <img src="images/delete_icon.svg" @click="deleteProductFromCart(index, product.id)"/>
+                        </div>
 
-                    <div class="photo-small">
-                        <img src="images/demo.jpg" class="img-fluid">
+                        <div class="photo-small">
+                            <img :src="product.image" class="img-fluid">
+                        </div>
+                        <div class="description">
+                            <a><b>{{ product.name }}</b></a><p><small>1x{{ product.price }} <i class="fa fa-rub"></i></small></p>
+                        </div>
                     </div>
-                    <div class="description">
-                        <a><b>{{ product.product_title }}</b></a><p><small>1x{{ product.price }} <i class="fa fa-rub"></i></small></p>
-                    </div>
+                    <span class="description" v-for="(additive, additive_index) in item.additive" :key="additive_index">
+                        <a><b>{{ additive.name }}</b></a><p><small>{{ additive.price }} <i class="fa fa-rub"></i></small></p>
+                    </span>
                 </li>
             </ul>
 
@@ -74,3 +79,9 @@
         }
     }
 </script>
+
+<style>
+    li {
+        list-style: none;
+    }
+</style>

@@ -3,11 +3,12 @@
         <nav>
             <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
                 <div v-for="(category, index) in ALL_CATEGORIES" :key="index">
-                    <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true" @click="selectProducts(category.id)">{{ category.name }}</a>
+                    <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true"
+                       @click="selectProducts(category.id)">{{ category.name }}
+                    </a>
                 </div>
             </div>
         </nav>
-
 
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-pizza" role="tabpanel" aria-labelledby="nav-pizza-tab">
@@ -15,18 +16,29 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"  v-for="(product, index) in ALL_PRODUCTS" :key="product.id">
                             <div class="one-food">
-                                <div id="recommend">рекомендуем</div>
+                                <div id="recommend"
+                                     v-if="product.recommend == true">рекомендуем</div>
                                 <div class="c-product">
-                                    <img src="images/demo.jpg"  class="img-fluid">
+                                    <img :src="product.image" class="img-fluid">
                                     <div class="search-heart">
-                                        <button class="success left"><i class="fa fa-search"></i></button>
-                                        <button data-toggle="modal" data-target="#modal-form-auth"  v-if="checkUser == 0"><i class="fa fa-heart"></i></button>
-                                        <button @click="changeFavorite(product.id)" :class="'favorite-' + product.id" v-else><i class="fa fa-heart"></i></button>
-                                        <button @click="deleteFavorite(product.id)" :class="'delete-favorite-' + product.id"><i class="fa fa-trash-o"></i></button>
+                                        <button data-toggle="modal" data-target="#modal-form-auth"
+                                                v-if="checkUser == 0"><i class="fa fa-heart"></i>
+                                        </button>
+                                        <button
+                                                @click="changeFavorite(product.id)"
+                                                :class="'favorite-' + product.id"
+                                                v-else><i class="fa fa-heart"></i>
+                                        </button>
+                                        <button
+                                                @click="deleteFavorite(product.id)"
+                                                :class="'delete-favorite-' + product.id"><i class="fa fa-trash-o"></i>
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="c-product-info">
-                                    <a class="product_title">{{ product.title }} </a>
+                                    <a class="product_title">{{ product.name }} </a>
+                                    <span> Масса: {{ product.weight }}г<br>Калорийность: {{ product.calories }}<br>Белки: {{ product.protein }}<br>Углеводы: {{ product.carbohydrates }} <br> <br></span>
+                                    <span v-for="(type, index_type) in product.types" :key="index_type"> {{ type.name }} {{ product.id }}</span>
                                     <div class="c-markers">
                                     <span>
                                         <img data-toggle="tooltip" data-placement="top" title="Вегетарианская" src="images/demo1-1944807851-1.svg" alt="Vegetarian">
@@ -34,25 +46,26 @@
                                         <span class="fa fa-info" data-toggle="popover" title="Пищевая ценность" data-content="Масса:340г<br>Калорийность: 1000<br>Белки:130<br>Углеводы:120"></span>
                                     </div>
 
-                                    <h5><small>{{ product.description }}</small></h5>
+                                    <h5><small>{{ product.structure }}</small></h5>
                                 </div>
 
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-secondary active">
-                                        <input type="radio" name="options" id="option1" autocomplete="off" checked> добавка 1
-                                    </label>
-                                    <label class="btn btn-secondary">
-                                        <input type="radio" name="options" id="option2" autocomplete="off"> добавка 2
-                                    </label>
-                                    <label class="btn btn-secondary">
-                                        <input type="radio" name="options" id="option3" autocomplete="off"> добавка 3
+                                    <label class="btn btn-secondary" v-for="(additive, additive_index) in product.additives" :key="additive_index" @click="changeAdditive(additive.id, product.id)">
+                                        <input type="checkbox" name="options"
+                                               :id="'option' + additive.id" autocomplete="off"> {{ additive.name }}
                                     </label>
                                 </div>
 
-                                <a class="product_title">{{ product.price }}</a>
+                                <input type="text"
+                                       :id="'additive' + product.id"
+                                       :class="'additive-' + product.id">
+
+                                <a class="product_title">{{ product.price }} P</a>
 
                                 <div :class="'add-product-id-' + product.id">
-                                    <button class="btn btn-block btn-success btn-add_to-cart" @click="changeProduct(product.id)"><i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Добавить в корзину</button>
+                                    <button class="btn btn-block btn-success btn-add_to-cart"
+                                            @click="changeProduct(product.id)"><i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Добавить в корзину
+                                    </button>
                                 </div>
 
                                 <div :class="'delete-product-id-' + product.id">
@@ -92,16 +105,31 @@
         methods: {
             ...mapActions(['SELECTED_ALL_PRODUCTS', 'CHECK_PRODUCT_IN_CART', 'CHECK_PRODUCT_IN_FAVORITE', 'SELECTION_BY_CATEGORY', 'ADD_TO_FAVORITE', 'SELECT_ALL_FAVORITE', 'DELETE_OF_FAVORITE']),
 
+            // если пользователь под своим аккаунтом,
+            // то записываем все в БД,
+            // но показываем все действия все равно из localStorage
+            // Если пользователь не под аккаунтов, то в БД не пишем
             changeProduct(id) {
-                this.cart.push(id);
+                var additive_id = document.getElementsByClassName('additive-' + id)[0].value;
+                this.cart.push({id: id, additive_id: additive_id});
                 $(".add-product-id-" + id).css("display", "none");
                 $(".delete-product-id-" + id).css("display", "block");
+
+                if (this.checkUser == 1) {
+                    console.log('YEP!')
+                }
             },
 
             changeFavorite(id) {
                 this.ADD_TO_FAVORITE(id);
                 $(".favorite-" + id).css("display", "none");
                 $(".delete-favorite-" + id).css("display", "block");
+            },
+
+            // передаем из цикла добавок id
+            // чтобы было что добавлять в корзину и заказы
+            changeAdditive(id, product_id) {
+                $('#additive' + product_id).val(id);
             },
 
             deleteFavorite(id) {

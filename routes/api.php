@@ -22,10 +22,10 @@ Route::get('selected-categories', 'CategoryController@index');
 
 Route::post('post-cart-in-delivery', 'DeliveryController@storeCartInOrder');
 
-Route::get('selected-all-products', 'ProductController@index');
-Route::get('catalog-products', 'ProductController@catalog');
-Route::post('selection-by-category', 'ProductController@selectByCategory');
-Route::post('selected-products-in-cart', 'ProductController@informationProductInCart');
+Route::get('selected-all-products', 'FoodController@index');
+Route::get('catalog-products', 'FoodController@catalog');
+Route::post('selection-by-category', 'FoodController@selectByCategory');
+Route::post('selected-products-in-cart', 'FoodController@informationProductInCart');
 
 Route::post('insert-call-me-number', 'CallController@store');
 

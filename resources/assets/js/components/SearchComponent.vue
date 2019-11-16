@@ -21,14 +21,13 @@
                             <div class="one-food">
                                 <div id="recommend">рекомендуем</div>
                                 <div class="c-product">
-                                    <img src="images/demo.jpg"  class="img-fluid">
+                                    <img :src="product.image"  class="img-fluid">
                                     <div class="search-heart">
-                                        <button class="success left"><i class="fa fa-search"></i></button>
                                         <button class="success right"><i class="fa fa-heart"></i></button>
                                     </div>
                                 </div>
                                 <div class="c-product-info">
-                                    <a class="product_title">{{ product.title }}</a>
+                                    <a class="product_title">{{ product.name }}</a>
                                     <div class="c-markers">
                                   <span>
                                       <img data-toggle="tooltip" data-placement="top" title="Вегетарианская" src="images/demo1-1944807851-1.svg" alt="Vegetarian">
@@ -36,22 +35,21 @@
                                         <span class="fa fa-info" data-toggle="popover" title="Пищевая ценность" data-content="Масса:340г<br>Калорийность: 1000<br>Белки:130<br>Углеводы:120"></span>
                                     </div>
 
-                                    <h5><small>{{ product.description }}</small></h5>
+                                    <h5><small>{{ product.structure }}</small></h5>
                                 </div>
 
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-secondary active">
-                                        <input type="radio" name="options" id="option1" autocomplete="off" checked> добавка 1
-                                    </label>
-                                    <label class="btn btn-secondary">
-                                        <input type="radio" name="options" id="option2" autocomplete="off"> добавка 2
-                                    </label>
-                                    <label class="btn btn-secondary">
-                                        <input type="radio" name="options" id="option3" autocomplete="off"> добавка 3
+                                    <label class="btn btn-secondary" v-for="(additive, additive_index) in product.additives" :key="additive_index" @click="changeAdditive(additive.id, product.id)">
+                                        <input type="checkbox" name="options"
+                                               :id="'option' + additive.id" autocomplete="off"> {{ additive.name }}
                                     </label>
                                 </div>
 
-                                <a class="product_title">{{ product.prict }}</a>
+                                <input type="text"
+                                       :id="'additive' + product.id"
+                                       :class="'additive-' + product.id">
+
+                                <a class="product_title">{{ product.price }}</a>
 
                                 <div :class="'add-product-id-' + product.id">
                                     <button class="btn btn-block btn-success btn-add_to-cart" @click="changeProduct(product.id)"><i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Добавить в корзину</button>
@@ -91,6 +89,7 @@
             searchByName: function() {
                 var filter = this.filter.trim().toLowerCase();
                 if (filter === '') return this.CATALOG;
+
                 return this.CATALOG.filter(function(s) {
                     return s.title.toLowerCase().indexOf(filter) > -1;
                 });
@@ -104,6 +103,12 @@
 
                 $(".add-product-id-" + id).css("display", "none");
                 $(".delete-product-id-" + id).css("display", "block");
+            },
+
+            // передаем из цикла добавок id
+            // чтобы было что добавлять в корзину и заказы
+            changeAdditive(id, product_id) {
+                $('#additive' + product_id).val(id);
             },
         }
     }
