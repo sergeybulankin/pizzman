@@ -50,15 +50,20 @@
                                 </div>
 
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-secondary" v-for="(additive, additive_index) in product.additives" :key="additive_index" @click="changeAdditive(additive.id, product.id)">
-                                        <input type="checkbox" name="options"
-                                               :id="'option' + additive.id" autocomplete="off"> {{ additive.name }}
+                                    <label class="btn btn-secondary" v-for="(additive, additive_index) in product.additives"
+                                           :class="{ 'active': additive.id === 0 }"
+                                           :key="additive_index"
+                                           @click="changeAdditive(additive.id, product.id)">
+                                        <input type="radio" name="options"
+                                               :id="'option-' + additive.id"
+                                               autocomplete="off"> {{ additive.name }}
                                     </label>
                                 </div>
 
-                                <input type="text"
-                                       :id="'additive' + product.id"
-                                       :class="'additive-' + product.id">
+                                <input type="hidden"
+                                       :id="'additive-' + product.id"
+                                       :class="'additive-' + product.id"
+                                       :value="0">
 
                                 <a class="product_title">{{ product.price }} P</a>
 
@@ -88,13 +93,21 @@
         created() {
             this.SELECTED_ALL_PRODUCTS();
             this.SELECT_ALL_FAVORITE();
+
+
         },
         mounted() {
             setTimeout (() => { this.CHECK_PRODUCT_IN_CART(this.cart) }, 1000)
             setTimeout (() => { this.CHECK_PRODUCT_IN_FAVORITE(this.ALL_FAVORITE) }, 1000)
+
+            if(this.checkUser == 1) { this.SELECTED_ALL_PRODUCTS_FOR_USERS() }
         },
         computed: {
-            ...mapGetters(['ALL_PRODUCTS', 'ALL_CATEGORIES', 'ALL_FAVORITE']),
+            ...mapGetters([
+                    'ALL_PRODUCTS',
+                    'ALL_CATEGORIES',
+                    'ALL_FAVORITE'
+                ]),
 
             checkUser() {
                 // window.Laravel.user - записывается в хэдэре,
@@ -103,20 +116,29 @@
             }
         },
         methods: {
-            ...mapActions(['SELECTED_ALL_PRODUCTS', 'CHECK_PRODUCT_IN_CART', 'CHECK_PRODUCT_IN_FAVORITE', 'SELECTION_BY_CATEGORY', 'ADD_TO_FAVORITE', 'SELECT_ALL_FAVORITE', 'DELETE_OF_FAVORITE']),
+            ...mapActions([
+                'SELECTED_ALL_PRODUCTS',
+                'SELECTED_ALL_PRODUCTS_FOR_USERS',
+                'CHECK_PRODUCT_IN_CART',
+                'CHECK_PRODUCT_IN_FAVORITE',
+                'SELECTION_BY_CATEGORY',
+                'ADD_TO_DATABASE_FROM_LOCAL_STORAGE',
+                'ADD_TO_FAVORITE',
+                'SELECT_ALL_FAVORITE',
+                'DELETE_OF_FAVORITE'
+            ]),
 
-            // если пользователь под своим аккаунтом,
-            // то записываем все в БД,
-            // но показываем все действия все равно из localStorage
-            // Если пользователь не под аккаунтов, то в БД не пишем
+
             changeProduct(id) {
-                var additive_id = document.getElementsByClassName('additive-' + id)[0].value;
+                var additive_id = $('.additive-' + id)[1].value;
                 this.cart.push({id: id, additive_id: additive_id});
                 $(".add-product-id-" + id).css("display", "none");
                 $(".delete-product-id-" + id).css("display", "block");
 
+                // если пользователь авторизовован
+                // то кидаем весь localStorage в БД
                 if (this.checkUser == 1) {
-                    console.log('YEP!')
+                    this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart)
                 }
             },
 
@@ -129,7 +151,7 @@
             // передаем из цикла добавок id
             // чтобы было что добавлять в корзину и заказы
             changeAdditive(id, product_id) {
-                $('#additive' + product_id).val(id);
+                $('#additive-' + product_id).val(id);
             },
 
             deleteFavorite(id) {
@@ -142,7 +164,6 @@
                 this.SELECTION_BY_CATEGORY(id);
                 setTimeout (() => { this.CHECK_PRODUCT_IN_CART(this.cart) }, 200)
             }
-
         }
     }
 </script>

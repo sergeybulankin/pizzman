@@ -13,8 +13,8 @@
                         </tr>
                         </thead>
 
-                        <tbody>
-                            <tr  v-for="(product, index) in ALL_PRODUCTS_IN_CART" class="cart" :key="product.id">
+                        <tbody v-for="(item, index) in ALL_PRODUCTS_IN_CART" class="cart" :key="index">
+                            <tr v-for="(product, index_product) in item.food" class="cart" :key="index_product">
                                 <td class="d-flex align-middle">
                                     <div class="delete_icon">
                                         <img src="/images/delete_icon.svg" @click="deleteProductFromCart(index)">
@@ -33,14 +33,14 @@
                                         <button style="min-width: 2.5rem" class="btn btn-decrement btn-outline-secondary" type="button" @click="MINUS(index)"><strong>-</strong></button>
                                     </div>
 
-                                    <span class="final-count" v-if="product.count >= 1">{{ product.count }}</span>
+                                    <span class="final-count" v-if="item.count >= 1">{{ item.count }}</span>
                                     <span class="final-count" v-else>{{ POSITIVE_NUMBERS(index) }}</span>
 
                                     <div class="input-group-append">
                                     <button style="min-width: 2.5rem" class="btn btn-increment btn-outline-secondary" type="button" @click="PLUS(index)"><strong>+</strong></button>
                                 </div>
                                 </div></td>
-                                <td class="font-weight-bold align-middle">{{ product.count * product.price }} <i class="fa fa-rub"></i></td>
+                                <td class="font-weight-bold align-middle">{{ item.count * product.price }} <i class="fa fa-rub"></i></td>
                             </tr>
                         </tbody>
                     </table>
@@ -77,7 +77,10 @@
             this.SELECTED_PRODUCTS_IN_CART(this.cart);
         },
         computed: {
-            ...mapGetters(['ALL_PRODUCTS_IN_CART', 'TOTAl_PRICE_CART']),
+            ...mapGetters([
+                    'ALL_PRODUCTS_IN_CART',
+                    'TOTAl_PRICE_CART'
+                ]),
 
             totalProducts() {
                 this.SELECTED_PRODUCTS_IN_CART(this.cart);
@@ -91,8 +94,19 @@
 
         },
         methods: {
-            ...mapActions(['SELECTED_PRODUCTS_IN_CART', 'COUNTING_TOTAL_PRICE', 'SEND_CART_IN_DELIVERY']),
-            ...mapMutations(['MINUS', 'PLUS', 'TOTAL_PRICE', 'POSITIVE_NUMBERS', 'SEND_CART']),
+            ...mapActions([
+                'SELECTED_PRODUCTS_IN_CART',
+                'COUNTING_TOTAL_PRICE',
+                'SEND_CART_IN_DELIVERY'
+            ]),
+
+            ...mapMutations([
+                'MINUS',
+                'PLUS',
+                'TOTAL_PRICE',
+                'POSITIVE_NUMBERS',
+                'SEND_CART'
+            ]),
 
             deleteProductFromCart(id) {
                 this.cart.splice(id, 1);

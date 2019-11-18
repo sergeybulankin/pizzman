@@ -16,8 +16,8 @@ class CategoryResource extends Resource
     {
         return [
             'id' => $this->id,
-            'name' => $this->category_name,
-            'icon' => $this->category_icon
+            'name' => $this->name,
+            'icon' => $this->icon
         ];
     }
 }
