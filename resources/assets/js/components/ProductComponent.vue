@@ -38,7 +38,7 @@
                                 <div class="c-product-info">
                                     <a class="product_title">{{ product.name }} </a>
                                     <span> Масса: {{ product.weight }}г<br>Калорийность: {{ product.calories }}<br>Белки: {{ product.protein }}<br>Углеводы: {{ product.carbohydrates }} <br> <br></span>
-                                    <span v-for="(type, index_type) in product.types" :key="index_type"> {{ type.name }} {{ product.id }}</span>
+                                    <span v-for="(type, index_type) in product.types" :key="index_type"> {{ type.name }}</span>
                                     <div class="c-markers">
                                     <span>
                                         <img data-toggle="tooltip" data-placement="top" title="Вегетарианская" src="images/demo1-1944807851-1.svg" alt="Vegetarian">
@@ -69,13 +69,14 @@
 
                                 <div :class="'add-product-id-' + product.id">
                                     <button class="btn btn-block btn-success btn-add_to-cart"
-                                            @click="changeProduct(product.id)"><i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Добавить в корзину
+                                            @click="changeProduct(product.id)">
+                                            <i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Добавить в корзину
                                     </button>
                                 </div>
 
-                                <div :class="'delete-product-id-' + product.id">
+                                <!--<div :class="'delete-product-id-' + product.id">
                                     <div class="delete-from-cart">Продукт в корзине</div>
-                                </div>
+                                </div>-->
 
                             </div>
                         </div>
@@ -91,16 +92,15 @@
 
     export default {
         created() {
+            if(this.checkUser == 1) { this.SELECTED_ALL_PRODUCTS_FOR_USERS() }
+
+            console.log('START');
             this.SELECTED_ALL_PRODUCTS();
             this.SELECT_ALL_FAVORITE();
-
-
         },
         mounted() {
             setTimeout (() => { this.CHECK_PRODUCT_IN_CART(this.cart) }, 1000)
             setTimeout (() => { this.CHECK_PRODUCT_IN_FAVORITE(this.ALL_FAVORITE) }, 1000)
-
-            if(this.checkUser == 1) { this.SELECTED_ALL_PRODUCTS_FOR_USERS() }
         },
         computed: {
             ...mapGetters([
@@ -130,10 +130,10 @@
 
 
             changeProduct(id) {
-                var additive_id = $('.additive-' + id)[1].value;
+                var additive_id = $('.additive-' + id)[0].value;
                 this.cart.push({id: id, additive_id: additive_id});
-                $(".add-product-id-" + id).css("display", "none");
-                $(".delete-product-id-" + id).css("display", "block");
+                //$(".add-product-id-" + id).css("display", "none");
+                //$(".delete-product-id-" + id).css("display", "block");
 
                 // если пользователь авторизовован
                 // то кидаем весь localStorage в БД
@@ -144,8 +144,8 @@
 
             changeFavorite(id) {
                 this.ADD_TO_FAVORITE(id);
-                $(".favorite-" + id).css("display", "none");
-                $(".delete-favorite-" + id).css("display", "block");
+                //$(".favorite-" + id).css("display", "none");
+                //$(".delete-favorite-" + id).css("display", "block");
             },
 
             // передаем из цикла добавок id

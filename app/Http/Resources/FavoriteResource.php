@@ -17,12 +17,12 @@ class FavoriteResource extends Resource
         return [
             'id' => $this->id,
             'user' => $this->user_id,
-            'product' => $this->product_id,
+            'food' => $this->food_id,
 
-            'product_id' => $this->product->id,
-            'title' => $this->product->product_title,
-            'description' => $this->product->product_description,
-            'price' => $this->product->price,
+            'food_id' => $this->food->id,
+            'name' => $this->food->name,
+            'structure' => $this->food->structure,
+            'price' => $this->food->price,
         ];
     }
 }

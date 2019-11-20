@@ -11,7 +11,8 @@
                 <div class="d-flex justify-content-center">
                     <div class="search-block pb-3">
                         <p>Что Вы желаете найти?</p>
-                        <input type="text" name="search-product" placeholder="Введите блюдо..." v-model="filter">
+                        <input type="text" name="search-product" placeholder="Введите блюдо..."
+                               v-model="filter">
                     </div>
                 </div>
 
@@ -39,20 +40,27 @@
                                 </div>
 
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-secondary" v-for="(additive, additive_index) in product.additives" :key="additive_index" @click="changeAdditive(additive.id, product.id)">
-                                        <input type="checkbox" name="options"
-                                               :id="'option' + additive.id" autocomplete="off"> {{ additive.name }}
+                                    <label class="btn btn-secondary" v-for="(additive, additive_index) in product.additives"
+                                           :class="{ 'active': additive.id === 0 }"
+                                           :key="additive_index"
+                                           @click="changeAdditive(additive.id, product.id)">
+                                        <input type="radio" name="options"
+                                               :id="'option-' + additive.id"
+                                               autocomplete="off"> {{ additive.name }}
                                     </label>
                                 </div>
 
                                 <input type="text"
-                                       :id="'additive' + product.id"
-                                       :class="'additive-' + product.id">
+                                       :id="'additive-' + product.id"
+                                       :class="'additive-' + product.id"
+                                       :value="0">
 
                                 <a class="product_title">{{ product.price }}</a>
 
                                 <div :class="'add-product-id-' + product.id">
-                                    <button class="btn btn-block btn-success btn-add_to-cart" @click="changeProduct(product.id)"><i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Добавить в корзину</button>
+                                    <button class="btn btn-block btn-success btn-add_to-cart"
+                                            @click="changeProduct(product.id)">
+                                            <i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Добавить в корзину</button>
                                 </div>
 
                                 <div :class="'delete-product-id-' + product.id">
@@ -91,24 +99,34 @@
                 if (filter === '') return this.CATALOG;
 
                 return this.CATALOG.filter(function(s) {
-                    return s.title.toLowerCase().indexOf(filter) > -1;
+                    return s.name.toLowerCase().indexOf(filter) > -1;
                 });
             }
         },
         methods: {
-            ...mapActions(['CATALOG_PRODUCTS', 'CHECK_PRODUCT_IN_CART']),
+            ...mapActions([
+                'CATALOG_PRODUCTS',
+                'CHECK_PRODUCT_IN_CART',
+                'ADD_TO_DATABASE_FROM_LOCAL_STORAGE'
+            ]),
 
             changeProduct(id) {
-                this.cart.push(id);
-
+                var additive_id = $('.additive-' + id)[0].value;
+                this.cart.push({id: id, additive_id: additive_id});
                 $(".add-product-id-" + id).css("display", "none");
                 $(".delete-product-id-" + id).css("display", "block");
+
+                // если пользователь авторизовован
+                // то кидаем весь localStorage в БД
+                if (this.checkUser == 1) {
+                    this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart)
+                }
             },
 
             // передаем из цикла добавок id
             // чтобы было что добавлять в корзину и заказы
             changeAdditive(id, product_id) {
-                $('#additive' + product_id).val(id);
+                $('#additive-' + product_id).val(id);
             },
         }
     }

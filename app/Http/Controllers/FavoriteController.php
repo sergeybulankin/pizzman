@@ -14,7 +14,7 @@ class FavoriteController extends Controller
      */
     public function index()
     {
-        $favorites = Favorite::with('product')->where('user_id', Auth::user()->id)->get();
+        $favorites = Favorite::with('food')->where('user_id', Auth::user()->id)->get();
 
         return FavoriteResource::collection($favorites);
     }
@@ -30,8 +30,8 @@ class FavoriteController extends Controller
     public function store(Request $request)
     {
         $favorite = new Favorite();
-        $favorite->product_id = $request->product;
-        $favorite->user_id = 1;
+        $favorite->food_id = $request->product;
+        $favorite->user_id = Auth::user()->id;
         $favorite->save();
     }
 

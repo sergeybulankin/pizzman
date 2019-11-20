@@ -13,6 +13,7 @@ export default {
         },
 
         SELECTED_ALL_PRODUCTS_FOR_USERS(ctx) {
+            console.log('Собираем вашу корзину')
             axios.get('/api/selected-all-products-for-users')
                 .then(response => { ctx.commit('SELECTED_ALL_PRODUCTS_FOR_USERS_MUTATION', response.data) })
                 .catch( error => { console.log(error) })
@@ -20,8 +21,8 @@ export default {
 
         CHECK_PRODUCT_IN_CART(ctx, cart) {
             cart.forEach((key, value) => {
-                $(".add-product-id-" + key.id).css("display", "none");
-                $(".delete-product-id-" + key.id).css("display", "block");
+                //$(".add-product-id-" + key.id).css("display", "none");
+                //$(".delete-product-id-" + key.id).css("display", "block");
             });
         },
 
@@ -33,7 +34,7 @@ export default {
 
         ADD_TO_DATABASE_FROM_LOCAL_STORAGE(ctx, cart) {
             axios.post('/api/add-to-database-from-cart', {cart: cart})
-                .then(response => { console.log('YEP!') })
+                .then(response => { console.log('Товар добавился') })
                 .catch (error => (console.log(error)));
         }
     },
@@ -49,6 +50,7 @@ export default {
         SELECTED_ALL_PRODUCTS_FOR_USERS_MUTATION(state, products) {
             state.cart = products;
             localStorage.setItem('cart', JSON.stringify(products));
+
         },
 
         CATALOG_PRODUCTS_MUTATIONS(state, products) {

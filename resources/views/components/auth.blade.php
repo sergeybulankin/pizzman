@@ -15,6 +15,7 @@
                     <div class="col-lg-4">
                         <div class="form-group">
                             <input type="text" name="name" placeholder="Номер телефона" class="form-control">
+                            <input type="hidden" name="email" value="admin@admin.com" class="form-control">
                         </div>
 
                         <div class="form-group">

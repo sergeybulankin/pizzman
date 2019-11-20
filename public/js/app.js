@@ -47463,6 +47463,7 @@ var debug = "development" !== 'production';
             });
         },
         SELECTED_ALL_PRODUCTS_FOR_USERS: function SELECTED_ALL_PRODUCTS_FOR_USERS(ctx) {
+            console.log('Собираем вашу корзину');
             axios.get('/api/selected-all-products-for-users').then(function (response) {
                 ctx.commit('SELECTED_ALL_PRODUCTS_FOR_USERS_MUTATION', response.data);
             }).catch(function (error) {
@@ -47471,8 +47472,8 @@ var debug = "development" !== 'production';
         },
         CHECK_PRODUCT_IN_CART: function CHECK_PRODUCT_IN_CART(ctx, cart) {
             cart.forEach(function (key, value) {
-                $(".add-product-id-" + key.id).css("display", "none");
-                $(".delete-product-id-" + key.id).css("display", "block");
+                //$(".add-product-id-" + key.id).css("display", "none");
+                //$(".delete-product-id-" + key.id).css("display", "block");
             });
         },
         SELECTION_BY_CATEGORY: function SELECTION_BY_CATEGORY(ctx, id) {
@@ -47484,7 +47485,7 @@ var debug = "development" !== 'production';
         },
         ADD_TO_DATABASE_FROM_LOCAL_STORAGE: function ADD_TO_DATABASE_FROM_LOCAL_STORAGE(ctx, cart) {
             axios.post('/api/add-to-database-from-cart', { cart: cart }).then(function (response) {
-                console.log('YEP!');
+                console.log('Товар добавился');
             }).catch(function (error) {
                 return console.log(error);
             });
@@ -47753,7 +47754,7 @@ var content = __webpack_require__(64);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("7ee07b3e", content, false, {});
+var update = __webpack_require__(6)("5a09079e", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -47912,11 +47913,17 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     created: function created() {
+        if (this.checkUser == 1) {
+            this.SELECTED_ALL_PRODUCTS_FOR_USERS();
+        }
+
+        console.log('START');
         this.SELECTED_ALL_PRODUCTS();
         this.SELECT_ALL_FAVORITE();
     },
@@ -47929,10 +47936,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         setTimeout(function () {
             _this.CHECK_PRODUCT_IN_FAVORITE(_this.ALL_FAVORITE);
         }, 1000);
-
-        if (this.checkUser == 1) {
-            this.SELECTED_ALL_PRODUCTS_FOR_USERS();
-        }
     },
 
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['ALL_PRODUCTS', 'ALL_CATEGORIES', 'ALL_FAVORITE']), {
@@ -47944,10 +47947,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }),
     methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_ALL_PRODUCTS', 'SELECTED_ALL_PRODUCTS_FOR_USERS', 'CHECK_PRODUCT_IN_CART', 'CHECK_PRODUCT_IN_FAVORITE', 'SELECTION_BY_CATEGORY', 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE', 'ADD_TO_FAVORITE', 'SELECT_ALL_FAVORITE', 'DELETE_OF_FAVORITE']), {
         changeProduct: function changeProduct(id) {
-            var additive_id = $('.additive-' + id)[1].value;
+            var additive_id = $('.additive-' + id)[0].value;
             this.cart.push({ id: id, additive_id: additive_id });
-            $(".add-product-id-" + id).css("display", "none");
-            $(".delete-product-id-" + id).css("display", "block");
+            //$(".add-product-id-" + id).css("display", "none");
+            //$(".delete-product-id-" + id).css("display", "block");
 
             // если пользователь авторизовован
             // то кидаем весь localStorage в БД
@@ -47957,8 +47960,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         changeFavorite: function changeFavorite(id) {
             this.ADD_TO_FAVORITE(id);
-            $(".favorite-" + id).css("display", "none");
-            $(".delete-favorite-" + id).css("display", "block");
+            //$(".favorite-" + id).css("display", "none");
+            //$(".delete-favorite-" + id).css("display", "block");
         },
 
 
@@ -48122,12 +48125,7 @@ var render = function() {
                           _vm._v(" "),
                           _vm._l(product.types, function(type, index_type) {
                             return _c("span", { key: index_type }, [
-                              _vm._v(
-                                " " +
-                                  _vm._s(type.name) +
-                                  " " +
-                                  _vm._s(product.id)
-                              )
+                              _vm._v(" " + _vm._s(type.name))
                             ])
                           }),
                           _vm._v(" "),
@@ -48214,12 +48212,6 @@ var render = function() {
                             )
                           ]
                         )
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { class: "delete-product-id-" + product.id }, [
-                        _c("div", { staticClass: "delete-from-cart" }, [
-                          _vm._v("Продукт в корзине")
-                        ])
                       ])
                     ])
                   ]
@@ -48334,7 +48326,7 @@ var content = __webpack_require__(70);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("2e56f2b0", content, false, {});
+var update = __webpack_require__(6)("0d235370", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -48742,6 +48734,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -48842,9 +48839,38 @@ var render = function() {
                             "td",
                             { staticClass: "font-weight-bold align-middle" },
                             [
-                              _vm._v(_vm._s(product.price)),
-                              _c("i", { staticClass: "fa fa-rub" })
-                            ]
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(product.price)
+                              ),
+                              _c("i", { staticClass: "fa fa-rub" }),
+                              _vm._v(" "),
+                              _vm._l(item.additive, function(
+                                additive,
+                                additive_index
+                              ) {
+                                return _c(
+                                  "span",
+                                  {
+                                    key: additive_index,
+                                    staticClass: "description"
+                                  },
+                                  [
+                                    _c(
+                                      "div",
+                                      { ref: "priceAdditive", refInFor: true },
+                                      [
+                                        _c("small", [
+                                          _vm._v(_vm._s(additive.price) + " "),
+                                          _c("i", { staticClass: "fa fa-rub" })
+                                        ])
+                                      ]
+                                    )
+                                  ]
+                                )
+                              })
+                            ],
+                            2
                           ),
                           _vm._v(" "),
                           _c("td", { staticClass: "align-middle" }, [
@@ -48913,7 +48939,12 @@ var render = function() {
                             "td",
                             { staticClass: "font-weight-bold align-middle" },
                             [
-                              _vm._v(_vm._s(item.count * product.price) + " "),
+                              _vm._v(
+                                _vm._s(
+                                  item.count * product.price +
+                                    item.additive[0].price
+                                ) + " "
+                              ),
                               _c("i", { staticClass: "fa fa-rub" })
                             ]
                           )
@@ -49195,7 +49226,7 @@ var content = __webpack_require__(81);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("12609c10", content, false, {});
+var update = __webpack_require__(6)("24edaf20", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -54088,6 +54119,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -54115,23 +54154,29 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             if (filter === '') return this.CATALOG;
 
             return this.CATALOG.filter(function (s) {
-                return s.title.toLowerCase().indexOf(filter) > -1;
+                return s.name.toLowerCase().indexOf(filter) > -1;
             });
         }
     }),
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['CATALOG_PRODUCTS', 'CHECK_PRODUCT_IN_CART']), {
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['CATALOG_PRODUCTS', 'CHECK_PRODUCT_IN_CART', 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE']), {
         changeProduct: function changeProduct(id) {
-            this.cart.push(id);
-
+            var additive_id = $('.additive-' + id)[0].value;
+            this.cart.push({ id: id, additive_id: additive_id });
             $(".add-product-id-" + id).css("display", "none");
             $(".delete-product-id-" + id).css("display", "block");
+
+            // если пользователь авторизовован
+            // то кидаем весь localStorage в БД
+            if (this.checkUser == 1) {
+                this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart);
+            }
         },
 
 
         // передаем из цикла добавок id
         // чтобы было что добавлять в корзину и заказы
         changeAdditive: function changeAdditive(id, product_id) {
-            $('#additive' + product_id).val(id);
+            $('#additive-' + product_id).val(id);
         }
     })
 });
@@ -54230,6 +54275,7 @@ var render = function() {
                           {
                             key: additive_index,
                             staticClass: "btn btn-secondary",
+                            class: { active: additive.id === 0 },
                             on: {
                               click: function($event) {
                                 return _vm.changeAdditive(
@@ -54242,9 +54288,9 @@ var render = function() {
                           [
                             _c("input", {
                               attrs: {
-                                type: "checkbox",
+                                type: "radio",
                                 name: "options",
-                                id: "option" + additive.id,
+                                id: "option-" + additive.id,
                                 autocomplete: "off"
                               }
                             }),
@@ -54261,7 +54307,8 @@ var render = function() {
                     _vm._v(" "),
                     _c("input", {
                       class: "additive-" + product.id,
-                      attrs: { type: "text", id: "additive" + product.id }
+                      attrs: { type: "text", id: "additive-" + product.id },
+                      domProps: { value: 0 }
                     }),
                     _vm._v(" "),
                     _c("a", { staticClass: "product_title" }, [
@@ -54535,7 +54582,7 @@ var content = __webpack_require__(99);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("328edc6a", content, false, {});
+var update = __webpack_require__(6)("caa1e7ec", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -54626,6 +54673,17 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -54642,9 +54700,23 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             $(".delete-favorite-" + id).css("display", "none");
         },
         changeProduct: function changeProduct(id) {
-            this.cart.push(id);
+            var additive_id = $('.additive-' + id)[0].value;
+            this.cart.push({ id: id, additive_id: additive_id });
             $(".add-product-id-" + id).css("display", "none");
             $(".delete-product-id-" + id).css("display", "block");
+
+            // если пользователь авторизовован
+            // то кидаем весь localStorage в БД
+            if (this.checkUser == 1) {
+                this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart);
+            }
+        },
+
+
+        // передаем из цикла добавок id
+        // чтобы было что добавлять в корзину и заказы
+        changeAdditive: function changeAdditive(id, product_id) {
+            $('#additive-' + product_id).val(id);
         }
     })
 });
@@ -54653,187 +54725,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "row" },
-    _vm._l(_vm.ALL_FAVORITE, function(favorite, index) {
-      return _c(
-        "div",
-        {
-          staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12",
-          attrs: { index: index }
-        },
-        [
-          _c("div", { staticClass: "one-food" }, [
-            _c("div", { attrs: { id: "recommend" } }, [_vm._v("рекомендуем")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "c-product" }, [
-              _c("img", {
-                staticClass: "img-fluid",
-                attrs: { src: "images/demo.jpg" }
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "search-heart" }, [
-                _vm._m(0, true),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    class: "delete-favorite-" + favorite.product_id,
-                    on: {
-                      click: function($event) {
-                        return _vm.deleteFavorite(favorite.product_id)
-                      }
-                    }
-                  },
-                  [_c("i", { staticClass: "fa fa-trash-o" })]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "c-product-info" }, [
-              _c("a", { staticClass: "product_title" }, [
-                _vm._v(" " + _vm._s(favorite.title) + " ")
-              ]),
-              _vm._v(" "),
-              _vm._m(1, true),
-              _vm._v(" "),
-              _c("h5", [_c("small", [_vm._v(_vm._s(favorite.description))])])
-            ]),
-            _vm._v(" "),
-            _vm._m(2, true),
-            _vm._v(" "),
-            _c("a", { staticClass: "product_title" }, [
-              _vm._v(_vm._s(favorite.price) + " Р")
-            ]),
-            _vm._v(" "),
-            _c("div", { class: "add-product-id-" + favorite.product_id }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-block btn-success btn-add_to-cart",
-                  on: {
-                    click: function($event) {
-                      return _vm.changeProduct(favorite.product_id)
-                    }
-                  }
-                },
-                [
-                  _c("i", { staticClass: "fa fa-shopping-cart" }),
-                  _vm._v("   Добавить в корзину")
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { class: "delete-product-id-" + favorite.product_id }, [
-              _c("div", { staticClass: "delete-from-cart" }, [
-                _vm._v("Продукт в корзине")
-              ])
-            ])
-          ])
-        ]
-      )
-    }),
-    0
-  )
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "success left" }, [
-      _c("i", { staticClass: "fa fa-search" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "c-markers" }, [
-      _c("span", [
-        _c("img", {
-          attrs: {
-            "data-toggle": "tooltip",
-            "data-placement": "top",
-            title: "",
-            src:
-              "https://parkofideas.com/foodz/demo4/wp-content/uploads/2019/03/demo1-1944807851-1.svg",
-            alt: "Vegetarian",
-            "data-original-title": "Вегетарианская"
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("span", {
-        staticClass: "fa fa-info",
-        attrs: {
-          "data-toggle": "popover",
-          title: "",
-          "data-content":
-            "Масса:340г<br>Калорийность: 1000<br>Белки:130<br>Углеводы:120",
-          "data-original-title": "Пищевая ценность"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "btn-group btn-group-toggle",
-        attrs: { "data-toggle": "buttons" }
-      },
-      [
-        _c("label", { staticClass: "btn btn-secondary active" }, [
-          _c("input", {
-            attrs: {
-              type: "radio",
-              name: "options",
-              id: "option1",
-              autocomplete: "off",
-              checked: ""
-            }
-          }),
-          _vm._v(" добавка 1\n                ")
-        ]),
-        _vm._v(" "),
-        _c("label", { staticClass: "btn btn-secondary" }, [
-          _c("input", {
-            attrs: {
-              type: "radio",
-              name: "options",
-              id: "option2",
-              autocomplete: "off"
-            }
-          }),
-          _vm._v(" добавка 2\n                ")
-        ]),
-        _vm._v(" "),
-        _c("label", { staticClass: "btn btn-secondary" }, [
-          _c("input", {
-            attrs: {
-              type: "radio",
-              name: "options",
-              id: "option3",
-              autocomplete: "off"
-            }
-          }),
-          _vm._v(" добавка 3\n                ")
-        ])
-      ]
-    )
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
+module.exports={render:function(){},staticRenderFns:[]}
 if (false) {
   module.hot.accept()
   if (module.hot.data) {

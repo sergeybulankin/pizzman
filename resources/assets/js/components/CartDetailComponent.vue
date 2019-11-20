@@ -26,7 +26,12 @@
                                         <a><b>{{ product.name }}</b></a><p><small>{{ product.structure }}</small></p>
                                     </div>
                                 </td>
-                                <td class="font-weight-bold align-middle">{{ product.price }}<i class="fa fa-rub"></i></td>
+                                <td class="font-weight-bold align-middle">
+                                    {{ product.price }}<i class="fa fa-rub"></i>
+                                    <span class="description" v-for="(additive, additive_index) in item.additive" :key="additive_index">
+                                         <div ref="priceAdditive"><small>{{ additive.price }} <i class="fa fa-rub"></i></small></div>
+                                    </span>
+                                </td>
                                 <td class="align-middle">
                                     <input type="number" value="1" min="1" max="30" step="1" style="display: none;"><div class="input-group  ">
                                     <div class="input-group-prepend">
@@ -40,7 +45,7 @@
                                     <button style="min-width: 2.5rem" class="btn btn-increment btn-outline-secondary" type="button" @click="PLUS(index)"><strong>+</strong></button>
                                 </div>
                                 </div></td>
-                                <td class="font-weight-bold align-middle">{{ item.count * product.price }} <i class="fa fa-rub"></i></td>
+                                <td class="font-weight-bold align-middle">{{ item.count * product.price + item.additive[0].price }} <i class="fa fa-rub"></i></td>
                             </tr>
                         </tbody>
                     </table>
@@ -91,7 +96,6 @@
                 this.$store.dispatch('COUNTING_TOTAL_PRICE')
                 return this.$store.getters.TOTAl_PRICE_CART;
             }
-
         },
         methods: {
             ...mapActions([
