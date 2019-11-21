@@ -68,9 +68,6 @@
 
             deleteProductFromCart(index, id) {
                 this.cart.splice(index, 1);
-
-                $(".delete-product-id-" + id).css("display", "none");
-                $(".add-product-id-" + id).css("display", "block");
             },
 
             sendCart(){

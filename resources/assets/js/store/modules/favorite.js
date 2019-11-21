@@ -20,8 +20,8 @@ export default {
 
         CHECK_PRODUCT_IN_FAVORITE(ctx, favorite) {
             favorite.forEach((key, value) => {
-                $(".favorite-" + key.product).css("display", "none");
-                $(".delete-favorite-" + key.product).css("display", "block");
+                $(".favorite-" + key.food_id).css("display", "none");
+                $(".delete-favorite-" + key.food_id).css("display", "block");
             });
         },
 
@@ -45,7 +45,7 @@ export default {
         },
 
         COUNT_FAVORITE_MUTATION(state, count) {
-            return state.count = count
+            state.count = count;
         }
     },
     state: {

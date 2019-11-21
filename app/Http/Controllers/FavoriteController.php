@@ -14,11 +14,14 @@ class FavoriteController extends Controller
      */
     public function index()
     {
-        $favorites = Favorite::with('food')->where('user_id', Auth::user()->id)->get();
+        $favorites = Favorite::with('food', 'additive')->where('user_id', Auth::user()->id)->get();
 
         return FavoriteResource::collection($favorites);
     }
 
+    /**
+     * @return mixed
+     */
     public function show()
     {
         return view('favorite');
@@ -40,7 +43,7 @@ class FavoriteController extends Controller
      */
     public function delete(Request $request)
     {
-        Favorite::where('product_id', $request->product)->where('user_id', Auth::user()->id)->delete();
+        Favorite::where('food_id', $request->product)->where('user_id', Auth::user()->id)->delete();
     }
 
     /**

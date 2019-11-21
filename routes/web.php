@@ -13,7 +13,7 @@
 
 Route::get('/', 'HomeController@show');
 Route::get('/cart', 'CartController@show');
-Route::get('/delivery/{u_id}', 'DeliveryController@show');
+Route::get('/delivery/{u_id}', 'PreOrderController@show');
 Route::get('/favorites', 'FavoriteController@show');
 
 Auth::routes();

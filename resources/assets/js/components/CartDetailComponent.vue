@@ -45,7 +45,7 @@
                                     <button style="min-width: 2.5rem" class="btn btn-increment btn-outline-secondary" type="button" @click="PLUS(index)"><strong>+</strong></button>
                                 </div>
                                 </div></td>
-                                <td class="font-weight-bold align-middle">{{ item.count * product.price + item.additive[0].price }} <i class="fa fa-rub"></i></td>
+                                <td class="font-weight-bold align-middle">{{ item.count * product.price + item.additive[0].price*item.count }} <i class="fa fa-rub"></i></td>
                             </tr>
                         </tbody>
                     </table>

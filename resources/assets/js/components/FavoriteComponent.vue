@@ -10,12 +10,14 @@
     import { mapGetters, mapActions } from 'vuex';
 
     export default {
+        mounted() {
+            this.COUNT_FAVORITE();
+        },
         computed: {
             ...mapGetters(['COUNT']),
 
             counts() {
-                this.COUNT_FAVORITE();
-                return this.COUNT
+                return this.$store.getters.COUNT;
             }
         },
         methods: mapActions(['COUNT_FAVORITE'])

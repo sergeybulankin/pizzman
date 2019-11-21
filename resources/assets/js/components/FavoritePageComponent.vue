@@ -7,7 +7,6 @@
                 <div class="c-product">
                     <img src="images/demo.jpg"  class="img-fluid">
                     <div class="search-heart">
-                        <button class="success left"><i class="fa fa-search"></i></button>
                         <button
                                 @click="deleteFavorite(favorite.food_id)"
                                 :class="'delete-favorite-' + favorite.food_id">
@@ -27,8 +26,10 @@
                     <h5><small>{{ favorite.structure }}</small></h5>
                 </div>
 
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <!--<label class="btn btn-secondary" v-for="(additive, additive_index) in favorite.additives"
+                {{ favorite }}
+
+                <!--<div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary" v-for="(additive, additive_index) in favorite.additives"
                            :class="{ 'active': additive.id === 0 }"
                            :key="additive_index"
                            @click="changeAdditive(additive.id, product.id)">
@@ -65,7 +66,7 @@
     import { mapGetters, mapActions } from 'vuex';
 
     export default {
-        created(){
+        mounted() {
             this.SELECT_ALL_FAVORITE();
         },
         computed: mapGetters(['ALL_FAVORITE']),
@@ -73,11 +74,13 @@
             ...mapActions([
                     'SELECT_ALL_FAVORITE',
                     'DELETE_OF_FAVORITE',
-                    'CHECK_PRODUCT_IN_CART'
+                    'COUNT_FAVORITE'
                 ]),
 
             deleteFavorite(id) {
                 this.DELETE_OF_FAVORITE(id);
+                this.COUNT_FAVORITE();
+                this.SELECT_ALL_FAVORITE();
                 $(".favorite-" + id).css("display", "black");
                 $(".delete-favorite-" + id).css("display", "none");
             },

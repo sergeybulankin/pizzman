@@ -9,6 +9,9 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import lodash from 'lodash';
+Vue.prototype._ = lodash;
+
 import persistentState from 'vue-persistent-state';
 
 let cartState = {

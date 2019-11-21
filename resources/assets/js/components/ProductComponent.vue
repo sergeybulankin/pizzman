@@ -73,11 +73,6 @@
                                             <i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Добавить в корзину
                                     </button>
                                 </div>
-
-                                <!--<div :class="'delete-product-id-' + product.id">
-                                    <div class="delete-from-cart">Продукт в корзине</div>
-                                </div>-->
-
                             </div>
                         </div>
                     </div>
@@ -92,14 +87,16 @@
 
     export default {
         created() {
-            if(this.checkUser == 1) { this.SELECTED_ALL_PRODUCTS_FOR_USERS() }
-
-            console.log('START');
+            console.log('Стартуем!');
             this.SELECTED_ALL_PRODUCTS();
             this.SELECT_ALL_FAVORITE();
+
+            if(this.checkUser == 1) {
+                console.log('Собираем вашу корзину');
+                this.SELECTED_ALL_PRODUCTS_FOR_USERS();
+            }
         },
         mounted() {
-            setTimeout (() => { this.CHECK_PRODUCT_IN_CART(this.cart) }, 1000)
             setTimeout (() => { this.CHECK_PRODUCT_IN_FAVORITE(this.ALL_FAVORITE) }, 1000)
         },
         computed: {
@@ -119,21 +116,36 @@
             ...mapActions([
                 'SELECTED_ALL_PRODUCTS',
                 'SELECTED_ALL_PRODUCTS_FOR_USERS',
-                'CHECK_PRODUCT_IN_CART',
-                'CHECK_PRODUCT_IN_FAVORITE',
                 'SELECTION_BY_CATEGORY',
                 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE',
-                'ADD_TO_FAVORITE',
                 'SELECT_ALL_FAVORITE',
+                'CHECK_PRODUCT_IN_FAVORITE',
+                'ADD_TO_FAVORITE',
+                'COUNT_FAVORITE',
                 'DELETE_OF_FAVORITE'
             ]),
 
 
             changeProduct(id) {
                 var additive_id = $('.additive-' + id)[0].value;
-                this.cart.push({id: id, additive_id: additive_id});
-                //$(".add-product-id-" + id).css("display", "none");
-                //$(".delete-product-id-" + id).css("display", "block");
+                var changedProduct = {id: id, additive_id: additive_id};
+
+                let result = true;
+                this.cart.forEach((key, value) => {
+                    var compareId = _.isEqual(changedProduct.id, key.id);
+
+                    if (compareId == true) {
+                        var compareAdditive = _.isEqual(changedProduct.additive_id, key.additive_id);
+                        if (compareAdditive == true) {
+                            console.log('Товар уже в корзине');
+                            result = false;
+                        }
+                    }
+                 });
+
+                if (result == true) {
+                    this.cart.push(changedProduct);
+                }
 
                 // если пользователь авторизовован
                 // то кидаем весь localStorage в БД
@@ -144,8 +156,9 @@
 
             changeFavorite(id) {
                 this.ADD_TO_FAVORITE(id);
-                //$(".favorite-" + id).css("display", "none");
-                //$(".delete-favorite-" + id).css("display", "block");
+                $(".favorite-" + id).css("display", "none");
+                $(".delete-favorite-" + id).css("display", "block");
+                this.COUNT_FAVORITE();
             },
 
             // передаем из цикла добавок id
@@ -156,13 +169,13 @@
 
             deleteFavorite(id) {
                 this.DELETE_OF_FAVORITE(id);
-                $(".favorite-" + id).css("display", "black");
+                $(".favorite-" + id).css("display", "block");
                 $(".delete-favorite-" + id).css("display", "none");
+                this.COUNT_FAVORITE();
             },
 
             selectProducts(id) {
                 this.SELECTION_BY_CATEGORY(id);
-                setTimeout (() => { this.CHECK_PRODUCT_IN_CART(this.cart) }, 200)
             }
         }
     }

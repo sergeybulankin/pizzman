@@ -13,17 +13,9 @@ export default {
         },
 
         SELECTED_ALL_PRODUCTS_FOR_USERS(ctx) {
-            console.log('Собираем вашу корзину')
             axios.get('/api/selected-all-products-for-users')
                 .then(response => { ctx.commit('SELECTED_ALL_PRODUCTS_FOR_USERS_MUTATION', response.data) })
                 .catch( error => { console.log(error) })
-        },
-
-        CHECK_PRODUCT_IN_CART(ctx, cart) {
-            cart.forEach((key, value) => {
-                //$(".add-product-id-" + key.id).css("display", "none");
-                //$(".delete-product-id-" + key.id).css("display", "block");
-            });
         },
 
         SELECTION_BY_CATEGORY(ctx, id) {

@@ -23,7 +23,6 @@ class Food extends Model
     public function type()
     {
         return $this->belongsToMany(Type::class, 'foods_types');
-
     }
 
     /**

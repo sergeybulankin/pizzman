@@ -23,6 +23,8 @@ class FavoriteResource extends Resource
             'name' => $this->food->name,
             'structure' => $this->food->structure,
             'price' => $this->food->price,
+
+            'additive' => $this->additive,
         ];
     }
 }

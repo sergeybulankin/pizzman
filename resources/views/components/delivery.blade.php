@@ -119,7 +119,7 @@
             <div class="col-lg-4">
                 <div id="cart_form" class="p-3">
                     <div class="d-flex justify-content-between pt-3 pb-3">
-                        <h4 class="text-uppercase">Ваш заказ</h4><h4><small>Товаров - {{ $productsCount }} - 2.600 кг</small></h4>
+                        <h4 class="text-uppercase">Ваш заказ</h4><h4><small>Товаров - {{ $productsCount }} - {{ $totalWeight }} гр</small></h4>
                     </div>
 
                     <table class="table shopping_basket">
@@ -133,8 +133,8 @@
                         <tbody>
                         @foreach($cart as $product)
                             <tr>
-                                <td class="font-weight-bold"><p>{{ $product->product->product_title }} <small>×{{ $product->count }}</small></p></td>
-                                <td class="font-weight-bold text-right">{{ $product->product->price * $product->count }} <i class="fa fa-rub"></i></td>
+                                <td class="font-weight-bold"><p>{{ $product->food[0]->name }} <small>×{{ $product->count }}</small></p></td>
+                                <td class="font-weight-bold text-right">{{ $product->food[0]->price * $product->count }} <i class="fa fa-rub"></i></td>
                             </tr>
                         @endforeach()
                         </tbody>

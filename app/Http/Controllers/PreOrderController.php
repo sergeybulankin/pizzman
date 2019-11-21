@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\PreOrder;
 use Illuminate\Http\Request;
 
-class DeliveryController extends Controller
+class PreOrderController extends Controller
 {
     /**
      * Добавляем данные из корзины в таблицу заказов
@@ -19,10 +20,11 @@ class DeliveryController extends Controller
         $cart = $request->order;
 
         foreach ($cart as $product) {
-            $order = new Order();
-            $order->cart_id = $product['id'];
+            $order = new PreOrder();
+            $order->food_additive_id = $product['id'];
             $order->count = $product['count'];
             $order->u_id = $request->u_id;
+            $order->status = false;
 
             if($order->save()) {
                 new Order();
@@ -35,23 +37,26 @@ class DeliveryController extends Controller
      * Показываем форму с добавленным заказом
      *
      * @param $u_id
-     * @param Order $order
+     * @param PreOrder $order
      * @return mixed
      */
-    public function show($u_id, Order $order)
+    public function show($u_id, PreOrder $order)
     {
-        $cart = $order->with('product')->where('u_id', $u_id)->get();
+        $cart = $order->with('food', 'additive')->where('u_id', $u_id)->get();
 
         $totalPrice = 0;
+
+        $totalWeight = 0;
 
         $courierPrice = 65;
 
         $productsCount = count($cart);
 
         foreach ($cart as $key => $value){
-            $totalPrice = $totalPrice + ($value->product->price * $value->count);
+            $totalPrice = $totalPrice + ($value->food[0]->price * $value->count + $value->additive[0]->price * $value->count);
+            $totalWeight = $totalWeight + $value->food[0]->weight;
         }
 
-        return view('delivery', compact('cart', 'totalPrice', 'courierPrice', 'productsCount'));
+        return view('delivery', compact('cart', 'totalPrice', 'totalWeight', 'courierPrice', 'productsCount'));
     }
 }
