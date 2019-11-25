@@ -189,15 +189,8 @@ function close_modal(el)
 }
 
 
-
-
-
-function get_cookie(cookie_name)
-{
-    var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)' );
-
-    if ( results )
-        return ( unescape ( results[2] ) );
-    else
-        return null;
-}
+$(document).ready(function(){
+    $('#logout').click(function(){
+        localStorage.clear();
+    });
+});

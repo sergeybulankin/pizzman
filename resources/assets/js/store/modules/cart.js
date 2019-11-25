@@ -21,6 +21,8 @@ export default {
     mutations: {
         PRODUCTS_IN_CART(state, productsInCart) {
             state.productsInCart = productsInCart
+            _.groupBy(state.productsInCart, "u_id")
+            console.log(state.productsInCart)
         },
 
         MINUS(state, index) {
@@ -39,7 +41,7 @@ export default {
         TOTAL_PRICE(state) {
             let total = [];
 
-            state.productsInCart.forEach((entry) => {
+            /*state.productsInCart.forEach((entry) => {
                 entry.food.forEach((food) => {
                     total.push(food.price*entry.count);
                 })
@@ -48,7 +50,7 @@ export default {
                     total.push(additive.price*entry.count);
                 })
             });
-            state.total_price = total.reduce((total, num) => { return total + num }, 0);
+            state.total_price = total.reduce((total, num) => { return total + num }, 0);*/
         }
     },
     state: {

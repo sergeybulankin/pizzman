@@ -20,15 +20,9 @@ export default {
 
         CHECK_PRODUCT_IN_FAVORITE(ctx, favorite) {
             favorite.forEach((key, value) => {
-                $(".favorite-" + key.food_id).css("display", "none");
-                $(".delete-favorite-" + key.food_id).css("display", "block");
+                $(".favorite-" + key).css("display", "none");
+                $(".delete-favorite-" + key).css("display", "block");
             });
-        },
-
-        COUNT_FAVORITE(ctx) {
-            axios.get('/api/count-favorites')
-                .then(response => { ctx.commit('COUNT_FAVORITE_MUTATION', response.data) })
-                .catch( error => {console.log(error)} )
         }
     },
     mutations: {
@@ -41,24 +35,18 @@ export default {
         },
 
         SELECT_ALL_FAVORITE_MUTATION(state, favorite) {
-            state.favorite = favorite
-        },
-
-        COUNT_FAVORITE_MUTATION(state, count) {
-            state.count = count;
+            favorite.forEach((key, value) => {
+                state.favorite.push(key.food_id);
+            })
+            localStorage.setItem('favorite', JSON.stringify(state.favorite));
         }
     },
     state: {
-        favorite: [],
-        count: 0
+        favorite: []
     },
     getters: {
         ALL_FAVORITE(state) {
             return state.favorite
-        },
-
-        COUNT(state) {
-            return state.count
         }
     }
 }

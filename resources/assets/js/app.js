@@ -15,7 +15,8 @@ Vue.prototype._ = lodash;
 import persistentState from 'vue-persistent-state';
 
 let cartState = {
-    cart: []
+    cart: [],
+    favorite: []
 };
 
 window.Vue.use(persistentState, cartState);

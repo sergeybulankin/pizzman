@@ -8,10 +8,6 @@
         @include('components.call')
     @endsection()
 
-    @section('favorite-auth')
-        @include('components.favorite-auth')
-    @endsection()
-
     @section('modile-block')
         @include('components.modile-block')
     @endsection()

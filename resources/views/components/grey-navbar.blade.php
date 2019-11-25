@@ -41,7 +41,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     @if(\Illuminate\Support\Facades\Auth::check())
-                        <a class="nav-link" href="/logout"><i class="fa fa-user"></i> Выйти</a>
+                        <a class="nav-link" id="logout" href="/logout"><i class="fa fa-user"></i> Выйти</a>
                     @else
                         <a class="nav-link" href="/auth"><i class="fa fa-user"></i> Войти</a>
                     @endif()

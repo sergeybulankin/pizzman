@@ -45,13 +45,4 @@ class FavoriteController extends Controller
     {
         Favorite::where('food_id', $request->product)->where('user_id', Auth::user()->id)->delete();
     }
-
-    /**
-     * @return mixed
-     */
-    public function count() {
-        $count = Favorite::where('user_id', Auth::user()->id)->get()->count();
-
-        return $count;
-    }
 }

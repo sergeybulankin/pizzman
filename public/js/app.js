@@ -30298,7 +30298,8 @@ Vue.prototype._ = __WEBPACK_IMPORTED_MODULE_0_lodash___default.a;
 
 
 var cartState = {
-  cart: []
+  cart: [],
+  favorite: []
 };
 
 window.Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_persistent_state___default.a, cartState);
@@ -47549,6 +47550,8 @@ var debug = "development" !== 'production';
     mutations: {
         PRODUCTS_IN_CART: function PRODUCTS_IN_CART(state, productsInCart) {
             state.productsInCart = productsInCart;
+            _.groupBy(state.productsInCart, "u_id");
+            console.log(state.productsInCart);
         },
         MINUS: function MINUS(state, index) {
             state.productsInCart[index].count--;
@@ -47562,18 +47565,15 @@ var debug = "development" !== 'production';
         TOTAL_PRICE: function TOTAL_PRICE(state) {
             var total = [];
 
-            state.productsInCart.forEach(function (entry) {
-                entry.food.forEach(function (food) {
-                    total.push(food.price * entry.count);
-                });
-
-                entry.additive.forEach(function (additive) {
-                    total.push(additive.price * entry.count);
-                });
+            /*state.productsInCart.forEach((entry) => {
+                entry.food.forEach((food) => {
+                    total.push(food.price*entry.count);
+                })
+                 entry.additive.forEach((additive) => {
+                    total.push(additive.price*entry.count);
+                })
             });
-            state.total_price = total.reduce(function (total, num) {
-                return total + num;
-            }, 0);
+            state.total_price = total.reduce((total, num) => { return total + num }, 0);*/
         }
     },
     state: {
@@ -47650,15 +47650,8 @@ var debug = "development" !== 'production';
         },
         CHECK_PRODUCT_IN_FAVORITE: function CHECK_PRODUCT_IN_FAVORITE(ctx, favorite) {
             favorite.forEach(function (key, value) {
-                $(".favorite-" + key.food_id).css("display", "none");
-                $(".delete-favorite-" + key.food_id).css("display", "block");
-            });
-        },
-        COUNT_FAVORITE: function COUNT_FAVORITE(ctx) {
-            axios.get('/api/count-favorites').then(function (response) {
-                ctx.commit('COUNT_FAVORITE_MUTATION', response.data);
-            }).catch(function (error) {
-                console.log(error);
+                $(".favorite-" + key).css("display", "none");
+                $(".delete-favorite-" + key).css("display", "block");
             });
         }
     },
@@ -47670,22 +47663,18 @@ var debug = "development" !== 'production';
             state.favorite = product;
         },
         SELECT_ALL_FAVORITE_MUTATION: function SELECT_ALL_FAVORITE_MUTATION(state, favorite) {
-            state.favorite = favorite;
-        },
-        COUNT_FAVORITE_MUTATION: function COUNT_FAVORITE_MUTATION(state, count) {
-            state.count = count;
+            favorite.forEach(function (key, value) {
+                state.favorite.push(key.food_id);
+            });
+            localStorage.setItem('favorite', JSON.stringify(state.favorite));
         }
     },
     state: {
-        favorite: [],
-        count: 0
+        favorite: []
     },
     getters: {
         ALL_FAVORITE: function ALL_FAVORITE(state) {
             return state.favorite;
-        },
-        COUNT: function COUNT(state) {
-            return state.count;
         }
     }
 });
@@ -47907,16 +47896,24 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            checkedAdditive: []
+        };
+    },
     created: function created() {
         console.log('Стартуем!');
         this.SELECTED_ALL_PRODUCTS();
-        this.SELECT_ALL_FAVORITE();
 
         if (this.checkUser == 1) {
+            console.log('Собираем ваше избранное');
+            this.SELECT_ALL_FAVORITE();
+
             console.log('Собираем вашу корзину');
             this.SELECTED_ALL_PRODUCTS_FOR_USERS();
         }
@@ -47925,7 +47922,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         var _this = this;
 
         setTimeout(function () {
-            _this.CHECK_PRODUCT_IN_FAVORITE(_this.ALL_FAVORITE);
+            _this.CHECK_PRODUCT_IN_FAVORITE(_this.favorite);
         }, 1000);
     },
 
@@ -47938,53 +47935,86 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }),
     methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_ALL_PRODUCTS', 'SELECTED_ALL_PRODUCTS_FOR_USERS', 'SELECTION_BY_CATEGORY', 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE', 'SELECT_ALL_FAVORITE', 'CHECK_PRODUCT_IN_FAVORITE', 'ADD_TO_FAVORITE', 'COUNT_FAVORITE', 'DELETE_OF_FAVORITE']), {
         changeProduct: function changeProduct(id) {
-            var additive_id = $('.additive-' + id)[0].value;
-            var changedProduct = { id: id, additive_id: additive_id };
-
-            var result = true;
-            this.cart.forEach(function (key, value) {
-                var compareId = _.isEqual(changedProduct.id, key.id);
-
-                if (compareId == true) {
-                    var compareAdditive = _.isEqual(changedProduct.additive_id, key.additive_id);
-                    if (compareAdditive == true) {
-                        console.log('Товар уже в корзине');
-                        result = false;
-                    }
+            var additiveFood = [];
+            this.checkedAdditive.forEach(function (key, value) {
+                if (key.product == id) {
+                    additiveFood.push(parseInt(key.additive));
                 }
             });
 
-            if (result == true) {
+            var additiveInCart = [];
+            this.cart.forEach(function (key, value) {
+                if (key.id == id) {
+                    key.additive_id.additiveFood.forEach(function (k, v) {
+                        additiveInCart.push(k);
+                    });
+                }
+            });
+
+            var diff = _.difference(additiveFood, additiveInCart, _.isEqual);
+
+            var u_id = Math.floor(Math.random() * (10000 - 50));
+            var changedProduct = { u_id: u_id, id: id, additive_id: { additiveFood: additiveFood }, count: 1 };
+
+            if (_.isEmpty(diff) == true) {
+                _.map(this.cart, function (cart) {
+                    if (cart.id == id) {
+                        cart.count++;
+                    }
+                });
+            } else {
+                this.cart.push(changedProduct);
+            }
+
+            if (this.cart.length == 0) {
+                console.log('PUSTO');
                 this.cart.push(changedProduct);
             }
 
             // если пользователь авторизовован
             // то кидаем весь localStorage в БД
-            if (this.checkUser == 1) {
-                this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart);
-            }
+            /*if (this.checkUser == 1) {
+                this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart)
+            }*/
         },
         changeFavorite: function changeFavorite(id) {
-            this.ADD_TO_FAVORITE(id);
+            if (this.checkUser == 1) {
+                this.ADD_TO_FAVORITE(id);
+            }
+
+            this.favorite.push(id);
             $(".favorite-" + id).css("display", "none");
             $(".delete-favorite-" + id).css("display", "block");
-            this.COUNT_FAVORITE();
         },
-
-
-        // передаем из цикла добавок id
-        // чтобы было что добавлять в корзину и заказы
-        changeAdditive: function changeAdditive(id, product_id) {
-            $('#additive-' + product_id).val(id);
+        changeAdditive: function changeAdditive(e) {
+            if (e.target.checked == true) {
+                var additive = e.target.value;
+                var product = e.target.id;
+                this.checkedAdditive.push({ product: product, additive: additive });
+            } else {
+                this.checkedAdditive.pop({ product: product, additive: additive });
+            }
         },
-        deleteFavorite: function deleteFavorite(id) {
-            this.DELETE_OF_FAVORITE(id);
+        deleteFavorite: function deleteFavorite(index, id) {
+            if (this.checkUser == 1) {
+                this.DELETE_OF_FAVORITE(id);
+            }
+
+            var idx = this.favorite.indexOf(id);
+
+            if (idx != -1) {
+                this.favorite.splice(idx, 1);
+            }
             $(".favorite-" + id).css("display", "block");
             $(".delete-favorite-" + id).css("display", "none");
-            this.COUNT_FAVORITE();
         },
         selectProducts: function selectProducts(id) {
+            var _this2 = this;
+
             this.SELECTION_BY_CATEGORY(id);
+            setTimeout(function () {
+                _this2.CHECK_PRODUCT_IN_FAVORITE(_this2.favorite);
+            }, 200);
         }
     })
 });
@@ -48046,7 +48076,7 @@ var render = function() {
                 return _c(
                   "div",
                   {
-                    key: product.id,
+                    key: index,
                     staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12"
                   },
                   [
@@ -48064,29 +48094,18 @@ var render = function() {
                         }),
                         _vm._v(" "),
                         _c("div", { staticClass: "search-heart" }, [
-                          _vm.checkUser == 0
-                            ? _c(
-                                "button",
-                                {
-                                  attrs: {
-                                    "data-toggle": "modal",
-                                    "data-target": "#modal-form-auth"
-                                  }
-                                },
-                                [_c("i", { staticClass: "fa fa-heart" })]
-                              )
-                            : _c(
-                                "button",
-                                {
-                                  class: "favorite-" + product.id,
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.changeFavorite(product.id)
-                                    }
-                                  }
-                                },
-                                [_c("i", { staticClass: "fa fa-heart" })]
-                              ),
+                          _c(
+                            "button",
+                            {
+                              class: "favorite-" + product.id,
+                              on: {
+                                click: function($event) {
+                                  return _vm.changeFavorite(product.id)
+                                }
+                              }
+                            },
+                            [_c("i", { staticClass: "fa fa-heart" })]
+                          ),
                           _vm._v(" "),
                           _c(
                             "button",
@@ -48094,7 +48113,7 @@ var render = function() {
                               class: "delete-favorite-" + product.id,
                               on: {
                                 click: function($event) {
-                                  return _vm.deleteFavorite(product.id)
+                                  return _vm.deleteFavorite(index, product.id)
                                 }
                               }
                             },
@@ -48151,46 +48170,25 @@ var render = function() {
                           additive,
                           additive_index
                         ) {
-                          return _c(
-                            "label",
-                            {
-                              key: additive_index,
-                              staticClass: "btn btn-secondary",
-                              class: { active: additive.id === 0 },
+                          return _c("div", { key: additive_index }, [
+                            _c("input", {
+                              attrs: { type: "checkbox", id: product.id },
+                              domProps: { value: additive.id },
                               on: {
                                 click: function($event) {
-                                  return _vm.changeAdditive(
-                                    additive.id,
-                                    product.id
-                                  )
+                                  return _vm.changeAdditive($event)
                                 }
                               }
-                            },
-                            [
-                              _c("input", {
-                                attrs: {
-                                  type: "radio",
-                                  name: "options",
-                                  id: "option-" + additive.id,
-                                  autocomplete: "off"
-                                }
-                              }),
-                              _vm._v(
-                                " " +
-                                  _vm._s(additive.name) +
-                                  "\n                                "
-                              )
-                            ]
-                          )
+                            }),
+                            _vm._v(
+                              " " +
+                                _vm._s(additive.name) +
+                                "\n                                "
+                            )
+                          ])
                         }),
                         0
                       ),
-                      _vm._v(" "),
-                      _c("input", {
-                        class: "additive-" + product.id,
-                        attrs: { type: "hidden", id: "additive-" + product.id },
-                        domProps: { value: 0 }
-                      }),
                       _vm._v(" "),
                       _c("a", { staticClass: "product_title" }, [
                         _vm._v(_vm._s(product.price) + " P")
@@ -48412,6 +48410,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
 
 
 
@@ -48484,12 +48485,12 @@ var render = function() {
             return _c("ul", { key: item.id }, [
               _c(
                 "li",
-                [
-                  _vm._l(item.food, function(product, index) {
-                    return _c(
-                      "div",
-                      { key: product.id, staticClass: "d-flex" },
-                      [
+                _vm._l(item, function(product, index) {
+                  return _c(
+                    "div",
+                    { key: product.id, staticClass: "d-flex" },
+                    _vm._l(product.food, function(food, index) {
+                      return _c("div", { staticClass: "d-flex" }, [
                         _c("div", { staticClass: "delete_icon" }, [
                           _c("img", {
                             attrs: { src: "images/delete_icon.svg" },
@@ -48507,40 +48508,59 @@ var render = function() {
                         _c("div", { staticClass: "photo-small" }, [
                           _c("img", {
                             staticClass: "img-fluid",
-                            attrs: { src: product.image }
+                            attrs: { src: food.image }
                           })
                         ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "description" }, [
-                          _c("a", [_c("b", [_vm._v(_vm._s(product.name))])]),
-                          _c("p", [
-                            _c("small", [
-                              _vm._v("1x" + _vm._s(product.price) + " "),
-                              _c("i", { staticClass: "fa fa-rub" })
-                            ])
-                          ])
-                        ])
-                      ]
-                    )
-                  }),
-                  _vm._v(" "),
-                  _vm._l(item.additive, function(additive, additive_index) {
-                    return _c(
-                      "span",
-                      { key: additive_index, staticClass: "description" },
-                      [
-                        _c("a", [_c("b", [_vm._v(_vm._s(additive.name))])]),
-                        _c("p", [
-                          _c("small", [
-                            _vm._v(_vm._s(additive.price) + " "),
-                            _c("i", { staticClass: "fa fa-rub" })
-                          ])
-                        ])
-                      ]
-                    )
-                  })
-                ],
-                2
+                        _c(
+                          "div",
+                          { staticClass: "description" },
+                          [
+                            _c("a", [_c("b", [_vm._v(_vm._s(food.name))])]),
+                            _c("p", [
+                              _c("small", [
+                                _vm._v(
+                                  _vm._s(product.count) +
+                                    "x" +
+                                    _vm._s(food.price) +
+                                    " "
+                                ),
+                                _c("i", { staticClass: "fa fa-rub" })
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _vm._l(product.additive, function(
+                              additive,
+                              additive_index
+                            ) {
+                              return _c(
+                                "span",
+                                {
+                                  key: additive_index,
+                                  staticClass: "description"
+                                },
+                                [
+                                  _c("a", [
+                                    _c("b", [_vm._v(_vm._s(additive.name))])
+                                  ]),
+                                  _c("p", [
+                                    _c("small", [
+                                      _vm._v(_vm._s(additive.price) + " "),
+                                      _c("i", { staticClass: "fa fa-rub" })
+                                    ])
+                                  ])
+                                ]
+                              )
+                            })
+                          ],
+                          2
+                        )
+                      ])
+                    }),
+                    0
+                  )
+                }),
+                0
               )
             ])
           }),
@@ -54469,9 +54489,6 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 //
 //
 //
@@ -54480,20 +54497,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        this.COUNT_FAVORITE();
-    },
-
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['COUNT']), {
-        counts: function counts() {
-            return this.$store.getters.COUNT;
+    computed: {
+        totalFavorite: function totalFavorite() {
+            return this.favorite.length;
         }
-    }),
-    methods: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['COUNT_FAVORITE'])
+    }
 });
 
 /***/ }),
@@ -54506,7 +54516,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("a", { attrs: { href: "/favorites" } }, [
-      _c("span", { staticClass: "count" }, [_vm._v(_vm._s(_vm.counts))]),
+      _c("span", { staticClass: "count" }, [_vm._v(_vm._s(_vm.totalFavorite))]),
       _c("i", { staticClass: "fa fa-heart " })
     ])
   ])

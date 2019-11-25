@@ -14,23 +14,20 @@
             <div class="tab-pane fade show active" id="nav-pizza" role="tabpanel" aria-labelledby="nav-pizza-tab">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"  v-for="(product, index) in ALL_PRODUCTS" :key="product.id">
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"  v-for="(product, index) in ALL_PRODUCTS" :key="index">
                             <div class="one-food">
                                 <div id="recommend"
                                      v-if="product.recommend == true">рекомендуем</div>
                                 <div class="c-product">
                                     <img :src="product.image" class="img-fluid">
                                     <div class="search-heart">
-                                        <button data-toggle="modal" data-target="#modal-form-auth"
-                                                v-if="checkUser == 0"><i class="fa fa-heart"></i>
-                                        </button>
                                         <button
                                                 @click="changeFavorite(product.id)"
-                                                :class="'favorite-' + product.id"
-                                                v-else><i class="fa fa-heart"></i>
+                                                :class="'favorite-' + product.id">
+                                                <i class="fa fa-heart"></i>
                                         </button>
                                         <button
-                                                @click="deleteFavorite(product.id)"
+                                                @click="deleteFavorite(index, product.id)"
                                                 :class="'delete-favorite-' + product.id"><i class="fa fa-trash-o"></i>
                                         </button>
                                     </div>
@@ -50,20 +47,24 @@
                                 </div>
 
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-secondary" v-for="(additive, additive_index) in product.additives"
+                                    <!--<label class="btn btn-secondary" v-for="(additive, additive_index) in product.additives"
                                            :class="{ 'active': additive.id === 0 }"
                                            :key="additive_index"
-                                           @click="changeAdditive(additive.id, product.id)">
-                                        <input type="radio" name="options"
+                                           :id="additive.id"
+                                           v-model="checkedAdditive"
+                                           @click="changeAdditive($event, additive.id, product.id)">
+                                        <input type="checkbox" name="options"
                                                :id="'option-' + additive.id"
                                                autocomplete="off"> {{ additive.name }}
-                                    </label>
-                                </div>
+                                    </label>-->
+                                    <div v-for="(additive, additive_index) in product.additives" :key="additive_index">
+                                        <input type="checkbox"
+                                               :value="additive.id"
+                                               :id="product.id"
+                                               @click="changeAdditive($event)"> {{ additive.name }}
+                                    </div>
 
-                                <input type="hidden"
-                                       :id="'additive-' + product.id"
-                                       :class="'additive-' + product.id"
-                                       :value="0">
+                                </div>
 
                                 <a class="product_title">{{ product.price }} P</a>
 
@@ -86,18 +87,25 @@
     import { mapGetters, mapActions } from 'vuex';
 
     export default {
+        data() {
+            return {
+                checkedAdditive: []
+            }
+        },
         created() {
             console.log('Стартуем!');
             this.SELECTED_ALL_PRODUCTS();
-            this.SELECT_ALL_FAVORITE();
 
             if(this.checkUser == 1) {
+                console.log('Собираем ваше избранное');
+                this.SELECT_ALL_FAVORITE();
+
                 console.log('Собираем вашу корзину');
                 this.SELECTED_ALL_PRODUCTS_FOR_USERS();
             }
         },
         mounted() {
-            setTimeout (() => { this.CHECK_PRODUCT_IN_FAVORITE(this.ALL_FAVORITE) }, 1000)
+            setTimeout (() => { this.CHECK_PRODUCT_IN_FAVORITE(this.favorite) }, 1000)
         },
         computed: {
             ...mapGetters([
@@ -127,55 +135,88 @@
 
 
             changeProduct(id) {
-                var additive_id = $('.additive-' + id)[0].value;
-                var changedProduct = {id: id, additive_id: additive_id};
-
-                let result = true;
-                this.cart.forEach((key, value) => {
-                    var compareId = _.isEqual(changedProduct.id, key.id);
-
-                    if (compareId == true) {
-                        var compareAdditive = _.isEqual(changedProduct.additive_id, key.additive_id);
-                        if (compareAdditive == true) {
-                            console.log('Товар уже в корзине');
-                            result = false;
-                        }
+                let additiveFood = [];
+                this.checkedAdditive.forEach((key, value) => {
+                    if(key.product == id) {
+                        additiveFood.push(parseInt(key.additive))
                     }
-                 });
+                });
 
-                if (result == true) {
+                let additiveInCart = [];
+                this.cart.forEach((key, value) => {
+                    if(key.id == id) {
+                        key.additive_id.additiveFood.forEach((k, v) => {
+                            additiveInCart.push(k)
+                        })
+                    }
+                });
+
+                var diff = _.difference(additiveFood, additiveInCart, _.isEqual);
+
+                var u_id = Math.floor(Math.random() * (10000 - 50));
+                var changedProduct = {u_id: u_id, id: id, additive_id: { additiveFood }, count: 1};
+
+                if (_.isEmpty(diff) == true) {
+                    _.map(this.cart, function (cart) {
+                        if (cart.id == id) {
+                            cart.count++
+                        }
+                    })
+                } else {
                     this.cart.push(changedProduct);
                 }
 
+                if (this.cart.length == 0) {
+                    console.log('PUSTO')
+                    this.cart.push(changedProduct);
+                }
+
+
                 // если пользователь авторизовован
                 // то кидаем весь localStorage в БД
-                if (this.checkUser == 1) {
+                /*if (this.checkUser == 1) {
                     this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart)
-                }
+                }*/
             },
 
             changeFavorite(id) {
-                this.ADD_TO_FAVORITE(id);
+                if (this.checkUser == 1) {
+                    this.ADD_TO_FAVORITE(id)
+                }
+
+                this.favorite.push(id);
                 $(".favorite-" + id).css("display", "none");
                 $(".delete-favorite-" + id).css("display", "block");
-                this.COUNT_FAVORITE();
             },
 
-            // передаем из цикла добавок id
-            // чтобы было что добавлять в корзину и заказы
-            changeAdditive(id, product_id) {
-                $('#additive-' + product_id).val(id);
+
+            changeAdditive(e) {
+                if (e.target.checked == true) {
+                    var additive = e.target.value;
+                    var product = e.target.id;
+                    this.checkedAdditive.push({product: product, additive: additive});
+                }else {
+                    this.checkedAdditive.pop({product: product, additive: additive});
+                }
             },
 
-            deleteFavorite(id) {
-                this.DELETE_OF_FAVORITE(id);
+            deleteFavorite(index, id) {
+                if (this.checkUser == 1) {
+                    this.DELETE_OF_FAVORITE(id);
+                }
+
+                var idx = this.favorite.indexOf(id);
+
+                if (idx != -1) {
+                    this.favorite.splice(idx, 1);
+                }
                 $(".favorite-" + id).css("display", "block");
                 $(".delete-favorite-" + id).css("display", "none");
-                this.COUNT_FAVORITE();
             },
 
             selectProducts(id) {
                 this.SELECTION_BY_CATEGORY(id);
+                setTimeout (() => { this.CHECK_PRODUCT_IN_FAVORITE(this.favorite) }, 200)
             }
         }
     }
