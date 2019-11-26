@@ -1,8 +1,8 @@
 export default {
     actions: {
-        SELECT_ALL_FAVORITE(ctx) {
-            axios.get('/api/select-all-favorite')
-                .then(response => { ctx.commit('SELECT_ALL_FAVORITE_MUTATION', response.data.data) })
+        SELECT_ALL_FAVORITE(ctx, favorite) {
+            axios.post('/api/select-all-favorite', {favorite: favorite})
+                .then(response => { ctx.commit('SELECT_ALL_FAVORITE_MUTATION', response.data) })
                 .catch( error => {console.log(error)} )
         },
 
@@ -35,10 +35,8 @@ export default {
         },
 
         SELECT_ALL_FAVORITE_MUTATION(state, favorite) {
-            favorite.forEach((key, value) => {
-                state.favorite.push(key.food_id);
-            })
-            localStorage.setItem('favorite', JSON.stringify(state.favorite));
+            state.favorite = favorite
+            //localStorage.setItem('favorite', JSON.stringify(state.favorite));
         }
     },
     state: {

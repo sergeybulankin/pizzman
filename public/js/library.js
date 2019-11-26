@@ -50,29 +50,33 @@ function close_cart(btn)
     $(btn).parents("div").find("#cart_info").addClass("d-none");
 }
 
+
+// отправка кода на телефон при правильном вводе номера
 function sign_up(phone)
 {
     var validate = sendSms(phone);
 
     if(validate != null) {
-        $.get("/sms", {phone: phone});
-
-        $("#phone_form").addClass("d-none");
-        $("#password_form").removeClass("d-none");
-        $("#repeatSms").css("display", "none");
+        $.ajax({
+            url: "/sms",
+            method: "GET",
+            data: {'phone': phone},
+            success: function(){
+                $("#phone_form").addClass("d-none");
+                $("#password_form").removeClass("d-none");
+                $("#repeatPhone").addClass("d-none");
+            },
+            error: function () {
+                $("#sms").remove();
+                $("#repeatPhone").removeClass("d-none");
+            }
+        })
     }
     else {
-        $("#repeatPhone").css("display", "block");
+        console.log('Номер телефона не введен');
+        $("#repeatPhone").removeClass("d-none");
     }
 
-}
-
-function confirmCode(code)
-{
-    $("#password_form").addClass("d-none");
-    $(".alert.alert-success").removeClass("d-none");
-    var x = get_cookie("key_sms");
-    //$.get('/checkSms', {sms: code});
 }
 
 function update_active(el)
@@ -113,6 +117,9 @@ function delivery_type(el, type, totalPrice)
     }
 }
 
+
+
+// отправка заказа
 function send_an_order(el, phone) {
     var validate = sendSms(phone);
 
@@ -138,21 +145,23 @@ function sendSms(phone) {
 }
 
 
-function confirm(el, sms)
+// проверяем введеный код с сессией смс-кода
+function confirmCodeSms(el, sms, phone)
 {
     $.ajax({
         url: "/checkSms",
         method: "GET",
-        data: {'sms': sms},
+        data: {'sms': sms, 'phone': phone},
         success: function(){
             $(el).remove();
-            $("#repeatSms").remove();
-            $("#answerError").addClass("d-none");
-            $("#answer").removeClass("d-none");
+            //$("#repeatSms").remove();
+            //$("#answerError").addClass("d-none");
+            //$("#answer").removeClass("d-none");
+            $("#registered").removeClass("d-none");
         },
         error: function () {
             $("#sms").remove();
-            $("#answerError").removeClass("d-none");
+            $("#repeatSms").removeClass("d-none");
         }
     })
 }

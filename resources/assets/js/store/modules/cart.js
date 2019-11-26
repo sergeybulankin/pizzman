@@ -10,6 +10,10 @@ export default {
             ctx.commit('TOTAL_PRICE')
         },
 
+        COUNTING_TOTAL_WEIGHT(ctx) {
+            ctx.commit('TOTAL_WEIGHT')
+        },
+
         SEND_CART_IN_DELIVERY(ctx, cart, u_id = Date.now()) {
             axios.post('/api/post-cart-in-delivery', {order: cart, u_id: u_id })
                 .then(
@@ -25,16 +29,28 @@ export default {
         },
 
         MINUS(state, index) {
-            state.productsInCart[index].count--
+            state.productsInCart[index].food.count--
         },
 
         PLUS(state, index) {
-            state.productsInCart[index].count++
+            state.productsInCart[index].food.count++
         },
 
         POSITIVE_NUMBERS(state, index) {
             if (state.productsInCart[index].count < 1)
                 state.productsInCart[index].count = 1
+        },
+
+        COUNT_PRICE_FOR_PRODUCT_MUTATION(state, index) {
+            let additive_price = [];
+
+            _.each(state.productsInCart[index].additive, (additives) => {
+                _.each(additives, (additive) => {
+                    additive_price[index] = additive.price*state.productsInCart[index].food.count
+                })
+            })
+
+            state.additivePrice[index] = additive_price[index];
         },
 
         TOTAL_PRICE(state) {
@@ -50,11 +66,22 @@ export default {
                 })
             })
             state.total_price = total.reduce((total, num) => { return total + num }, 0);
+        },
+
+        TOTAL_WEIGHT(state) {
+            let total = [];
+
+            _.each(state.productsInCart, (entry) => {
+                total.push(entry.food.weight*entry.food.count);
+            })
+            state.total_weight = total.reduce((total, num) => { return total + num }, 0);
         }
     },
     state: {
         productsInCart: [],
-        total_price: 0
+        total_price: 0,
+        total_weight: 0,
+        additivePrice: []
     },
     getters: {
         ALL_PRODUCTS_IN_CART(state) {
@@ -63,6 +90,14 @@ export default {
 
         TOTAl_PRICE_CART(state) {
             return state.total_price
+        },
+
+        TOTAl_WEIGHT_CART(state) {
+            return state.total_weight
+        },
+
+        ADDITIVE_PRICE(state) {
+            return state.additivePrice
         }
     }
 }

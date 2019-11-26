@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Nutnet\LaravelSms\SmsSender;
 use Illuminate\Support\Facades\Cookie;
@@ -19,7 +20,7 @@ class OrderController extends Controller
     {
         $number = rand(1111, 9999);
 
-        Cookie::queue('key_sms', $number, 999999999);
+        session(['key_sms' => $number]);
 
         $smsSender->send($request->phone, $number);
     }
@@ -34,20 +35,26 @@ class OrderController extends Controller
      */
     public function checkSms(Request $request)
     {
-        $cookie_sms = $request->cookie('key_sms');
+        $session_sms = session('key_sms');
 
-        $sms = $request->sms;
+        $phone = $request->phone;
 
-        if ($cookie_sms === $sms) {
-            $this->store();
+        $sms = (int)$request->sms;
+
+        if ($session_sms == $sms) {
+            $this->store($phone, $sms);
         } else {
             return false;
         }
     }
 
 
-    public function store()
+    public function store($phone, $sms)
     {
-        return "YEP!";
+        return User::create([
+            'name' => $phone,
+            'email' => '',
+            'password' => bcrypt($sms)
+        ]);
     }
 }

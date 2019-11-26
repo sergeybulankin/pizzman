@@ -56,28 +56,29 @@
                                 <h5><small>На указанный номер телефона был отправлен пароль, введите его в поле ниже.</small></h5>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Пароль (код из смс)</label>
-                                    <input type="phone" name="code" class="form-control">
+                                    <input type="text" name="code" class="form-control">
                                 </div>
 
-                                <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="confirmCode(code.value)">подтвердить</button>
+                                <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="confirmCodeSms(this, code.value, phone.value)">подтвердить</button>
                             </div>
 
 
-                            <div id="repeatPhone" class="repeat-sms">
+                            <div id="repeatPhone" class="d-none">
                                 <div class="alert alert-primary" role="alert">
                                     Номер телефона некоректен. Введите нормально номер телефона и повторите попытку
                                 </div>
                                 <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="sign_up(phone.value)">зарегистрироваться</button>
                             </div>
 
-                            <div id="repeatSms" class="repeat-sms">
+
+                            <div id="repeatSms" class="repeat-code d-none">
                                 <div class="alert alert-primary" role="alert">
                                     Ошибка смс-кода. неправильно введен
                                 </div>
-                                <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="sign_up(phone.value)">зарегистрироваться</button>
+                                <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="confirmCodeSms(this, code.value)">подтвердить</button>
                             </div>
 
-                            <div class="alert alert-success d-none" role="alert">Поздравляем! Регистрация прошла успешно! Пожалуйста, авторизуйтесь.</div>
+                            <div id="registered" class="alert alert-success d-none" role="alert">Поздравляем! Регистрация прошла успешно! Сейчас мы вас авторизируем.</div>
                         </form>
                     </div>
                 </div>
