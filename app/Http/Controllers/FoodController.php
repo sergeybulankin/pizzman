@@ -96,7 +96,7 @@ class FoodController extends Controller
         foreach ($foods as $key => $value) {
             foreach ($value as $k => $v) {
                 $preparedFoods[$key]['food'] = $v->food[0];
-                $preparedFoods[$key][$k]['additive'] = $v->additive;
+                $preparedFoods[$key]['additive'][$k] = $v->additive;
                 $preparedFoods[$key]['food']['count'] = $v->count;
             }
         }

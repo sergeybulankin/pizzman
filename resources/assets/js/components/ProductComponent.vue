@@ -167,16 +167,15 @@
                 }
 
                 if (this.cart.length == 0) {
-                    console.log('PUSTO')
                     this.cart.push(changedProduct);
                 }
 
 
                 // если пользователь авторизовован
                 // то кидаем весь localStorage в БД
-                /*if (this.checkUser == 1) {
+                if (this.checkUser == 1) {
                     this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart)
-                }*/
+                }
             },
 
             changeFavorite(id) {

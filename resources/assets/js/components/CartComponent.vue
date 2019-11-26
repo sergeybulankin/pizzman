@@ -7,24 +7,24 @@
         </a>
 
         <div id='cart_info' class="d-none">
-            <ul v-for="(item, index) in ALL_PRODUCTS_IN_CART" :key="item.id">
+            <ul v-for="(item, index) in ALL_PRODUCTS_IN_CART" :key="index">
                 <li>
-                    <div class="d-flex" v-for="(product, index) in item" :key="product.id">
-                        <div class="d-flex" v-for="(food, index) in product.food">
-                            <div class="delete_icon">
-                                <img src="images/delete_icon.svg" @click="deleteProductFromCart(index, product.id)"/>
-                            </div>
+                    <div class="d-flex">
+                        <div class="delete_icon">
+                            <img src="images/delete_icon.svg" @click="deleteProductFromCart(index)"/>
+                        </div>
 
-                            <div class="photo-small">
-                                <img :src="food.image" class="img-fluid">
-                            </div>
-                            <div class="description">
-                                <a><b>{{ food.name }}</b></a><p><small>{{ product.count }}x{{ food.price }} <i class="fa fa-rub"></i></small></p>
+                        <div class="photo-small">
+                            <img :src="item.food.image" class="img-fluid">
+                        </div>
+                        <div class="description">
+                            <a><b>{{ item.food.name }}</b></a><p><small>{{ item.food.count }}x{{ item.food.price }} <i class="fa fa-rub"></i></small></p>
 
-                                <span class="description" v-for="(additive, additive_index) in product.additive" :key="additive_index">
+                            <span class="description" v-for="(additives, additives_index) in item.additive" :key="additives_index">
+                                <span class="description" v-for="(additive, additive_index) in additives" :key="additive_index">
                                     <a><b>{{ additive.name }}</b></a><p><small>{{ additive.price }} <i class="fa fa-rub"></i></small></p>
                                 </span>
-                            </div>
+                            </span>
                         </div>
                     </div>
                 </li>
@@ -69,7 +69,7 @@
         methods: {
             ...mapActions(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY']),
 
-            deleteProductFromCart(index, id) {
+            deleteProductFromCart(index) {
                 this.cart.splice(index, 1);
             },
 

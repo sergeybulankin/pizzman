@@ -47551,7 +47551,6 @@ var debug = "development" !== 'production';
         PRODUCTS_IN_CART: function PRODUCTS_IN_CART(state, productsInCart) {
             state.productsInCart = productsInCart;
             _.groupBy(state.productsInCart, "u_id");
-            console.log(state.productsInCart);
         },
         MINUS: function MINUS(state, index) {
             state.productsInCart[index].count--;
@@ -47565,15 +47564,18 @@ var debug = "development" !== 'production';
         TOTAL_PRICE: function TOTAL_PRICE(state) {
             var total = [];
 
-            /*state.productsInCart.forEach((entry) => {
-                entry.food.forEach((food) => {
-                    total.push(food.price*entry.count);
-                })
-                 entry.additive.forEach((additive) => {
-                    total.push(additive.price*entry.count);
-                })
+            _.each(state.productsInCart, function (entry) {
+                total.push(entry.food.price * entry.food.count);
+
+                _.each(entry.additive, function (additives) {
+                    _.each(additives, function (additive) {
+                        total.push(additive.price * entry.food.count);
+                    });
+                });
             });
-            state.total_price = total.reduce((total, num) => { return total + num }, 0);*/
+            state.total_price = total.reduce(function (total, num) {
+                return total + num;
+            }, 0);
         }
     },
     state: {
@@ -47741,7 +47743,7 @@ var content = __webpack_require__(64);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("7ee07b3e", content, false, {});
+var update = __webpack_require__(6)("5a09079e", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -47967,15 +47969,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }
 
             if (this.cart.length == 0) {
-                console.log('PUSTO');
                 this.cart.push(changedProduct);
             }
 
             // если пользователь авторизовован
             // то кидаем весь localStorage в БД
-            /*if (this.checkUser == 1) {
-                this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart)
-            }*/
+            if (this.checkUser == 1) {
+                this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart);
+            }
         },
         changeFavorite: function changeFavorite(id) {
             if (this.checkUser == 1) {
@@ -48327,7 +48328,7 @@ var content = __webpack_require__(70);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("2e56f2b0", content, false, {});
+var update = __webpack_require__(6)("0d235370", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -48432,7 +48433,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }
     }),
     methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY']), {
-        deleteProductFromCart: function deleteProductFromCart(index, id) {
+        deleteProductFromCart: function deleteProductFromCart(index) {
             this.cart.splice(index, 1);
         },
         sendCart: function sendCart() {
@@ -48482,86 +48483,79 @@ var render = function() {
         { staticClass: "d-none", attrs: { id: "cart_info" } },
         [
           _vm._l(_vm.ALL_PRODUCTS_IN_CART, function(item, index) {
-            return _c("ul", { key: item.id }, [
-              _c(
-                "li",
-                _vm._l(item, function(product, index) {
-                  return _c(
+            return _c("ul", { key: index }, [
+              _c("li", [
+                _c("div", { staticClass: "d-flex" }, [
+                  _c("div", { staticClass: "delete_icon" }, [
+                    _c("img", {
+                      attrs: { src: "images/delete_icon.svg" },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteProductFromCart(index)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "photo-small" }, [
+                    _c("img", {
+                      staticClass: "img-fluid",
+                      attrs: { src: item.food.image }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
                     "div",
-                    { key: product.id, staticClass: "d-flex" },
-                    _vm._l(product.food, function(food, index) {
-                      return _c("div", { staticClass: "d-flex" }, [
-                        _c("div", { staticClass: "delete_icon" }, [
-                          _c("img", {
-                            attrs: { src: "images/delete_icon.svg" },
-                            on: {
-                              click: function($event) {
-                                return _vm.deleteProductFromCart(
-                                  index,
-                                  product.id
-                                )
-                              }
-                            }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "photo-small" }, [
-                          _c("img", {
-                            staticClass: "img-fluid",
-                            attrs: { src: food.image }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "description" },
-                          [
-                            _c("a", [_c("b", [_vm._v(_vm._s(food.name))])]),
-                            _c("p", [
-                              _c("small", [
-                                _vm._v(
-                                  _vm._s(product.count) +
-                                    "x" +
-                                    _vm._s(food.price) +
-                                    " "
-                                ),
-                                _c("i", { staticClass: "fa fa-rub" })
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _vm._l(product.additive, function(
-                              additive,
-                              additive_index
-                            ) {
-                              return _c(
-                                "span",
-                                {
-                                  key: additive_index,
-                                  staticClass: "description"
-                                },
-                                [
-                                  _c("a", [
-                                    _c("b", [_vm._v(_vm._s(additive.name))])
-                                  ]),
-                                  _c("p", [
-                                    _c("small", [
-                                      _vm._v(_vm._s(additive.price) + " "),
-                                      _c("i", { staticClass: "fa fa-rub" })
-                                    ])
+                    { staticClass: "description" },
+                    [
+                      _c("a", [_c("b", [_vm._v(_vm._s(item.food.name))])]),
+                      _c("p", [
+                        _c("small", [
+                          _vm._v(
+                            _vm._s(item.food.count) +
+                              "x" +
+                              _vm._s(item.food.price) +
+                              " "
+                          ),
+                          _c("i", { staticClass: "fa fa-rub" })
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(item.additive, function(
+                        additives,
+                        additives_index
+                      ) {
+                        return _c(
+                          "span",
+                          { key: additives_index, staticClass: "description" },
+                          _vm._l(additives, function(additive, additive_index) {
+                            return _c(
+                              "span",
+                              {
+                                key: additive_index,
+                                staticClass: "description"
+                              },
+                              [
+                                _c("a", [
+                                  _c("b", [_vm._v(_vm._s(additive.name))])
+                                ]),
+                                _c("p", [
+                                  _c("small", [
+                                    _vm._v(_vm._s(additive.price) + " "),
+                                    _c("i", { staticClass: "fa fa-rub" })
                                   ])
-                                ]
-                              )
-                            })
-                          ],
-                          2
+                                ])
+                              ]
+                            )
+                          }),
+                          0
                         )
-                      ])
-                    }),
-                    0
+                      })
+                    ],
+                    2
                   )
-                }),
-                0
-              )
+                ])
+              ])
             ])
           }),
           _vm._v(" "),
@@ -49246,7 +49240,7 @@ var content = __webpack_require__(81);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("12609c10", content, false, {});
+var update = __webpack_require__(6)("24edaf20", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -54593,7 +54587,7 @@ var content = __webpack_require__(99);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("328edc6a", content, false, {});
+var update = __webpack_require__(6)("caa1e7ec", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags

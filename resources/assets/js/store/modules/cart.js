@@ -22,7 +22,6 @@ export default {
         PRODUCTS_IN_CART(state, productsInCart) {
             state.productsInCart = productsInCart
             _.groupBy(state.productsInCart, "u_id")
-            console.log(state.productsInCart)
         },
 
         MINUS(state, index) {
@@ -41,16 +40,16 @@ export default {
         TOTAL_PRICE(state) {
             let total = [];
 
-            /*state.productsInCart.forEach((entry) => {
-                entry.food.forEach((food) => {
-                    total.push(food.price*entry.count);
-                })
+            _.each(state.productsInCart, (entry) => {
+                total.push(entry.food.price*entry.food.count);
 
-                entry.additive.forEach((additive) => {
-                    total.push(additive.price*entry.count);
+                _.each(entry.additive, (additives) => {
+                    _.each(additives, (additive) => {
+                        total.push(additive.price*entry.food.count)
+                    })
                 })
-            });
-            state.total_price = total.reduce((total, num) => { return total + num }, 0);*/
+            })
+            state.total_price = total.reduce((total, num) => { return total + num }, 0);
         }
     },
     state: {
