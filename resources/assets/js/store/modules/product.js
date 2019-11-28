@@ -41,8 +41,6 @@ export default {
 
         SELECTED_ALL_PRODUCTS_FOR_USERS_MUTATION(state, products) {
             state.cart = products;
-            localStorage.setItem('cart', JSON.stringify(products));
-
         },
 
         CATALOG_PRODUCTS_MUTATIONS(state, products) {
@@ -52,7 +50,7 @@ export default {
     state: {
         products: [],
         catalog: [],
-        cart: localStorage.getItem('cart')
+        cart: []
     },
     getters: {
         ALL_PRODUCTS(state) {
@@ -61,6 +59,10 @@ export default {
 
         CATALOG(state) {
             return state.catalog
+        },
+
+        CART_FOR_USER(state) {
+            return state.cart
         }
 
     }

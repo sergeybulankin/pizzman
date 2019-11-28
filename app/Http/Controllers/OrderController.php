@@ -48,7 +48,12 @@ class OrderController extends Controller
         }
     }
 
-
+    /**
+     * Добавляем нового пользователя
+     *
+     * @param $phone
+     * @param $sms
+     */
     public function store($phone, $sms)
     {
         $user = new User();

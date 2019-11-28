@@ -46,15 +46,41 @@ class FoodController extends Controller
     {
         $cart = FoodCart::select('food_additive_id')->where('user_id', Auth::user()->id)->get();
 
-        $food_additives = [];
+        $foods = [];
+
+        $uIds = [];
+
+        $countIds = [];
 
         foreach ($cart as $key => $value) {
-            $food_additive = FoodAdditive::select('food_id', 'additive_id')->where('id', $value->food_additive_id)->first();
-            $food_additives[$key]['id'] = $food_additive->food_id;
-            $food_additives[$key]['additive_id'] = $food_additive->additive_id;
+                $foods[] = FoodAdditive::with('food', 'additive')
+                    ->where('id', $value->food_additive_id)
+                    ->get();
+                //$uIds[] = $value['u_id'];
+                $uIds[] = rand(1111, 9999);
+                $countIds[] = 1;
         }
 
-        return $food_additives;
+        $foods = collect($foods)->collapse();
+
+        foreach ($foods as $k => $v){
+            $foods[$k]['u_id'] = $uIds[$k];
+            $foods[$k]['count'] = $countIds[$k];
+        }
+
+        $foods = $foods->groupBy('u_id');
+
+        $preparedFoods = [];
+
+        foreach ($foods as $key => $value) {
+            foreach ($value as $k => $v) {
+                $preparedFoods[$key]['food'] = $v->food[0];
+                $preparedFoods[$key]['additive'][$k] = $v->additive;
+                $preparedFoods[$key]['food']['count'] = $v->count;
+            }
+        }
+
+        return $preparedFoods;
     }
 
     /**

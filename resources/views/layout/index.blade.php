@@ -16,7 +16,8 @@
     <script>
         window.Laravel = {
             csrfToken: '{{ csrf_token() }}',
-            user: '{{ (Auth::user()) ? Auth::user()->id : 0 }}'
+            //user: '{{ (Auth::user()) ? Auth::user()->id : 0 }}'
+            user: '{{ (Auth::user()) ? 1 : 0 }}'
         };
     </script>
     <script

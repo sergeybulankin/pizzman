@@ -94,8 +94,24 @@
                 console.log('Собираем ваше избранное');
                 this.SELECT_ALL_FAVORITE_FOR_USERS();
 
+                // TODO сравнить правильно сформированные массивы
                 console.log('Собираем вашу корзину');
                 this.SELECTED_ALL_PRODUCTS_FOR_USERS();
+                setTimeout (() => {
+                    let diff = _.difference(this.CART_FOR_USER, this.cart, _.isEqual);
+
+                    if (_.isEmpty(diff) == true) {
+                        _.each(this.CART_FOR_USER, (value, key) => {
+                            let additiveFood = [];
+
+                            additiveFood.push(value['additive'][0]);
+
+                            var changedProduct = {u_id: key, id: value['food']['id'], additive_id: { additiveFood } , count: 1};
+
+                            this.cart.push(changedProduct);
+                        })
+                    }
+                }, 1000)
             }
         },
         mounted() {
@@ -105,7 +121,8 @@
             ...mapGetters([
                     'ALL_PRODUCTS',
                     'ALL_CATEGORIES',
-                    'ALL_FAVORITE'
+                    'ALL_FAVORITE',
+                    'CART_FOR_USER'
                 ]),
 
             // window.Laravel.user - записывается в хэдэре,

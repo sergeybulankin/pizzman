@@ -47499,7 +47499,6 @@ var debug = "development" !== 'production';
         },
         SELECTED_ALL_PRODUCTS_FOR_USERS_MUTATION: function SELECTED_ALL_PRODUCTS_FOR_USERS_MUTATION(state, products) {
             state.cart = products;
-            localStorage.setItem('cart', JSON.stringify(products));
         },
         CATALOG_PRODUCTS_MUTATIONS: function CATALOG_PRODUCTS_MUTATIONS(state, products) {
             state.catalog = products;
@@ -47508,7 +47507,7 @@ var debug = "development" !== 'production';
     state: {
         products: [],
         catalog: [],
-        cart: localStorage.getItem('cart')
+        cart: []
     },
     getters: {
         ALL_PRODUCTS: function ALL_PRODUCTS(state) {
@@ -47516,6 +47515,9 @@ var debug = "development" !== 'production';
         },
         CATALOG: function CATALOG(state) {
             return state.catalog;
+        },
+        CART_FOR_USER: function CART_FOR_USER(state) {
+            return state.cart;
         }
     }
 });
@@ -47783,7 +47785,7 @@ var content = __webpack_require__(64);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("5a09079e", content, false, {});
+var update = __webpack_require__(6)("7ee07b3e", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -47943,6 +47945,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         };
     },
     created: function created() {
+        var _this = this;
+
         console.log('Стартуем!');
         this.SELECTED_ALL_PRODUCTS();
 
@@ -47950,19 +47954,38 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             console.log('Собираем ваше избранное');
             this.SELECT_ALL_FAVORITE_FOR_USERS();
 
+            // TODO сравнить правильно сформированные массивы
             console.log('Собираем вашу корзину');
             this.SELECTED_ALL_PRODUCTS_FOR_USERS();
+            setTimeout(function () {
+                var diff = _.difference(_this.CART_FOR_USER, _this.cart, _.isEqual);
+                console.log(diff);
+                console.log(_this.CART_FOR_USER);
+                console.log(_this.cart);
+
+                if (_.isEmpty(diff) == true) {
+                    _.each(_this.CART_FOR_USER, function (value, key) {
+                        var additiveFood = [];
+
+                        additiveFood.push(value['additive'][0]);
+
+                        var changedProduct = { u_id: key, id: value['food']['id'], additive_id: { additiveFood: additiveFood }, count: 1 };
+
+                        _this.cart.push(changedProduct);
+                    });
+                }
+            }, 1000);
         }
     },
     mounted: function mounted() {
-        var _this = this;
+        var _this2 = this;
 
         setTimeout(function () {
-            _this.CHECK_PRODUCT_IN_FAVORITE(_this.favorite);
+            _this2.CHECK_PRODUCT_IN_FAVORITE(_this2.favorite);
         }, 1000);
     },
 
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['ALL_PRODUCTS', 'ALL_CATEGORIES', 'ALL_FAVORITE']), {
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['ALL_PRODUCTS', 'ALL_CATEGORIES', 'ALL_FAVORITE', 'CART_FOR_USER']), {
 
         // window.Laravel.user - записывается в хэдэре,
         // если пользователь авторизовался
@@ -48056,7 +48079,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }
         },
         deleteFavorite: function deleteFavorite(id) {
-            var _this2 = this;
+            var _this3 = this;
 
             if (this.checkUser == 1) {
                 this.DELETE_OF_FAVORITE(id);
@@ -48064,7 +48087,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             _.each(this.favorite, function (value, key) {
                 if (value == id) {
-                    _this2.favorite.splice(key, 1);
+                    _this3.favorite.splice(key, 1);
                 }
             });
 
@@ -48072,11 +48095,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             $(".delete-favorite-" + id).addClass("d-none");
         },
         selectProducts: function selectProducts(id) {
-            var _this3 = this;
+            var _this4 = this;
 
             this.SELECTION_BY_CATEGORY(id);
             setTimeout(function () {
-                _this3.CHECK_PRODUCT_IN_FAVORITE(_this3.favorite);
+                _this4.CHECK_PRODUCT_IN_FAVORITE(_this4.favorite);
             }, 200);
         }
     })
@@ -48407,7 +48430,7 @@ var content = __webpack_require__(70);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("0d235370", content, false, {});
+var update = __webpack_require__(6)("2e56f2b0", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -49339,7 +49362,7 @@ var content = __webpack_require__(81);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("24edaf20", content, false, {});
+var update = __webpack_require__(6)("12609c10", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -54686,7 +54709,7 @@ var content = __webpack_require__(99);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("caa1e7ec", content, false, {});
+var update = __webpack_require__(6)("328edc6a", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
