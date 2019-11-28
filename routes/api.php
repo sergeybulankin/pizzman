@@ -34,4 +34,5 @@ Route::post('insert-call-me-number', 'CallController@store');
 Route::post('add-to-favorite', 'FavoriteController@store');
 Route::post('delete-of-favorite', 'FavoriteController@delete');
 Route::post('select-all-favorite', 'FavoriteController@index');
+Route::post('select-all-favorite-for-users', 'FavoriteController@favoriteForUser');
 Route::get('count-favorites', 'FavoriteController@count');

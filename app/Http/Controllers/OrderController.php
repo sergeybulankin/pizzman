@@ -42,7 +42,7 @@ class OrderController extends Controller
         $sms = (int)$request->sms;
 
         if ($session_sms == $sms) {
-            $this->store($phone, $sms);
+            $this->store($phone, $request->sms);
         } else {
             return false;
         }
@@ -51,10 +51,13 @@ class OrderController extends Controller
 
     public function store($phone, $sms)
     {
-        return User::create([
-            'name' => $phone,
-            'email' => '',
-            'password' => bcrypt($sms)
-        ]);
+        $user = new User();
+        $user->name = $phone;
+        $user->password = bcrypt($sms);
+        $user->email = 'admin@admin.com';
+        $user->api_token = str_random(60);
+        $user->remember_token = str_random(100);
+
+        $user->save();
     }
 }

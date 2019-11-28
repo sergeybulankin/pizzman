@@ -9,8 +9,8 @@
                         <img :src="food.image"  class="img-fluid">
                         <div class="search-heart">
                             <button
-                                    @click="deleteFavorite(favorite.food_id)"
-                                    :class="'delete-favorite-' + favorite.food_id">
+                                    @click="deleteFavorite(food.id)"
+                                    :class="'delete-favorite-' + food.id">
                                     <i class="fa fa-trash-o"></i>
                             </button>
                         </div>
@@ -28,19 +28,22 @@
                     </div>
 
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <div v-for="(additive, additive_index) in food.additives" :key="additive_index">
-                            <input type="checkbox"
+                        <label class="btn btn-secondary" v-for="(additive, additive_index) in food.additives"
+                               :key="additive_index"
+                               :class="{ 'active': additive.id === 1, 'd-none': additive.id === 1 }"
+                               @click="changeAdditive($event)">
+                            <input type="checkbox" name="options"
                                    :value="additive.id"
                                    :id="food.id"
-                                   @click="changeAdditive($event)"> {{ additive.name }}
-                        </div>
+                                   autocomplete="off"> {{ additive.name }}
+                        </label>
                     </div>
 
                     <a class="product_title">{{ food.price }} Р</a>
 
-                    <div :class="'add-product-id-' + favorite.product_id">
+                    <div :class="'add-product-id-' + food.id">
                         <button class="btn btn-block btn-success btn-add_to-cart"
-                                @click="changeProduct(favorite.product_id)">
+                                @click="changeProduct(food.id)">
                                 <i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Добавить в корзину</button>
                     </div>
 
@@ -59,28 +62,88 @@
     import { mapGetters, mapActions } from 'vuex';
 
     export default {
+        data() {
+            return {
+                checkedAdditive: []
+            }
+        },
         mounted() {
             this.SELECT_ALL_FAVORITE(this.favorite);
         },
-        computed: mapGetters(['ALL_FAVORITE']),
+        computed: {
+            ...mapGetters(['ALL_FAVORITE']),
+
+            // window.Laravel.user - записывается в хэдэре,
+            // если пользователь авторизовался
+            checkUser() {
+                return window.Laravel.user;
+            }
+        },
         methods: {
             ...mapActions([
                     'SELECT_ALL_FAVORITE',
                     'DELETE_OF_FAVORITE'
                 ]),
 
-            deleteFavorite(id) {
-                this.DELETE_OF_FAVORITE(id);
-                this.SELECT_ALL_FAVORITE();
-                $(".favorite-" + id).css("display", "black");
-                $(".delete-favorite-" + id).css("display", "none");
-            },
-
             changeProduct(id) {
-                var additive_id = $('.additive-' + id)[0].value;
-                this.cart.push({id: id, additive_id: additive_id});
-                $(".add-product-id-" + id).css("display", "none");
-                $(".delete-product-id-" + id).css("display", "block");
+                // перебираем v-model с добавками
+                // если массив пустой, то тогда добавляем id со стандартным типом
+                // если массив не пустой, то добавляем к нему id со стандартным типом
+                // для того чтобы знать какое блюдо с какой добавкой нужно готовить
+                let additiveFood = [];
+                if (this.checkedAdditive.length == 0) {
+                    additiveFood.push(1)
+                }else {
+                    additiveFood.push(1)
+                    this.checkedAdditive.forEach((key, value) => {
+                        if(key.product == id) {
+                        additiveFood.push(parseInt(key.additive))
+                    }
+                });
+                }
+
+                // перебираем массив из localStorage
+                // добавляем в массив additiveInCart все добавки, которые соответствуют блюду
+                // по которому был совершен клик
+                let additiveInCart = [];
+                this.cart.forEach((key, value) => {
+                    if(key.id == id) {
+                        key.additive_id.additiveFood.forEach((k, v) => {
+                            additiveInCart.push(k)
+                      })
+                    }
+                });
+
+                // выясняем какая есть разница между массивами
+                var diff = _.difference(additiveFood, additiveInCart, _.isEqual);
+
+                // создаем уникальный идентификатор для блюда с (или без) добавок
+                // записываем в объект нужные для нас данные:
+                // u_id - уникальный ключ
+                // id - ключ блюда
+                // additive_id - объект с ключами добавок
+                // count- количество блюд с такими добавками
+                var u_id = Math.floor(Math.random() * (10000 - 50));
+                var changedProduct = {u_id: u_id, id: id, additive_id: { additiveFood }, count: 1};
+
+                // сравниваем переменную сравнения массивов
+                // если переменная оказалась пустой, то получается это блюдо с добавкой уже в корзине
+                // и мы увеличиваем только количество этого блюда, найдя его по id
+                // если же разница есть, то записывем в localStorage новое блюдо с добавкой (или без)
+                if (_.isEmpty(diff) == true) {
+                    _.map(this.cart, function (cart) {
+                        if (cart.id == id) {
+                            cart.count++
+                        }
+                    })
+                } else {
+                    this.cart.push(changedProduct);
+                }
+
+                // если localStorage пустой, то сразу записываем туда блюдо
+                if (this.cart.length == 0) {
+                    this.cart.push(changedProduct);
+                }
 
                 // если пользователь авторизовован
                 // то кидаем весь localStorage в БД
@@ -89,11 +152,31 @@
                 }
             },
 
-            // передаем из цикла добавок id
-            // чтобы было что добавлять в корзину и заказы
-            changeAdditive(id, product_id) {
-                $('#additive-' + product_id).val(id);
-            }
+
+            changeAdditive(e) {
+                if (e.target.children[0].checked == false) {
+                    var additive = e.target.children[0].value;
+                    var product = e.target.children[0].id;
+                    this.checkedAdditive.push({product: product, additive: additive});
+                }else {
+                    this.checkedAdditive.pop({product: product, additive: additive});
+                }
+            },
+
+
+            deleteFavorite(id) {
+                if (this.checkUser == 1) {
+                    this.DELETE_OF_FAVORITE(id);
+                }
+
+                _.each(this.favorite, (value, key) => {
+                    if (value == id) {
+                        this.favorite.splice(key, 1);
+                    }
+                })
+
+                this.SELECT_ALL_FAVORITE(this.favorite);
+            },
         }
     }
 </script>

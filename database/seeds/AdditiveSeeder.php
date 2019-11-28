@@ -12,6 +12,12 @@ class AdditiveSeeder extends Seeder
      */
     public function run()
     {
+        Additive::create([
+            'id' => 1,
+            'name' => 'Стандарт',
+            'price' => 0
+        ]);
+
         factory(Additive::class, 5)->create();
     }
 }

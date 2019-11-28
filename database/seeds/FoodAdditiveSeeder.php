@@ -15,7 +15,7 @@ class FoodAdditiveSeeder extends Seeder
         for ($i=1; $i<=10; $i++) {
             FoodAdditive::create([
                 'food_id' => $i,
-                'additive_id' => 0
+                'additive_id' => 1
             ]);
         }
 

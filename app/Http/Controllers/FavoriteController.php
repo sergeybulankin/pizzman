@@ -56,4 +56,20 @@ class FavoriteController extends Controller
     {
         Favorite::where('food_id', $request->product)->where('user_id', Auth::user()->id)->delete();
     }
+
+
+    /**
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function favoriteForUser()
+    {
+        $favorites[] = Favorite::select('id')
+            ->with('food', 'additive')
+            ->where('user_id', Auth::user()->id)
+            ->get();
+
+        $favorites = collect($favorites)->collapse();
+
+        return FoodResource::collection($favorites);
+    }
 }

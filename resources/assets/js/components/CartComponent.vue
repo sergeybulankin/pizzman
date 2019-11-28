@@ -70,7 +70,11 @@
             ...mapActions(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY']),
 
             deleteProductFromCart(index) {
-                this.cart.splice(index, 1);
+                _.each(this.cart, (value, key) => {
+                    if(value['u_id'] == index) {
+                        this.cart.splice(key, 1);
+                    }
+                })
             },
 
             sendCart(){
