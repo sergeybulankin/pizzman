@@ -37,8 +37,8 @@ export default {
         },
 
         POSITIVE_NUMBERS(state, index) {
-            if (state.productsInCart[index].count < 1)
-                state.productsInCart[index].count = 1
+            if (state.productsInCart[index].food.count < 1)
+                state.productsInCart[index].food.count = 1
         },
 
         COUNT_PRICE_FOR_PRODUCT_MUTATION(state, index) {

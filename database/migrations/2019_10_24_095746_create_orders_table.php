@@ -22,6 +22,7 @@ class CreateOrdersTable extends Migration
             $table->boolean('type_of_delivery');
             $table->dateTime('date');
             $table->string('note');
+            $table->bigInteger('u_id');
             $table->timestamps();
         });
     }

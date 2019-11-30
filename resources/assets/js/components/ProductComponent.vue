@@ -94,24 +94,10 @@
                 console.log('Собираем ваше избранное');
                 this.SELECT_ALL_FAVORITE_FOR_USERS();
 
-                // TODO сравнить правильно сформированные массивы
                 console.log('Собираем вашу корзину');
+                //localStorage.removeItem('cart');
                 this.SELECTED_ALL_PRODUCTS_FOR_USERS();
-                setTimeout (() => {
-                    let diff = _.difference(this.CART_FOR_USER, this.cart, _.isEqual);
-
-                    if (_.isEmpty(diff) == true) {
-                        _.each(this.CART_FOR_USER, (value, key) => {
-                            let additiveFood = [];
-
-                            additiveFood.push(value['additive'][0]);
-
-                            var changedProduct = {u_id: key, id: value['food']['id'], additive_id: { additiveFood } , count: 1};
-
-                            this.cart.push(changedProduct);
-                        })
-                    }
-                }, 1000)
+                setTimeout (() => {this.differenceUserCart()}, 1000)
             }
         },
         mounted() {
@@ -229,6 +215,7 @@
                 if (e.target.children[0].checked == false) {
                     var additive = e.target.children[0].value;
                     var product = e.target.children[0].id;
+
                     this.checkedAdditive.push({product: product, additive: additive});
                 }else {
                     this.checkedAdditive.pop({product: product, additive: additive});
@@ -255,23 +242,41 @@
             selectProducts(id) {
                 this.SELECTION_BY_CATEGORY(id);
                 setTimeout (() => { this.CHECK_PRODUCT_IN_FAVORITE(this.favorite) }, 200)
+            },
+
+
+            differenceUserCart() {
+                let userCart = [];
+                _.each(this.CART_FOR_USER, (value, key) => {
+                    let additiveFood = [];
+                    additiveFood.push(value['additive'][0][0]['id']);
+
+                    var changedProduct = {u_id: key, id: value['food']['id'], additive_id: { additiveFood } , count: value['food']['count']};
+                    userCart.push(changedProduct);
+                });
+
+                let diff = _.differenceWith(userCart, this.cart, _.isEqual);
+
+                /*let formatDifferenceByCount = _(diff).groupBy('id')
+                        .map((value, id) => ({
+                            id,
+                            u_id: value[0].u_id,
+                            additive_id: value[0].additive_id,
+                            count: _.map(value, 'count').length
+                        }))
+                        .value();*/
+
+                if (_.isEmpty(diff) == false) {
+                    _.each(diff, (value, key) => {
+                        let additiveFood = [];
+                        additiveFood.push(value['additive_id']['additiveFood'][0]);
+
+                        var changedProduct = {u_id: value['u_id'], id: value['id'], additive_id: { additiveFood } , count: value['count']};
+                        this.cart.push(changedProduct);
+                    })
+                }
+
             }
         }
     }
 </script>
-
-
-<style>
-    .delete-from-cart {
-        margin: 20px 0 0 0;
-        background: #a2a2a2;
-        padding: 10px;
-        text-align: center;
-        color: white;
-        cursor: pointer;
-    }
-    .add-to-cart:hover {
-        background-color: white;
-        color: black;
-    }
-</style>

@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('selected-categories', 'CategoryController@index');
 
-Route::post('post-cart-in-delivery', 'PreOrderController@storeCartInOrder');
+Route::post('post-cart-in-delivery', 'OrderController@storeCartInOrder');
 
 Route::get('selected-all-products', 'FoodController@index');
 Route::get('selected-all-products-for-users', 'FoodController@cartForUser');

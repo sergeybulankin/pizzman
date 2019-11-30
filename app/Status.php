@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PreOrder extends Model
+class Status extends Model
 {
-    protected $table = 'orders';
+    protected $table = 'statuses';
 }
