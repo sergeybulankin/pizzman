@@ -47706,8 +47706,9 @@ var debug = "development" !== 'production';
             state.favorite = product;
         },
         SELECT_ALL_FAVORITE_FOR_USERS_MUTATION: function SELECT_ALL_FAVORITE_FOR_USERS_MUTATION(state, favorite) {
-            state.favorite = favorite;
-            localStorage.setItem('favorite', JSON.stringify(state.favorite));
+            _.each(favorite, function (value, key) {
+                state.favorite.push(value.food_id);
+            });
         },
         SELECT_ALL_FAVORITE_MUTATION: function SELECT_ALL_FAVORITE_MUTATION(state, favorite) {
             state.favorite = favorite;
@@ -47876,9 +47877,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         if (this.checkUser == 1) {
             console.log('Собираем ваше избранное');
             this.SELECT_ALL_FAVORITE_FOR_USERS();
+            setTimeout(function () {
+                _this.differenceUserFavorite();
+            }, 1000);
 
             console.log('Собираем вашу корзину');
-            //localStorage.removeItem('cart');
             this.SELECTED_ALL_PRODUCTS_FOR_USERS();
             setTimeout(function () {
                 _this.differenceUserCart();
@@ -48043,6 +48046,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     _this5.cart.push(changedProduct);
                 });
             }
+        },
+        differenceUserFavorite: function differenceUserFavorite() {
+            var _this6 = this;
+
+            this.favorite.length = 0;
+
+            _.each(this.ALL_FAVORITE, function (value, key) {
+                _this6.favorite.push(value);
+            });
         }
     })
 });
@@ -48513,14 +48525,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         deleteProductFromCart: function deleteProductFromCart(index) {
             var _this = this;
 
-            if (this.checkUser == 1) {
-                //this.DELETE_OF_FAVORITE(id);
-                console.log(index);
-            }
-
             _.each(this.cart, function (value, key) {
                 if (value['u_id'] == index) {
-
                     _this.cart.splice(key, 1);
                 }
             });

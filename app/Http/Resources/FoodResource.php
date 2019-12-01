@@ -30,6 +30,8 @@ class FoodResource extends Resource
             'types' => $this->type,
 
             'additives' => $this->additive,
+
+            'food_id' => $this->food_id
         ];
     }
 }

@@ -90,7 +90,12 @@ class OrderController extends Controller
         $u_id = $request->u_id;
 
         $order = new Order();
-        $order->user_id = Auth::user()->id;
+        if (Auth::check()) {
+            $order->user_id = Auth::user()->id;
+        } else {
+            $order->user_id = 0;
+        }
+
         $order->type_of_time_id = 0;
         $order->address_id = 0;
         $order->pizzman_address_id = 0;

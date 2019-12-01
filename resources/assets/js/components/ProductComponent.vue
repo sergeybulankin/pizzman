@@ -93,9 +93,9 @@
             if(this.checkUser == 1) {
                 console.log('Собираем ваше избранное');
                 this.SELECT_ALL_FAVORITE_FOR_USERS();
+                setTimeout (() => {this.differenceUserFavorite()}, 1000)
 
                 console.log('Собираем вашу корзину');
-                //localStorage.removeItem('cart');
                 this.SELECTED_ALL_PRODUCTS_FOR_USERS();
                 setTimeout (() => {this.differenceUserCart()}, 1000)
             }
@@ -276,6 +276,14 @@
                     })
                 }
 
+            },
+
+            differenceUserFavorite() {
+                this.favorite.length = 0;
+
+                _.each(this.ALL_FAVORITE, (value, key) => {
+                    this.favorite.push(value);
+                })
             }
         }
     }

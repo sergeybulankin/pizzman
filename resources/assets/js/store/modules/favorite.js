@@ -41,8 +41,9 @@ export default {
         },
 
         SELECT_ALL_FAVORITE_FOR_USERS_MUTATION(state, favorite) {
-            state.favorite = favorite
-            localStorage.setItem('favorite', JSON.stringify(state.favorite));
+            _.each(favorite, (value, key) => {
+                state.favorite.push(value.food_id)
+            })
         },
 
         SELECT_ALL_FAVORITE_MUTATION(state, favorite) {

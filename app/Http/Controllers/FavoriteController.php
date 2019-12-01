@@ -63,7 +63,7 @@ class FavoriteController extends Controller
      */
     public function favoriteForUser()
     {
-        $favorites[] = Favorite::select('id')
+        $favorites[] = Favorite::select('food_id')
             ->with('food', 'additive')
             ->where('user_id', Auth::user()->id)
             ->get();
