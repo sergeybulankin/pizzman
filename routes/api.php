@@ -28,6 +28,8 @@ Route::get('catalog-products', 'FoodController@catalog');
 Route::post('selection-by-category', 'FoodController@selectByCategory');
 Route::post('selected-products-in-cart', 'FoodController@informationProductInCart');
 Route::post('add-to-database-from-cart', 'FoodController@storeFromLocalStorage');
+Route::post('delete-product-from-cart', 'FoodController@deleteFromCart');
+
 
 Route::post('insert-call-me-number', 'CallController@store');
 

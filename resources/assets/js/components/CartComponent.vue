@@ -56,6 +56,12 @@
         computed: {
             ...mapGetters(['ALL_PRODUCTS_IN_CART']),
 
+            // window.Laravel.user - записывается в хэдэре,
+            // если пользователь авторизовался
+            checkUser() {
+                return window.Laravel.user;
+            },
+
             totalProducts() {
                 this.SELECTED_PRODUCTS_IN_CART(this.cart);
                 return this.cart.length;
@@ -67,11 +73,15 @@
             }
         },
         methods: {
-            ...mapActions(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY']),
+            ...mapActions(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY', 'DELETE_PRODUCT_FROM_CART_FOR_USER']),
 
             deleteProductFromCart(index) {
                 _.each(this.cart, (value, key) => {
                     if(value['u_id'] == index) {
+                        if(this.checkUser == 1) {
+                            this.DELETE_PRODUCT_FROM_CART_FOR_USER(value['u_id']);
+                        }
+
                         this.cart.splice(key, 1);
                     }
                 })

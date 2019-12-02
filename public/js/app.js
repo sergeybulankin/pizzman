@@ -47550,6 +47550,13 @@ var debug = "development" !== 'production';
             }, 1000)).catch(function (error) {
                 console.log(error);
             });
+        },
+        DELETE_PRODUCT_FROM_CART_FOR_USER: function DELETE_PRODUCT_FROM_CART_FOR_USER(ctx, cart_id) {
+            axios.post('/api/delete-product-from-cart', { id: cart_id }).then(function (res) {
+                ctx.commit('DELETE_PRODUCT_FROM_CART_FOR_USER'), res.data;
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
     },
     mutations: {
@@ -47602,6 +47609,9 @@ var debug = "development" !== 'production';
             state.total_weight = total.reduce(function (total, num) {
                 return total + num;
             }, 0);
+        },
+        DELETE_PRODUCT_FROM_CART_FOR_USER: function DELETE_PRODUCT_FROM_CART_FOR_USER(state, product) {
+            state.productsInCart = product;
         }
     },
     state: {
@@ -48017,35 +48027,40 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         differenceUserCart: function differenceUserCart() {
             var _this5 = this;
 
-            var userCart = [];
+            this.cart.length = 0;
+
             _.each(this.CART_FOR_USER, function (value, key) {
                 var additiveFood = [];
                 additiveFood.push(value['additive'][0][0]['id']);
 
                 var changedProduct = { u_id: key, id: value['food']['id'], additive_id: { additiveFood: additiveFood }, count: value['food']['count'] };
-                userCart.push(changedProduct);
+                _this5.cart.push(changedProduct);
             });
 
-            var diff = _.differenceWith(userCart, this.cart, _.isEqual);
-
-            /*let formatDifferenceByCount = _(diff).groupBy('id')
+            /*let userCart = [];
+            _.each(this.CART_FOR_USER, (value, key) => {
+                let additiveFood = [];
+                additiveFood.push(value['additive'][0][0]['id']);
+                 var changedProduct = {u_id: key, id: value['food']['id'], additive_id: { additiveFood } , count: value['food']['count']};
+                userCart.push(changedProduct);
+            });
+             let diff = _.differenceWith(userCart, this.cart, _.isEqual);
+             let formatDifferenceByCount = _(diff).groupBy('id')
                     .map((value, id) => ({
                         id,
                         u_id: value[0].u_id,
                         additive_id: value[0].additive_id,
                         count: _.map(value, 'count').length
                     }))
-                    .value();*/
-
-            if (_.isEmpty(diff) == false) {
-                _.each(diff, function (value, key) {
-                    var additiveFood = [];
+                    .value();
+             if (_.isEmpty(diff) == false) {
+                _.each(diff, (value, key) => {
+                    let additiveFood = [];
                     additiveFood.push(value['additive_id']['additiveFood'][0]);
-
-                    var changedProduct = { u_id: value['u_id'], id: value['id'], additive_id: { additiveFood: additiveFood }, count: value['count'] };
-                    _this5.cart.push(changedProduct);
-                });
-            }
+                     var changedProduct = {u_id: value['u_id'], id: value['id'], additive_id: { additiveFood } , count: value['count']};
+                    this.cart.push(changedProduct);
+                })
+            }*/
         },
         differenceUserFavorite: function differenceUserFavorite() {
             var _this6 = this;
@@ -48384,7 +48399,7 @@ var content = __webpack_require__(67);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("2e56f2b0", content, false, {});
+var update = __webpack_require__(8)("0d235370", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -48512,6 +48527,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     },
 
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['ALL_PRODUCTS_IN_CART']), {
+
+        // window.Laravel.user - записывается в хэдэре,
+        // если пользователь авторизовался
+        checkUser: function checkUser() {
+            return window.Laravel.user;
+        },
         totalProducts: function totalProducts() {
             this.SELECTED_PRODUCTS_IN_CART(this.cart);
             return this.cart.length;
@@ -48521,12 +48542,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return this.$store.getters.TOTAl_PRICE_CART;
         }
     }),
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY']), {
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY', 'DELETE_PRODUCT_FROM_CART_FOR_USER']), {
         deleteProductFromCart: function deleteProductFromCart(index) {
             var _this = this;
 
             _.each(this.cart, function (value, key) {
                 if (value['u_id'] == index) {
+                    if (_this.checkUser == 1) {
+                        _this.DELETE_PRODUCT_FROM_CART_FOR_USER(value['u_id']);
+                    }
+
                     _this.cart.splice(key, 1);
                 }
             });
@@ -49349,7 +49374,7 @@ var content = __webpack_require__(79);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("12609c10", content, false, {});
+var update = __webpack_require__(8)("24edaf20", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -54696,7 +54721,7 @@ var content = __webpack_require__(97);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("328edc6a", content, false, {});
+var update = __webpack_require__(8)("caa1e7ec", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags

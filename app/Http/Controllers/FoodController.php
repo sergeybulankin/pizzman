@@ -181,5 +181,13 @@ class FoodController extends Controller
             $food_cart->save();
         }
     }
+
+    /**
+     * @param Request $request
+     */
+    public function deleteFromCart(Request $request)
+    {
+        FoodCart::where('u_id', $request->id)->where('user_id', Auth::user()->id)->delete();
+    }
     
 }

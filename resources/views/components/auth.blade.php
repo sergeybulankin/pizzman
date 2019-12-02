@@ -26,6 +26,7 @@
                     </div>
 
                 @if ($errors->has('password'))
+                    {{ $errors }}
                     <div class="HelpBlock">
                         <strong>{{ $errors->first('password') }}</strong>
                     </div>
@@ -78,7 +79,7 @@
                                 <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="confirmCodeSms(this, code.value)">подтвердить</button>
                             </div>
 
-                            <div id="registered" class="alert alert-success d-none" role="alert">Поздравляем! Регистрация прошла успешно! Сейчас мы вас авторизируем.</div>
+                            <div id="registered" class="alert alert-success d-none" role="alert">Поздравляем! Регистрация прошла успешно! Вы авторизованы</div>
                         </form>
                     </div>
                 </div>

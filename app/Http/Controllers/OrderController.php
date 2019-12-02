@@ -61,7 +61,7 @@ class OrderController extends Controller
      */
     public function store($phone, $sms)
     {
-        $user = User::where('name', $phone)->firstOrFail();
+        $user = User::where('name', $phone)->first();
 
         if (empty($user)) {
             $user = new User();
@@ -74,6 +74,9 @@ class OrderController extends Controller
         $user->remember_token = str_random(100);
 
         $user->save();
+
+        $user_id = $user->id;
+        Auth::loginUsingId($user_id);
     }
 
 
@@ -102,7 +105,7 @@ class OrderController extends Controller
         $order->type_of_delivery = 0;
         $order->date = Carbon::now();
         $order->note = '';
-        $order->u_id = (int)$u_id;
+        $order->u_id = $u_id;
 
         if ($order->save()) {
             $lastId = $order->id;

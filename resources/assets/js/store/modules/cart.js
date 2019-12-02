@@ -19,7 +19,13 @@ export default {
                 .then(
                     setTimeout( () => window.location.href = '/delivery/' + u_id, 1000)
                     )
-                    .catch( error => { console.log(error) })
+                .catch( error => { console.log(error) })
+        },
+
+        DELETE_PRODUCT_FROM_CART_FOR_USER(ctx, cart_id) {
+            axios.post('/api/delete-product-from-cart', {id: cart_id})
+                .then(res => { ctx.commit('DELETE_PRODUCT_FROM_CART_FOR_USER'), res.data })
+                .catch (error => {console.log(error)})
         }
     },
     mutations: {
@@ -75,6 +81,10 @@ export default {
                 total.push(entry.food.weight*entry.food.count);
             })
             state.total_weight = total.reduce((total, num) => { return total + num }, 0);
+        },
+
+        DELETE_PRODUCT_FROM_CART_FOR_USER(state, product) {
+            state.productsInCart = product
         }
     },
     state: {

@@ -246,7 +246,18 @@
 
 
             differenceUserCart() {
-                let userCart = [];
+                this.cart.length = 0;
+
+                _.each(this.CART_FOR_USER, (value, key) => {
+                    let additiveFood = [];
+                    additiveFood.push(value['additive'][0][0]['id']);
+
+                    var changedProduct = {u_id: key, id: value['food']['id'], additive_id: { additiveFood } , count: value['food']['count']};
+                    this.cart.push(changedProduct);
+                });
+
+
+                /*let userCart = [];
                 _.each(this.CART_FOR_USER, (value, key) => {
                     let additiveFood = [];
                     additiveFood.push(value['additive'][0][0]['id']);
@@ -257,14 +268,14 @@
 
                 let diff = _.differenceWith(userCart, this.cart, _.isEqual);
 
-                /*let formatDifferenceByCount = _(diff).groupBy('id')
+                let formatDifferenceByCount = _(diff).groupBy('id')
                         .map((value, id) => ({
                             id,
                             u_id: value[0].u_id,
                             additive_id: value[0].additive_id,
                             count: _.map(value, 'count').length
                         }))
-                        .value();*/
+                        .value();
 
                 if (_.isEmpty(diff) == false) {
                     _.each(diff, (value, key) => {
@@ -274,7 +285,7 @@
                         var changedProduct = {u_id: value['u_id'], id: value['id'], additive_id: { additiveFood } , count: value['count']};
                         this.cart.push(changedProduct);
                     })
-                }
+                }*/
 
             },
 
