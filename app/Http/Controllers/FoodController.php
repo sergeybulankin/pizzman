@@ -155,30 +155,64 @@ class FoodController extends Controller
      */
     public function storeFromLocalStorage(Request $request)
     {
-        $cart = $request->cart;
+        $food = $request->food['food'];
 
-        $cart_food_db = '';
+        $additive = $request->food['additive'];
 
-        foreach ($cart as $key => $value) {
-            $cart_food_db = FoodCart::select('id', 'food_id', 'additive_id', 'count')
-                ->where('food_id', $value['id'])
-                ->where('additive_id', $value['additive_id'])
-                ->first();
-        }
+        $u_id = $request->food['u_id'];
 
-        if (!empty($cart_food_db)) {
-            $cart_food_db->count = $cart_food_db->count + 1;
-            $cart_food_db->save();
+        $foodInCart = FoodCart::where('food_id', $food)->get();
+
+        $foodInCart = collect($foodInCart);
+
+        if ($foodInCart->isEmpty()) {
+            foreach ($additive as $key => $value) {
+                $food_cart = new FoodCart();
+                $food_cart->user_id = Auth::user()->id;
+                $food_cart->food_id = $food;
+                $food_cart->additive_id = $value;
+                $food_cart->u_id = $u_id;
+                $food_cart->count = 1;
+
+                $food_cart->save();
+            }            
         }else {
-            $new_food = end($cart);
+            $additiveFood = [];
 
-            $food_cart = new FoodCart();
-            $food_cart->user_id = Auth::user()->id;
-            $food_cart->food_id = $new_food['id'];
-            $food_cart->additive_id = $new_food['additive_id']['additiveFood'][0];
-            $food_cart->u_id = $new_food['u_id'];
-            $food_cart->count = $new_food['count'];
-            $food_cart->save();
+            foreach ($foodInCart as $key => $value) {
+                $additiveFood[] = $value['additive_id'];
+            }
+
+            $difference = count($additive) < count($additiveFood)
+                ? collect($additiveFood)->diffKeys($additive)
+                : collect($additive)->diffKeys($additiveFood);
+
+            $difference = collect($difference);
+
+            if ($difference->isEmpty()) {
+                foreach ($foodInCart as $key => $value) {
+                    $foodInCart[$key]->count = $foodInCart[$key]->count + 1;
+                    $foodInCart[$key]->save();
+                }
+            }else {
+                // TODO доделать
+                foreach ($difference as $key => $value) {
+                    $value != 1 ? $difference[] = 1 : $value;
+                }
+
+                $differenceAdditive = collect($additiveFood)->diffKeys($difference);
+
+                foreach ($difference as $key => $value) {
+                    $food_cart = new FoodCart();
+                    $food_cart->user_id = Auth::user()->id;
+                    $food_cart->food_id = $food;
+                    $food_cart->additive_id = $value;
+                    $food_cart->u_id = $u_id;
+                    $food_cart->count = 1;
+
+                    $food_cart->save();
+                }
+            }
         }
     }
 

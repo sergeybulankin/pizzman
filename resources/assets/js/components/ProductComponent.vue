@@ -195,7 +195,8 @@
                 // если пользователь авторизовован
                 // то кидаем весь localStorage в БД
                 if (this.checkUser == 1) {
-                    this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart)
+                    var food = {food: id, additive: additiveFood, u_id: u_id};
+                    this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(food)
                 }
             },
 
@@ -250,9 +251,12 @@
 
                 _.each(this.CART_FOR_USER, (value, key) => {
                     let additiveFood = [];
-                    additiveFood.push(value['additive'][0][0]['id']);
+                    _.each(value['additive'], (value, key) => {
+                        additiveFood.push(value[0]['id']);
+                    })
 
-                    var changedProduct = {u_id: key, id: value['food']['id'], additive_id: { additiveFood } , count: value['food']['count']};
+                    var changedProduct = {u_id: key, id: value['food']['id'], additive_id: { additiveFood } , count: value['food']['count']}
+
                     this.cart.push(changedProduct);
                 });
 

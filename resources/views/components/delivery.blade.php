@@ -71,17 +71,10 @@
                 </div>
 
                 <div class="row w-100 ml-0 d-none pt-3" id="pickup">
-                    <div class="col-lg-4">
-                        <button class="btn btn-secondary btn-success btn-block active" type="button" onclick="update_active(this)">Адрес №1</button>
-                    </div>
+                        <div class="col-lg-4">
+                            <button class="btn btn-secondary btn-success btn-block active" type="button" onclick="update_active(this)">{{ $pointDelivery->address_delivery->address }}</button>
+                        </div>
 
-                    <div class="col-lg-4">
-                        <button class="btn btn-secondary btn-success btn-block " type="button" onclick="update_active(this)">Адрес №2</button>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <button class="btn btn-secondary btn-success btn-block " type="button" onclick="update_active(this)">Адрес №3</button>
-                    </div>
                 </div>
 
                 <div class="row w-100 ml-0 pt-3" id="courier">
@@ -133,7 +126,7 @@
                         <tbody>
                         @foreach($cart as $key => $product)
                             <tr>
-                                <td class="font-weight-bold"><p>{{ $product->food_additive[0]->food[0]->name }} <small>× {{ $product->count }}</small></p></td>
+                                <td class="font-weight-bold"><p>{{ $product->food_additive[0]->food[0]->name }} {{ $product->food_additive[0]->food[0]->id }} <small>× {{ $product->count }}</small></p></td>
                                 <td class="font-weight-bold text-right">{{ $product->food_additive[0]->food[0]->price * $product->count }} <i class="fa fa-rub"></i></td>
                             </tr>
                         @endforeach()

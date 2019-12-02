@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\FoodInOrder;
 use App\Order;
+use App\PizzmanAddress;
 use Illuminate\Http\Request;
 
 class DeliveryController extends Controller
@@ -16,9 +17,21 @@ class DeliveryController extends Controller
     {
         $order = Order::where('u_id', $u_id)->get();
 
-        $cart = FoodInOrder::with('food_additive')
+        $cart = FoodInOrder::with('food_additive', 'pizzman_address')
             ->where('order_id', $order[0]['id'])
             ->get();
+
+
+        $pointPizzmanAddress = [];
+        foreach ($cart as $key => $value) {
+            foreach ($value->pizzman_address as $k => $v) {
+                $pointPizzmanAddress[] = $v->pizzman_address_id;
+            }
+        }
+
+        $point = array_values((array_unique($pointPizzmanAddress)))[0];
+
+        $pointDelivery = PizzmanAddress::with('pizzman_address_food', 'address_delivery')->where('address_id', $point)->first();
 
         $totalPrice = 0;
 
@@ -33,6 +46,6 @@ class DeliveryController extends Controller
             $totalWeight = $totalWeight + $value->food_additive[0]->food[0]->weight;
         }
 
-        return view('delivery', compact('cart', 'totalPrice', 'totalWeight', 'courierPrice', 'productsCount'));
+        return view('delivery', compact('cart', 'totalPrice', 'totalWeight', 'courierPrice', 'productsCount', 'pointDelivery'));
     }
 }

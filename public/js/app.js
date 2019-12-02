@@ -47482,8 +47482,8 @@ var debug = "development" !== 'production';
                 return console.log(error);
             });
         },
-        ADD_TO_DATABASE_FROM_LOCAL_STORAGE: function ADD_TO_DATABASE_FROM_LOCAL_STORAGE(ctx, cart) {
-            axios.post('/api/add-to-database-from-cart', { cart: cart }).then(function (response) {
+        ADD_TO_DATABASE_FROM_LOCAL_STORAGE: function ADD_TO_DATABASE_FROM_LOCAL_STORAGE(ctx, food) {
+            axios.post('/api/add-to-database-from-cart', { food: food }).then(function (response) {
                 console.log('Товар добавился');
             }).catch(function (error) {
                 return console.log(error);
@@ -47978,7 +47978,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             // если пользователь авторизовован
             // то кидаем весь localStorage в БД
             if (this.checkUser == 1) {
-                this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart);
+                var food = { food: id, additive: additiveFood, u_id: u_id };
+                this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(food);
             }
         },
         changeFavorite: function changeFavorite(id) {
@@ -48031,9 +48032,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             _.each(this.CART_FOR_USER, function (value, key) {
                 var additiveFood = [];
-                additiveFood.push(value['additive'][0][0]['id']);
+                _.each(value['additive'], function (value, key) {
+                    additiveFood.push(value[0]['id']);
+                });
 
                 var changedProduct = { u_id: key, id: value['food']['id'], additive_id: { additiveFood: additiveFood }, count: value['food']['count'] };
+
                 _this5.cart.push(changedProduct);
             });
 
@@ -48399,7 +48403,7 @@ var content = __webpack_require__(67);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("0d235370", content, false, {});
+var update = __webpack_require__(8)("2e56f2b0", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -49374,7 +49378,7 @@ var content = __webpack_require__(79);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("24edaf20", content, false, {});
+var update = __webpack_require__(8)("12609c10", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -54721,7 +54725,7 @@ var content = __webpack_require__(97);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("caa1e7ec", content, false, {});
+var update = __webpack_require__(8)("328edc6a", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags

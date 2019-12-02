@@ -24,8 +24,8 @@ export default {
                 .catch (error => (console.log(error)));
         },
 
-        ADD_TO_DATABASE_FROM_LOCAL_STORAGE(ctx, cart) {
-            axios.post('/api/add-to-database-from-cart', {cart: cart})
+        ADD_TO_DATABASE_FROM_LOCAL_STORAGE(ctx, food) {
+            axios.post('/api/add-to-database-from-cart', {food: food})
                 .then(response => { console.log('Товар добавился') })
                 .catch (error => (console.log(error)));
         }
