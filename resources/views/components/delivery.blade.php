@@ -43,11 +43,11 @@
 
                 <div class="row w-100 ml-0">
                     <div class="col-lg-6">
-                        <button class="btn btn-secondary btn-success btn-block active" onclick="type_of_readiness(this,'quickly')">срочная</button>
+                        <button class="btn btn-secondary btn-success btn-block active" value="0" onclick="type_of_readiness(this,'quickly')">срочная</button>
                     </div>
 
                     <div class="col-lg-6">
-                        <button class="btn btn-secondary btn-success btn-block" onclick="type_of_readiness(this,'by_time')">ко времени</button>
+                        <button class="btn btn-secondary btn-success btn-block" value="1" onclick="type_of_readiness(this,'by_time')">ко времени</button>
 
                         <div class="d-none" id="time"> ко времени</div>
                     </div>
@@ -170,7 +170,8 @@
 
 
                 @if(Auth::check())
-                    <button class="btn btn-default btn-block text-uppercase" type="button" onclick="send_order()">отправить заказ</button>
+                    <button class="btn btn-default btn-block text-uppercase" type="button"
+                            onclick="send_order()">отправить заказ</button>
                 @else
                     <div id="repeatSms" class="repeat-sms">
                         <div class="alert alert-primary" role="alert">
@@ -191,7 +192,7 @@
                             </div>
 
                             <div class="col-lg-12">
-                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirm(this, sms.value)">подвердить</button>
+                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirmCodeSmsForDeliveryOrder(this, sms.value, phone.value)">подвердить</button>
                             </div>
 
                         </div>
@@ -209,7 +210,7 @@
                             </div>
 
                             <div class="col-lg-12">
-                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirm(this, sms.value)">подвердить</button>
+                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirmCodeSmsForDeliveryOrder(this, sms.value, phone.value)">подвердить</button>
                             </div>
 
                         </div>

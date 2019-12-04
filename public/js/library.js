@@ -98,6 +98,8 @@ function type_of_readiness(el,type)
     }
 }
 
+
+
 function delivery_type(el, type, totalPrice)
 {
     update_active(el);
@@ -166,6 +168,26 @@ function confirmCodeSms(el, sms, phone)
     })
 }
 
+
+
+function confirmCodeSmsForDeliveryOrder(el, sms, phone)
+{
+    $.ajax({
+        url: "/checkSms",
+        method: "GET",
+        data: {'sms': sms, 'phone': phone},
+        success: function(){
+            console.log('test');
+            $(el).remove();
+            $("#registered").removeClass("d-none");
+        },
+        error: function () {
+            $("#sms").remove();
+            $("#repeatSms").removeClass("d-none");
+        }
+    })
+}
+
 function update_star(el)
 {
 
@@ -187,7 +209,8 @@ function update_star(el)
 
 
 function send_order() {
-    console.log('order is added');
+    console.log();
+
 }
 
 

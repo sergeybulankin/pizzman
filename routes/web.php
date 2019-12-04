@@ -25,4 +25,3 @@ Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get('/sms', 'OrderController@sendSms');
 Route::get('/checkSms', 'OrderController@checkSms');
-Route::post('/treatment', 'OrderController@treatment');
