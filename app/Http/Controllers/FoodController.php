@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class FoodController extends Controller
 {
-
     /**
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
@@ -179,7 +178,6 @@ class FoodController extends Controller
             // то забираем все данные с этим товаром и добавками, которые были отмечены
             // и записываем их в массив
             $foodWithAdditive = [];
-
             foreach ($additive as $key => $value) {
                 $foodWithAdditive[] = FoodCart::where('food_id', $food)
                     ->where('additive_id', $value)
@@ -188,11 +186,12 @@ class FoodController extends Controller
 
             $foodWithAdditive = collect($foodWithAdditive)->collapse();
 
-            // если коллекция равна еденице,
+            // если коллекция равна еденице и выбранные добавки также равны еденице
             // то значит выбран только стандарт
-            // поэтому добавляем только его отдельно
-            if ($foodWithAdditive->count() == 1) {
-                $food_cart = new FoodCart();
+            // поэтому добавляем только его отдельно или прибавляем еденицу к товару
+            if ($foodWithAdditive->count() == 1 && collect($additive)->count() == 1) {
+                $food_cart = $foodWithAdditive[0]['additive_id'] == 1 ? $foodWithAdditive[0] : new FoodCart();
+
                 $food_cart->user_id = Auth::user()->id;
                 $food_cart->food_id = $food;
                 $food_cart->additive_id = 1;
@@ -206,8 +205,6 @@ class FoodController extends Controller
                 // для того чтобы его найти мы сравниваем добавки выбранные пользователем
                 // и добавки из таблицы
                 // находим совпадение - и добавляем count++
-
-                // TODO доделать вычисление
                 $groupCartById = [];
                 foreach ($foodInCart as $key => $value) {
                     $groupCartById[$value['u_id']][] = $value['additive_id'];
@@ -216,12 +213,14 @@ class FoodController extends Controller
                 $uId = '';
                 foreach ($groupCartById as $key => $value) {
                     if (count($additive) == count($value)) {
-                        $uId = empty(collect($additive)->diff($value)) ? 'error' : $key;
+                        $uId = empty(array_diff($additive, $value)) ? $key : 'LOL';
                     }
                 }
 
                 $result = FoodCart::all()->where('u_id', $uId);
 
+                // ессли коллекция пустая, то значит товара с такой добавкой нет
+                // добавляем эту позицию в таблицу
                 if (collect($result)->isEmpty()) {
                     foreach ($additive as $key => $value) {
                         $food_cart = new FoodCart();
@@ -235,6 +234,7 @@ class FoodController extends Controller
                     }
                 }
 
+                // если нашли товар с добавкой, то прибавляем еденицу
                 foreach ($result as $key => $value) {
                     $value->count = $value['count'] + 1;
                     $value->save();
