@@ -43,11 +43,11 @@
 
                 <div class="row w-100 ml-0">
                     <div class="col-lg-6">
-                        <button class="btn btn-secondary btn-success btn-block active" value="0" onclick="type_of_readiness(this,'quickly')">срочная</button>
+                        <button class="btn btn-secondary btn-success btn-block active cooking-time" type="button" id="0" onclick="type_of_readiness(this,'quickly')">срочная</button>
                     </div>
 
                     <div class="col-lg-6">
-                        <button class="btn btn-secondary btn-success btn-block" value="1" onclick="type_of_readiness(this,'by_time')">ко времени</button>
+                        <button class="btn btn-secondary btn-success btn-block cooking-time" type="button" id="1" onclick="type_of_readiness(this,'by_time')">ко времени</button>
 
                         <div class="d-none" id="time"> ко времени</div>
                     </div>
@@ -62,17 +62,17 @@
 
                 <div class="row w-100 ml-0">
                     <div class="col-lg-6">
-                        <button class="btn btn-secondary btn-success btn-block" type="button" onclick="delivery_type(this,'pickup', {{ $totalPrice }})">самовывоз</button>
+                        <button class="btn btn-secondary btn-success btn-block delivery" type="button" id="1" onclick="delivery_type(this,'pickup', {{ $totalPrice }})">самовывоз</button>
                     </div>
 
                     <div class="col-lg-6">
-                        <button class="btn btn-secondary btn-success btn-block active" type="button" onclick="delivery_type(this,'courier', {{ $totalPrice }})">курьерская доставка</button>
+                        <button class="btn btn-secondary btn-success btn-block active delivery" type="button" id="0" onclick="delivery_type(this,'courier', {{ $totalPrice }})">курьерская доставка</button>
                     </div>
                 </div>
 
                 <div class="row w-100 ml-0 d-none pt-3" id="pickup">
                         <div class="col-lg-4">
-                            <button class="btn btn-secondary btn-success btn-block active" type="button" onclick="update_active(this)">{{ $pointDelivery->address_delivery->address }}</button>
+                            <button class="btn btn-secondary btn-success btn-block active delivery-pickup" type="button" id="{{ $pointDelivery->address_delivery->id }}" onclick="update_active(this)">{{ $pointDelivery->address_delivery->address }}</button>
                         </div>
 
                 </div>
@@ -81,7 +81,7 @@
                     <div class="form-group col-lg-12">
                         <label for="exampleInputEmail1">Введите адрес доставки</label>
                             <search-address></search-address>
-                            <input id="kv" name="kv" type="text" placeholder="Номер квартиры" /> <br />
+                            <input id="kv" name="kv" type="text" id="kv" placeholder="Номер квартиры" /> <br />
                             <input type="hidden" id="suggest" name="hidden_address" class="input" placeholder="Введите адрес">
                     </div>
 

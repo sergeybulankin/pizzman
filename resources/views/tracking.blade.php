@@ -29,7 +29,7 @@
 @endsection()
 
 @section('cart-details')
-    @include('components.account')
+    @include('components.tracking')
 @endsection()
 
 @section('footer')

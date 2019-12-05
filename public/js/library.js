@@ -207,9 +207,47 @@ function update_star(el)
     })
 }
 
-
+// подтверждаем заказ и оформляем его
 function send_order() {
-    console.log();
+    var cookingTime = $('.active.cooking-time').attr('id');
+
+    var delivery = $('.active.delivery').attr('id');
+
+    var address = $('#suggest')[0].value;
+
+    var kv = $('#kv')[0].value;
+
+    var url = document.location.href;
+    
+    var u_id = url.substring(url.lastIndexOf('/') + 1);
+
+    if (delivery == 1) {
+        var pizzmanAddress = $('.active.delivery-pickup').attr('id');
+    } else {
+        var pizzmanAddress = 0;
+    }
+
+    $.ajax({
+        url: "/confirmOrder",
+        method: "GET",
+        data: {
+            'cookingTime': cookingTime,
+            'delivery': delivery,
+            'pizzmanAddress': pizzmanAddress,
+            'address': address,
+            'kv': kv,
+            'u_id': u_id
+        },
+        success: function(){
+            localStorage.clear();
+            $(el).remove();
+            $("#registered").removeClass("d-none");
+        },
+        error: function () {
+            $("#sms").remove();
+            $("#repeatSms").removeClass("d-none");
+        }
+    })
 
 }
 
@@ -217,7 +255,6 @@ function send_order() {
 function close_modal(el)
 {
     $(el).parents(".modal").modal('hide');
-    console.log(123);
 }
 
 

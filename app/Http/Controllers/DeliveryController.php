@@ -15,10 +15,10 @@ class DeliveryController extends Controller
      */
     public function show($u_id)
     {
-        $order = Order::where('u_id', $u_id)->get();
+        $order = Order::where('u_id', $u_id)->first();
 
         $cart = FoodInOrder::with('food_additive', 'pizzman_address')
-            ->where('order_id', $order[0]['id'])
+            ->where('order_id', $order['id'])
             ->get();
 
 

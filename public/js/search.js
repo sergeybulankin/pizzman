@@ -22,6 +22,8 @@ function init() {
             var obj = res.geoObjects.get(0),
                 error, hint;
 
+            var cords = obj.geometry.getCoordinates();
+
             if (obj) {
                 switch (obj.properties.get('metaDataProperty.GeocoderMetaData.precision')) {
                     case 'exact':

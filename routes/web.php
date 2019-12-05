@@ -21,7 +21,10 @@ Auth::routes();
 
 Route::get('/auth', 'HomeController@auth')->name('auth');
 Route::get('/account', 'HomeController@account')->middleware('auth');
+Route::get('account/tracking/{order_id}', 'HomeController@tracking')->middleware('auth');
+
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get('/sms', 'OrderController@sendSms');
 Route::get('/checkSms', 'OrderController@checkSms');
+Route::get('/confirmOrder', 'OrderController@confirmOrder');

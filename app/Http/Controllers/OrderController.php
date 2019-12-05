@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
 use App\FoodAdditive;
 use App\FoodInOrder;
 use App\Order;
@@ -127,5 +128,53 @@ class OrderController extends Controller
         $orderStatus->order_id = $lastId;
         $orderStatus->status_id = 1;
         $orderStatus->save();
+    }
+
+
+    /**
+     * Подтверждение заказа
+     * 
+     * @param Request $request
+     */
+    public function confirmOrder(Request $request)
+    {
+        $u_id = $request->u_id;
+
+        $cooking_time = $request->cookingTime;
+
+        $delivery = $request->delivery;
+
+        $pizzman_address = $request->pizzmanAddress;
+
+        $address = $request->address;
+
+        $kv = $request->kv;
+
+        $select_address = Address::where('address', $address)->first();
+
+        if (empty($select_address)) {
+            $new_address = new Address();
+            $new_address->address = $address;
+            $new_address->kv = $kv;
+            $new_address->coordinates = 0.00;
+
+            $new_address->save();
+            $address_id = $new_address->id;
+        }else {
+            $address_id = $select_address->id;
+        }
+
+        $order = Order::where('u_id', $u_id)->firstOrFail();
+        $order->type_of_time_id = $cooking_time;
+        $order->pizzman_address_id = $pizzman_address;
+        $order->type_of_delivery = $delivery;
+        $order->address_id = $address_id;
+
+        $order->save();
+
+        $status = OrderStatus::where('order_id', $order->id)->firstOrFail();
+        $status->status_id = 2;
+
+        $status->save();
     }
 }
