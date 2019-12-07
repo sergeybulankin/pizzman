@@ -15,7 +15,7 @@
                     @if (Auth::check())
                         <div class="form-group col-lg-6">
                             <label for="exampleInputEmail1">Ваше имя</label>
-                            <input type="phone" class="form-control" id="name"  name="name" placeholder="{{ Auth::user()->email }}" disabled>
+                            <input type="phone" class="form-control" id="name"  name="name" placeholder="{{ $account->name }}" disabled>
                         </div>
 
                         <div class="form-group col-lg-6">

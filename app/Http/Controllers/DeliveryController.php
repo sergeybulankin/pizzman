@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Account;
 use App\FoodInOrder;
 use App\Order;
 use App\PizzmanAddress;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DeliveryController extends Controller
 {
@@ -22,10 +24,16 @@ class DeliveryController extends Controller
             ->get();
 
 
+        // если точек доставки у товара вовсе нет
+        // то добавляем точку, которую выберем по умолчанию - например 1
         $pointPizzmanAddress = [];
         foreach ($cart as $key => $value) {
-            foreach ($value->pizzman_address as $k => $v) {
-                $pointPizzmanAddress[] = $v->pizzman_address_id;
+            if (collect($value->pizzman_address)->isEmpty()) {
+                $pointPizzmanAddress[] = 1;
+            }else {
+                foreach ($value->pizzman_address as $k => $v) {
+                    $pointPizzmanAddress[] = $v->pizzman_address_id;
+                }
             }
         }
 
@@ -41,11 +49,13 @@ class DeliveryController extends Controller
 
         $productsCount = count($cart);
 
+        $account = Auth::check() ? Account::select('name')->where('user_id', Auth::user()->id)->first() : '';
+
         foreach ($cart as $key => $value){
             $totalPrice = $totalPrice + ($value->food_additive[0]->food[0]->price * $value->count + $value->food_additive[0]->additive[0]->price * $value->count);
             $totalWeight = $totalWeight + $value->food_additive[0]->food[0]->weight;
         }
 
-        return view('delivery', compact('cart', 'totalPrice', 'totalWeight', 'courierPrice', 'productsCount', 'pointDelivery'));
+        return view('delivery', compact('cart', 'totalPrice', 'totalWeight', 'courierPrice', 'productsCount', 'pointDelivery', 'account'));
     }
 }

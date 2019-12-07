@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Account;
 use App\Address;
 use App\FoodAdditive;
 use App\FoodInOrder;
 use App\Order;
 use App\OrderStatus;
 use App\User;
+use App\UserRole;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -73,10 +75,19 @@ class OrderController extends Controller
         $user->email = 'admin@admin.com';
         $user->api_token = str_random(60);
         $user->remember_token = str_random(100);
-
         $user->save();
 
         $user_id = $user->id;
+
+        $account = new Account();
+        $account->user_id = $user_id;
+        $account->save();
+
+        $user_role = new UserRole();
+        $user_role->user_id = $user_id;
+        $user_role->role_id = 1;
+        $user_role->save();
+
         Auth::loginUsingId($user_id);
     }
 

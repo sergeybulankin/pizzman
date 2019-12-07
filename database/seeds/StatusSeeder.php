@@ -13,27 +13,33 @@ class StatusSeeder extends Seeder
     public function run()
     {
         Status::create([
-            'name' => 'Обрабатывается'
+            'name' => 'Обрабатывается',
+            'description' => 'Заказ еще не утвержден'
         ]);
 
         Status::create([
-            'name' => 'Рассматривается'
+            'name' => 'Рассматривается',
+            'description' => 'Сейчам мы принимаем заявку и раскидываем её по поварам'
         ]);
 
         Status::create([
-            'name' => 'Принят'
+            'name' => 'Принят',
+            'description' => 'Заказ принят'
         ]);
 
         Status::create([
-            'name' => 'Готовится'
+            'name' => 'Готовится',
+            'description' => 'Мы уже готовим Вам вкуснейшие блюда'
         ]);
 
         Status::create([
-            'name' => 'В пути'
+            'name' => 'В пути',
+            'description' => 'Мы уже мчим к указанной вам точке с заказами. Ждите в ближайшие минуты'
         ]);
 
         Status::create([
-            'name' => 'Доставлено'
+            'name' => 'Доставлено',
+            'description' => 'Приятного аппетита!'
         ]);
     }
 }

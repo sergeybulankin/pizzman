@@ -13,6 +13,14 @@ class Order extends Model
      */
     public function food()
     {
-        return $this->hasMany(FoodInOrder::class, 'id', 'order_id');
+        return $this->hasMany(FoodInOrder::class, 'order_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function order_status()
+    {
+        return $this->hasMany(OrderStatus::class, 'order_id', 'id');
     }
 }
