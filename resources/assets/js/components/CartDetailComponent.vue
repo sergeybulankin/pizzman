@@ -92,6 +92,10 @@
                     'ADDITIVE_PRICE'
                 ]),
 
+            checkUser() {
+                return window.Laravel.user;
+            },
+
             totalProducts() {
                 this.SELECTED_PRODUCTS_IN_CART(this.cart);
                 return this.cart.length;
@@ -112,7 +116,8 @@
                 'SELECTED_PRODUCTS_IN_CART',
                 'COUNTING_TOTAL_PRICE',
                 'COUNTING_TOTAL_WEIGHT',
-                'SEND_CART_IN_DELIVERY'
+                'SEND_CART_IN_DELIVERY',
+                'DELETE_PRODUCT_FROM_CART_FOR_USER'
             ]),
 
             ...mapMutations([
@@ -123,8 +128,16 @@
                 'SEND_CART'
             ]),
 
-            deleteProductFromCart(id) {
-                this.cart.splice(id, 1);
+            deleteProductFromCart(index) {
+                _.each(this.cart, (value, key) => {
+                    if(value['u_id'] == index) {
+                        if(this.checkUser == 1) {
+                            this.DELETE_PRODUCT_FROM_CART_FOR_USER(value['u_id']);
+                        }
+
+                        this.cart.splice(key, 1);
+                    }
+                })
             },
 
             sendCart(){

@@ -197,6 +197,10 @@
                 if (this.checkUser == 1) {
                     var food = {food: id, additive: additiveFood, u_id: u_id};
                     this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(food)
+
+                    // производим перерасчет корзины
+                    this.SELECTED_ALL_PRODUCTS_FOR_USERS();
+                    setTimeout (() => {this.differenceUserCart()}, 200)
                 }
             },
 
@@ -259,38 +263,6 @@
 
                     this.cart.push(changedProduct);
                 });
-
-
-                /*let userCart = [];
-                _.each(this.CART_FOR_USER, (value, key) => {
-                    let additiveFood = [];
-                    additiveFood.push(value['additive'][0][0]['id']);
-
-                    var changedProduct = {u_id: key, id: value['food']['id'], additive_id: { additiveFood } , count: value['food']['count']};
-                    userCart.push(changedProduct);
-                });
-
-                let diff = _.differenceWith(userCart, this.cart, _.isEqual);
-
-                let formatDifferenceByCount = _(diff).groupBy('id')
-                        .map((value, id) => ({
-                            id,
-                            u_id: value[0].u_id,
-                            additive_id: value[0].additive_id,
-                            count: _.map(value, 'count').length
-                        }))
-                        .value();
-
-                if (_.isEmpty(diff) == false) {
-                    _.each(diff, (value, key) => {
-                        let additiveFood = [];
-                        additiveFood.push(value['additive_id']['additiveFood'][0]);
-
-                        var changedProduct = {u_id: value['u_id'], id: value['id'], additive_id: { additiveFood } , count: value['count']};
-                        this.cart.push(changedProduct);
-                    })
-                }*/
-
             },
 
             differenceUserFavorite() {

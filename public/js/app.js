@@ -47553,7 +47553,7 @@ var debug = "development" !== 'production';
         },
         DELETE_PRODUCT_FROM_CART_FOR_USER: function DELETE_PRODUCT_FROM_CART_FOR_USER(ctx, cart_id) {
             axios.post('/api/delete-product-from-cart', { id: cart_id }).then(function (res) {
-                ctx.commit('DELETE_PRODUCT_FROM_CART_FOR_USER'), res.data;
+                console.log('Товар удален');
             }).catch(function (error) {
                 console.log(error);
             });
@@ -47916,6 +47916,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }),
     methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_ALL_PRODUCTS', 'SELECTED_ALL_PRODUCTS_FOR_USERS', 'SELECTION_BY_CATEGORY', 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE', 'SELECT_ALL_FAVORITE', 'SELECT_ALL_FAVORITE_FOR_USERS', 'CHECK_PRODUCT_IN_FAVORITE', 'ADD_TO_FAVORITE', 'COUNT_FAVORITE', 'DELETE_OF_FAVORITE']), {
         changeProduct: function changeProduct(id) {
+            var _this3 = this;
+
             // перебираем v-model с добавками
             // если массив пустой, то тогда добавляем id со стандартным типом
             // если массив не пустой, то добавляем к нему id со стандартным типом
@@ -47980,6 +47982,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             if (this.checkUser == 1) {
                 var food = { food: id, additive: additiveFood, u_id: u_id };
                 this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(food);
+
+                // производим перерасчет корзины
+                this.SELECTED_ALL_PRODUCTS_FOR_USERS();
+                setTimeout(function () {
+                    _this3.differenceUserCart();
+                }, 200);
             }
         },
         changeFavorite: function changeFavorite(id) {
@@ -48002,7 +48010,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }
         },
         deleteFavorite: function deleteFavorite(id) {
-            var _this3 = this;
+            var _this4 = this;
 
             if (this.checkUser == 1) {
                 this.DELETE_OF_FAVORITE(id);
@@ -48010,7 +48018,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             _.each(this.favorite, function (value, key) {
                 if (value == id) {
-                    _this3.favorite.splice(key, 1);
+                    _this4.favorite.splice(key, 1);
                 }
             });
 
@@ -48018,15 +48026,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             $(".delete-favorite-" + id).addClass("d-none");
         },
         selectProducts: function selectProducts(id) {
-            var _this4 = this;
+            var _this5 = this;
 
             this.SELECTION_BY_CATEGORY(id);
             setTimeout(function () {
-                _this4.CHECK_PRODUCT_IN_FAVORITE(_this4.favorite);
+                _this5.CHECK_PRODUCT_IN_FAVORITE(_this5.favorite);
             }, 200);
         },
         differenceUserCart: function differenceUserCart() {
-            var _this5 = this;
+            var _this6 = this;
 
             this.cart.length = 0;
 
@@ -48038,41 +48046,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
                 var changedProduct = { u_id: key, id: value['food']['id'], additive_id: { additiveFood: additiveFood }, count: value['food']['count'] };
 
-                _this5.cart.push(changedProduct);
+                _this6.cart.push(changedProduct);
             });
-
-            /*let userCart = [];
-            _.each(this.CART_FOR_USER, (value, key) => {
-                let additiveFood = [];
-                additiveFood.push(value['additive'][0][0]['id']);
-                 var changedProduct = {u_id: key, id: value['food']['id'], additive_id: { additiveFood } , count: value['food']['count']};
-                userCart.push(changedProduct);
-            });
-             let diff = _.differenceWith(userCart, this.cart, _.isEqual);
-             let formatDifferenceByCount = _(diff).groupBy('id')
-                    .map((value, id) => ({
-                        id,
-                        u_id: value[0].u_id,
-                        additive_id: value[0].additive_id,
-                        count: _.map(value, 'count').length
-                    }))
-                    .value();
-             if (_.isEmpty(diff) == false) {
-                _.each(diff, (value, key) => {
-                    let additiveFood = [];
-                    additiveFood.push(value['additive_id']['additiveFood'][0]);
-                     var changedProduct = {u_id: value['u_id'], id: value['id'], additive_id: { additiveFood } , count: value['count']};
-                    this.cart.push(changedProduct);
-                })
-            }*/
         },
         differenceUserFavorite: function differenceUserFavorite() {
-            var _this6 = this;
+            var _this7 = this;
 
             this.favorite.length = 0;
 
             _.each(this.ALL_FAVORITE, function (value, key) {
-                _this6.favorite.push(value);
+                _this7.favorite.push(value);
             });
         }
     })
@@ -48403,7 +48386,7 @@ var content = __webpack_require__(67);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("0d235370", content, false, {});
+var update = __webpack_require__(8)("2e56f2b0", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -48546,7 +48529,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return this.$store.getters.TOTAl_PRICE_CART;
         }
     }),
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY', 'DELETE_PRODUCT_FROM_CART_FOR_USER']), {
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY', 'DELETE_PRODUCT_FROM_CART_FOR_USER', 'SELECTED_ALL_PRODUCTS_FOR_USERS']), {
         deleteProductFromCart: function deleteProductFromCart(index) {
             var _this = this;
 
@@ -48889,6 +48872,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     },
 
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['ALL_PRODUCTS_IN_CART', 'TOTAl_PRICE_CART', 'TOTAl_WEIGHT_CART', 'ADDITIVE_PRICE']), {
+        checkUser: function checkUser() {
+            return window.Laravel.user;
+        },
         totalProducts: function totalProducts() {
             this.SELECTED_PRODUCTS_IN_CART(this.cart);
             return this.cart.length;
@@ -48902,9 +48888,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return this.TOTAl_WEIGHT_CART;
         }
     }),
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_PRODUCTS_IN_CART', 'COUNTING_TOTAL_PRICE', 'COUNTING_TOTAL_WEIGHT', 'SEND_CART_IN_DELIVERY']), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["d" /* mapMutations */])(['MINUS', 'PLUS', 'POSITIVE_NUMBERS', 'COUNT_PRICE_FOR_PRODUCT_MUTATION', 'SEND_CART']), {
-        deleteProductFromCart: function deleteProductFromCart(id) {
-            this.cart.splice(id, 1);
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_PRODUCTS_IN_CART', 'COUNTING_TOTAL_PRICE', 'COUNTING_TOTAL_WEIGHT', 'SEND_CART_IN_DELIVERY', 'DELETE_PRODUCT_FROM_CART_FOR_USER']), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["d" /* mapMutations */])(['MINUS', 'PLUS', 'POSITIVE_NUMBERS', 'COUNT_PRICE_FOR_PRODUCT_MUTATION', 'SEND_CART']), {
+        deleteProductFromCart: function deleteProductFromCart(index) {
+            var _this = this;
+
+            _.each(this.cart, function (value, key) {
+                if (value['u_id'] == index) {
+                    if (_this.checkUser == 1) {
+                        _this.DELETE_PRODUCT_FROM_CART_FOR_USER(value['u_id']);
+                    }
+
+                    _this.cart.splice(key, 1);
+                }
+            });
         },
         sendCart: function sendCart() {
             this.SEND_CART_IN_DELIVERY(this.ALL_PRODUCTS_IN_CART);
@@ -49378,7 +49374,7 @@ var content = __webpack_require__(79);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("24edaf20", content, false, {});
+var update = __webpack_require__(8)("12609c10", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -54766,7 +54762,7 @@ var content = __webpack_require__(97);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("caa1e7ec", content, false, {});
+var update = __webpack_require__(8)("328edc6a", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags

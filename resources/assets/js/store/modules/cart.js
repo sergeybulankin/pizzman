@@ -24,7 +24,7 @@ export default {
 
         DELETE_PRODUCT_FROM_CART_FOR_USER(ctx, cart_id) {
             axios.post('/api/delete-product-from-cart', {id: cart_id})
-                .then(res => { ctx.commit('DELETE_PRODUCT_FROM_CART_FOR_USER'), res.data })
+                .then(res => { console.log('Товар удален')  })
                 .catch (error => {console.log(error)})
         }
     },

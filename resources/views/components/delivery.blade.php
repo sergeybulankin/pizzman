@@ -49,7 +49,8 @@
                     <div class="col-lg-6">
                         <button class="btn btn-secondary btn-success btn-block cooking-time" type="button" id="1" onclick="type_of_readiness(this,'by_time')">ко времени</button>
 
-                        <div class="d-none" id="time"> ко времени</div>
+                        <!--<div class="d-none" id="time"> ко времени</div>-->
+                        <input type="datetime-local" class="d-none" id="time">
                     </div>
                 </div>
 
@@ -84,10 +85,12 @@
                             <input id="kv" name="kv" type="text" id="kv" placeholder="Номер квартиры" /> <br />
                             <input type="hidden" id="suggest" name="hidden_address" class="input" placeholder="Введите адрес">
 
-                        <div style="background-color: lightblue; padding: 4px; margin: 10px 0">
-                            <span>Ваш самый популярный адрес:</span>
-                            <span style="color: blue; cursor: pointer" id="offerAddress" onclick="offerAddress()">{{ $addresses->address[0]->address }}</span>
-                        </div>
+                        @if(Auth::check())
+                            <div style="background-color: lightblue; padding: 4px; margin: 10px 0">
+                                <span>Ваш самый популярный адрес:</span>
+                                <span style="color: blue; cursor: pointer" id="offerAddress" onclick="offerAddress()">{{ $addresses->address[0]->address }}</span>
+                            </div>
+                        @endif()
                     </div>
 
                     <div class="map">
@@ -176,7 +179,7 @@
 
                 @if(Auth::check())
                     <button class="btn btn-default btn-block text-uppercase" type="button"
-                            onclick="send_order()">отправить заказ</button>
+                            onclick="send_order(this)">отправить заказ</button>
                 @else
                     <div id="repeatSms" class="repeat-sms">
                         <div class="alert alert-primary" role="alert">
@@ -197,7 +200,7 @@
                             </div>
 
                             <div class="col-lg-12">
-                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirmCodeSmsForDeliveryOrder(this, sms.value, phone.value)">подвердить</button>
+                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirmCodeSmsForDeliveryOrder(this)">подвердить1</button>
                             </div>
 
                         </div>
@@ -211,11 +214,11 @@
 
                         <div class="row">
                             <div class="form-group col-lg-12">
-                                <input type="text" class="form-control" id="name" name="sms" placeholder="код из смс">
+                                <input type="text" class="form-control" id="sms" name="sms" placeholder="код из смс">
                             </div>
 
                             <div class="col-lg-12">
-                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirmCodeSmsForDeliveryOrder(this, sms.value, phone.value)">подвердить</button>
+                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirmCodeSmsForDeliveryOrder(this)">подвердить2</button>
                             </div>
 
                         </div>
@@ -225,7 +228,7 @@
 
                 <div id="answer" class="d-none">
                     <div class="alert alert-success" role="alert">
-                        Ваш заказ успешно получен. Пройдите по <a href="/account/track">ссылке</a> для того, чтобы отследить статус заявки.
+                        Ваш заказ успешно получен. Пройдите по <a href="/account/">ссылке</a> для того, чтобы отследить статус заявки.
                     </div>
                 </div>
 

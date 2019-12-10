@@ -156,10 +156,10 @@ function confirmCodeSms(el, sms, phone)
         data: {'sms': sms, 'phone': phone},
         success: function(){
             $(el).remove();
-            //$("#repeatSms").remove();
-            //$("#answerError").addClass("d-none");
-            //$("#answer").removeClass("d-none");
             $("#registered").removeClass("d-none");
+            setTimeout(function(){
+                location.href="/account"
+            } , 2000);
         },
         error: function () {
             $("#sms").remove();
@@ -170,20 +170,30 @@ function confirmCodeSms(el, sms, phone)
 
 
 
-function confirmCodeSmsForDeliveryOrder(el, sms, phone)
+function confirmCodeSmsForDeliveryOrder(el)
 {
+    var phone = $('input#phone');
+
+    var sms = $('input#sms').val();
+
     $.ajax({
         url: "/checkSms",
         method: "GET",
-        data: {'sms': sms, 'phone': phone},
+        data: {
+            'sms': sms,
+            'phone': phone
+        },
         success: function(){
-            console.log('test');
+            console.log('OK');
             $(el).remove();
             $("#registered").removeClass("d-none");
+
+            //send_order();
         },
         error: function () {
-            $("#sms").remove();
-            $("#repeatSms").removeClass("d-none");
+            console.log('ERROR');
+            //$("#sms").remove();
+            $("#answerError").removeClass("d-none");
         }
     })
 }
@@ -208,7 +218,7 @@ function update_star(el)
 }
 
 // подтверждаем заказ и оформляем его
-function send_order() {
+function send_order(el) {
     var cookingTime = $('.active.cooking-time').attr('id');
 
     var delivery = $('.active.delivery').attr('id');
@@ -227,6 +237,8 @@ function send_order() {
         var pizzmanAddress = 0;
     }
 
+    var date = $('#time')[0].value;
+
     $.ajax({
         url: "/confirmOrder",
         method: "GET",
@@ -236,12 +248,14 @@ function send_order() {
             'pizzmanAddress': pizzmanAddress,
             'address': address,
             'kv': kv,
-            'u_id': u_id
+            'u_id': u_id,
+            'date': date
         },
         success: function(){
             localStorage.clear();
             $(el).remove();
             $("#registered").removeClass("d-none");
+            $("#answer").removeClass("d-none");
         },
         error: function () {
             $("#sms").remove();
@@ -264,7 +278,7 @@ function close_modal(el)
     $(el).parents(".modal").modal('hide');
 }
 
-
+// очистка localStorage после выхода из аккаунта
 $(document).ready(function(){
     $('#logout').click(function(){
         localStorage.clear();

@@ -73,7 +73,12 @@
             }
         },
         methods: {
-            ...mapActions(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY', 'DELETE_PRODUCT_FROM_CART_FOR_USER']),
+            ...mapActions([
+                'SELECTED_PRODUCTS_IN_CART',
+                'SEND_CART_IN_DELIVERY',
+                'DELETE_PRODUCT_FROM_CART_FOR_USER',
+                'SELECTED_ALL_PRODUCTS_FOR_USERS'
+            ]),
 
             deleteProductFromCart(index) {
                 _.each(this.cart, (value, key) => {

@@ -162,6 +162,8 @@ class OrderController extends Controller
 
         $kv = $request->kv;
 
+        $date = $request->date;
+
         $select_address = Address::where('address', $address)->first();
 
         if (is_null($select_address)) {
@@ -184,6 +186,10 @@ class OrderController extends Controller
         $order->pizzman_address_id = $pizzman_address;
         $order->type_of_delivery = $delivery;
         $order->address_id = $address_id;
+        if (!is_null($date)) {
+            $formatedDate = Carbon::createFromFormat('Y-m-d\TH:i', $date);
+            $order->date = $formatedDate;
+        }
 
         $order->save();
 
@@ -192,12 +198,12 @@ class OrderController extends Controller
 
         $status->save();
 
-        /*
+
         if (Auth::check()) {
             $food_cart_for_user = FoodCart::all()->where('user_id', Auth::user()->id);
             foreach ($food_cart_for_user as $cart) {
                 $cart->delete();
             }
-        }*/
+        }
     }
 }

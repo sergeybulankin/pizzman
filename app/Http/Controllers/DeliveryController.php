@@ -42,6 +42,7 @@ class DeliveryController extends Controller
         $pointDelivery = PizzmanAddress::with('pizzman_address_food', 'address_delivery')->where('address_id', $point)->first();
 
         // ищем повторяющиеся адреса в заказах у пользователя
+        // если такиех нет , то выдаем последний адрес
         if (Auth::check()) {
             $offerAddress = Order::select('address_id')
                 ->with('address')
@@ -58,7 +59,11 @@ class DeliveryController extends Controller
                 return $value > 2;
             }));
 
-            $addresses = Order::with('address')->where('address_id', $result[0])->first();
+            if(is_null($result)) {
+                $addresses = Order::with('address')->where('address_id', $result[0])->first();
+            }else {
+                $addresses = Order::with('address')->first();
+            }
         }
 
         $totalPrice = 0;
