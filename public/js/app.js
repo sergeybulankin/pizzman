@@ -47914,7 +47914,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return window.Laravel.user;
         }
     }),
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_ALL_PRODUCTS', 'SELECTED_ALL_PRODUCTS_FOR_USERS', 'SELECTION_BY_CATEGORY', 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE', 'SELECT_ALL_FAVORITE', 'SELECT_ALL_FAVORITE_FOR_USERS', 'CHECK_PRODUCT_IN_FAVORITE', 'ADD_TO_FAVORITE', 'COUNT_FAVORITE', 'DELETE_OF_FAVORITE']), {
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_ALL_PRODUCTS', 'SELECTED_ALL_PRODUCTS_FOR_USERS', 'SELECTION_BY_CATEGORY', 'SELECTED_PRODUCTS_IN_CART', 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE', 'SELECT_ALL_FAVORITE', 'SELECT_ALL_FAVORITE_FOR_USERS', 'CHECK_PRODUCT_IN_FAVORITE', 'ADD_TO_FAVORITE', 'COUNT_FAVORITE', 'DELETE_OF_FAVORITE']), {
         changeProduct: function changeProduct(id) {
             var _this3 = this;
 
@@ -47977,17 +47977,18 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 this.cart.push(changedProduct);
             }
 
+            // перегружаем localStorage для определения количества товара
+            // считаем это не багом, а фичей ¯\_(ツ)_/¯
+            setTimeout(function () {
+                _this3.SELECTED_PRODUCTS_IN_CART(_this3.cart);
+            }, 200);
+
             // если пользователь авторизовован
             // то кидаем весь localStorage в БД
+            // а там пусть серверная часть разбирается
             if (this.checkUser == 1) {
                 var food = { food: id, additive: additiveFood, u_id: u_id };
                 this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(food);
-
-                // производим перерасчет корзины
-                this.SELECTED_ALL_PRODUCTS_FOR_USERS();
-                setTimeout(function () {
-                    _this3.differenceUserCart();
-                }, 200);
             }
         },
         changeFavorite: function changeFavorite(id) {

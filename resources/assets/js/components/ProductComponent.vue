@@ -122,6 +122,7 @@
                 'SELECTED_ALL_PRODUCTS',
                 'SELECTED_ALL_PRODUCTS_FOR_USERS',
                 'SELECTION_BY_CATEGORY',
+                'SELECTED_PRODUCTS_IN_CART',
                 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE',
                 'SELECT_ALL_FAVORITE',
                 'SELECT_ALL_FAVORITE_FOR_USERS',
@@ -192,15 +193,18 @@
                     this.cart.push(changedProduct);
                 }
 
+                // перегружаем localStorage для определения количества товара
+                // считаем это не багом, а фичей ¯\_(ツ)_/¯
+                setTimeout (() => {
+                    this.SELECTED_PRODUCTS_IN_CART(this.cart)
+                }, 200)
+
                 // если пользователь авторизовован
                 // то кидаем весь localStorage в БД
+                // а там пусть серверная часть разбирается
                 if (this.checkUser == 1) {
                     var food = {food: id, additive: additiveFood, u_id: u_id};
                     this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(food)
-
-                    // производим перерасчет корзины
-                    this.SELECTED_ALL_PRODUCTS_FOR_USERS();
-                    setTimeout (() => {this.differenceUserCart()}, 200)
                 }
             },
 
