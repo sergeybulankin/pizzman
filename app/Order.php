@@ -23,4 +23,12 @@ class Order extends Model
     {
         return $this->hasMany(OrderStatus::class, 'order_id', 'id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function address()
+    {
+        return $this->hasMany(Address::class, 'id', 'address_id');
+    }
 }

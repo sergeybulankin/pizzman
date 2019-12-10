@@ -251,6 +251,13 @@ function send_order() {
 
 }
 
+// копирование самого популярного адреса
+function offerAddress() {
+    var address = $('#offerAddress')[0].innerText;
+    $('#address').val(address);
+    $('#suggest').val(address);
+}
+
 
 function close_modal(el)
 {

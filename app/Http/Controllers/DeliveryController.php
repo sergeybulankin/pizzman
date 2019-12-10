@@ -41,6 +41,26 @@ class DeliveryController extends Controller
 
         $pointDelivery = PizzmanAddress::with('pizzman_address_food', 'address_delivery')->where('address_id', $point)->first();
 
+        // ищем повторяющиеся адреса в заказах у пользователя
+        if (Auth::check()) {
+            $offerAddress = Order::select('address_id')
+                ->with('address')
+                ->where('user_id', Auth::user()->id)
+                ->get()
+                ->toArray();
+
+            $offerAddressArray = [];
+            foreach ($offerAddress as $value) {
+                $offerAddressArray[] = $value['address_id'];
+            }
+
+            $result = array_keys(array_filter(array_count_values($offerAddressArray), function($value){
+                return $value > 2;
+            }));
+
+            $addresses = Order::with('address')->where('address_id', $result[0])->first();
+        }
+
         $totalPrice = 0;
 
         $totalWeight = 0;
@@ -56,6 +76,6 @@ class DeliveryController extends Controller
             $totalWeight = $totalWeight + $value->food_additive[0]->food[0]->weight;
         }
 
-        return view('delivery', compact('cart', 'totalPrice', 'totalWeight', 'courierPrice', 'productsCount', 'pointDelivery', 'account'));
+        return view('delivery', compact('cart', 'totalPrice', 'totalWeight', 'courierPrice', 'productsCount', 'pointDelivery', 'account', 'addresses'));
     }
 }

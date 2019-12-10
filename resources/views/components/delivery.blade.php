@@ -83,6 +83,11 @@
                             <search-address></search-address>
                             <input id="kv" name="kv" type="text" id="kv" placeholder="Номер квартиры" /> <br />
                             <input type="hidden" id="suggest" name="hidden_address" class="input" placeholder="Введите адрес">
+
+                        <div style="background-color: lightblue; padding: 4px; margin: 10px 0">
+                            <span>Ваш самый популярный адрес:</span>
+                            <span style="color: blue; cursor: pointer" id="offerAddress" onclick="offerAddress()">{{ $addresses->address[0]->address }}</span>
+                        </div>
                     </div>
 
                     <div class="map">

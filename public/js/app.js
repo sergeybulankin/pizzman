@@ -48403,7 +48403,7 @@ var content = __webpack_require__(67);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("2e56f2b0", content, false, {});
+var update = __webpack_require__(8)("0d235370", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -49378,7 +49378,7 @@ var content = __webpack_require__(79);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("12609c10", content, false, {});
+var update = __webpack_require__(8)("24edaf20", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -54281,7 +54281,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            filter: ''
+            filter: '',
+            checkedAdditive: []
         };
     },
     created: function created() {
@@ -54301,30 +54302,70 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }),
     methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['CATALOG_PRODUCTS', 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE']), {
         changeProduct: function changeProduct(id) {
-            var additive_id = $('.additive-' + id)[0].value;
-            var changedProduct = { id: id, additive_id: additive_id };
-
-            var result = true;
-            this.cart.forEach(function (key, value) {
-                var compareId = _.isEqual(changedProduct.id, key.id);
-
-                if (compareId == true) {
-                    var compareAdditive = _.isEqual(changedProduct.additive_id, key.additive_id);
-                    if (compareAdditive == true) {
-                        console.log('Товар уже в корзине');
-                        result = false;
+            // перебираем v-model с добавками
+            // если массив пустой, то тогда добавляем id со стандартным типом
+            // если массив не пустой, то добавляем к нему id со стандартным типом
+            // для того чтобы знать какое блюдо с какой добавкой нужно готовить
+            var additiveFood = [];
+            if (this.checkedAdditive.length == 0) {
+                additiveFood.push(1);
+            } else {
+                additiveFood.push(1);
+                this.checkedAdditive.forEach(function (key, value) {
+                    if (key.product == id) {
+                        additiveFood.push(parseInt(key.additive));
                     }
+                });
+            }
+
+            // перебираем массив из localStorage
+            // добавляем в массив additiveInCart все добавки, которые соответствуют блюду
+            // по которому был совершен клик
+            var additiveInCart = [];
+            this.cart.forEach(function (key, value) {
+                if (key.id == id) {
+                    key.additive_id.additiveFood.forEach(function (k, v) {
+                        additiveInCart.push(k);
+                    });
                 }
             });
 
-            if (result == true) {
+            // выясняем какая есть разница между массивами
+            var diff = _.difference(additiveFood, additiveInCart, _.isEqual);
+
+            // создаем уникальный идентификатор для блюда с (или без) добавок
+            // записываем в объект нужные для нас данные:
+            // u_id - уникальный ключ
+            // id - ключ блюда
+            // additive_id - объект с ключами добавок
+            // count- количество блюд с такими добавками
+            var u_id = Math.floor(Math.random() * (10000 - 50));
+            var changedProduct = { u_id: u_id, id: id, additive_id: { additiveFood: additiveFood }, count: 1 };
+
+            // сравниваем переменную сравнения массивов
+            // если переменная оказалась пустой, то получается это блюдо с добавкой уже в корзине
+            // и мы увеличиваем только количество этого блюда, найдя его по id
+            // если же разница есть, то записывем в localStorage новое блюдо с добавкой (или без)
+            if (_.isEmpty(diff) == true) {
+                _.map(this.cart, function (cart) {
+                    if (cart.id == id) {
+                        cart.count++;
+                    }
+                });
+            } else {
+                this.cart.push(changedProduct);
+            }
+
+            // если localStorage пустой, то сразу записываем туда блюдо
+            if (this.cart.length == 0) {
                 this.cart.push(changedProduct);
             }
 
             // если пользователь авторизовован
             // то кидаем весь localStorage в БД
             if (this.checkUser == 1) {
-                this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart);
+                var food = { food: id, additive: additiveFood, u_id: u_id };
+                this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(food);
             }
         },
 
@@ -54725,7 +54766,7 @@ var content = __webpack_require__(97);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(8)("328edc6a", content, false, {});
+var update = __webpack_require__(8)("caa1e7ec", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags

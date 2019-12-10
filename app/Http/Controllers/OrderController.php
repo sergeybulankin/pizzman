@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Account;
 use App\Address;
 use App\FoodAdditive;
+use App\FoodCart;
 use App\FoodInOrder;
 use App\Order;
 use App\OrderStatus;
@@ -163,7 +164,10 @@ class OrderController extends Controller
 
         $select_address = Address::where('address', $address)->first();
 
-        if (empty($select_address)) {
+        if (is_null($select_address)) {
+            $address_id = 0;
+        }
+        elseif (empty($select_address)) {
             $new_address = new Address();
             $new_address->address = $address;
             $new_address->kv = $kv;
@@ -187,5 +191,13 @@ class OrderController extends Controller
         $status->status_id = 2;
 
         $status->save();
+
+        /*
+        if (Auth::check()) {
+            $food_cart_for_user = FoodCart::all()->where('user_id', Auth::user()->id);
+            foreach ($food_cart_for_user as $cart) {
+                $cart->delete();
+            }
+        }*/
     }
 }
