@@ -172,9 +172,9 @@ function confirmCodeSms(el, sms, phone)
 
 function confirmCodeSmsForDeliveryOrder(el)
 {
-    var phone = $('input#phone');
+    var phone = $('.phone#phone')[0].value;
 
-    var sms = $('input#sms').val();
+    var sms = $('.sms#sms')[0].value;
 
     $.ajax({
         url: "/checkSms",
@@ -186,13 +186,15 @@ function confirmCodeSmsForDeliveryOrder(el)
         success: function(){
             console.log('OK');
             $(el).remove();
+            $(".alert .alert-primary").addClass('d-none');
+            $("#answerError").addClass('d-none');
             $("#registered").removeClass("d-none");
 
-            //send_order();
+            send_order();
         },
         error: function () {
             console.log('ERROR');
-            //$("#sms").remove();
+            $("#sms").remove();
             $("#answerError").removeClass("d-none");
         }
     })

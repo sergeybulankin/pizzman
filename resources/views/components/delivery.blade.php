@@ -30,7 +30,7 @@
 
                         <div class="form-group col-lg-6">
                             <label for="exampleInputEmail1">Телефон</label>
-                            <input type="text" class="form-control" id="phone" name="phone">
+                            <input type="text" class="form-control phone" id="phone" name="phone">
                         </div>
                     @endif()
                 </div>
@@ -86,10 +86,13 @@
                             <input type="hidden" id="suggest" name="hidden_address" class="input" placeholder="Введите адрес">
 
                         @if(Auth::check())
-                            <div style="background-color: lightblue; padding: 4px; margin: 10px 0">
-                                <span>Ваш самый популярный адрес:</span>
-                                <span style="color: blue; cursor: pointer" id="offerAddress" onclick="offerAddress()">{{ $addresses->address[0]->address }}</span>
-                            </div>
+                            @if(($addresses->address)->isEmpty())
+                            @else
+                                <div style="background-color: lightblue; padding: 4px; margin: 10px 0">
+                                    <span>Ваш самый популярный адрес:</span>
+                                    <span style="color: blue; cursor: pointer" id="offerAddress" onclick="offerAddress()">{{ $addresses->address[0]->address }}</span>
+                                </div>
+                            @endif()
                         @endif()
                     </div>
 
@@ -196,13 +199,8 @@
 
                         <div class="row">
                             <div class="form-group col-lg-12">
-                                <input type="text" class="form-control" id="name" name="sms" placeholder="код из смс">
+                                <input type="text" class="form-control sms" id="name" name="sms" placeholder="код из смс">
                             </div>
-
-                            <div class="col-lg-12">
-                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirmCodeSmsForDeliveryOrder(this)">подвердить1</button>
-                            </div>
-
                         </div>
                     </div>
 
@@ -214,7 +212,7 @@
 
                         <div class="row">
                             <div class="form-group col-lg-12">
-                                <input type="text" class="form-control" id="sms" name="sms" placeholder="код из смс">
+                                <input type="text" class="form-control sms" id="sms" name="sms" placeholder="код из смс">
                             </div>
 
                             <div class="col-lg-12">

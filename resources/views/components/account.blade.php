@@ -1,7 +1,7 @@
 <div class="container" id="track">
     <h1 class="text-center text-uppercase font-weight-bold">Мой аккаунт</h1>
 
-    @if(!collect($orders)->isEmpty())
+    @if($orders->isEmpty())
         <h2>У вас есть отслеживаемые заказы</h2>
 
         @foreach($orders as $order)
