@@ -169,42 +169,50 @@ function confirmCodeSms(el, sms, phone)
 }
 
 
-
+// подтверждение смс у неавторизованного пользователя
 function confirmCodeSmsForDeliveryOrder(el)
 {
     var phone = $('.phone#phone')[0].value;
 
     var sms = $('.sms#sms')[0].value;
 
-    $.ajax({
-        url: "/checkSms",
-        method: "GET",
-        data: {
-            'sms': sms,
-            'phone': phone
-        },
-        success: function(){
-            console.log('OK');
-            $(el).remove();
-            $(".alert .alert-primary").addClass('d-none');
-            $("#answerError").addClass('d-none');
-            $("#registered").removeClass("d-none");
+    var address = $('#suggest')[0].value;
 
-            send_order();
-        },
-        error: function () {
-            console.log('ERROR');
-            $("#sms").remove();
-            $("#answerError").removeClass("d-none");
-        }
-    })
+    var delivery = $('.active.delivery').attr('id');
+
+    if (address == '' && delivery == 0) {
+        console.log('Не введен адрес доставки');
+        $("#addressError").removeClass("d-none");
+    }else {
+        $.ajax({
+            url: "/checkSms",
+            method: "GET",
+            data: {
+                'sms': sms,
+                'phone': phone
+            },
+            success: function(){
+                console.log('Заказ оформлен');
+                $(el).remove();
+                $("#answerError").addClass('d-none');
+                $("#addressError").addClass("d-none");
+                $("#registered").removeClass("d-none");
+                $('#sms').remove();
+
+                send_order();
+            },
+            error: function () {
+                console.log('Ошибка в оформлении заказа');
+                $("#checkSms").addClass('d-none');
+                $("#answerError").removeClass("d-none");
+            }
+        })
+    }
 }
 
 function update_star(el)
 {
-
     $("#star").children("div").each(function(){
-
         $(this).removeClass("fa-star");
         $(this).removeClass("fa-star-o");
 
@@ -253,7 +261,7 @@ function send_order(el) {
             'u_id': u_id,
             'date': date
         },
-        success: function(){
+        success: function () {
             localStorage.clear();
             $(el).remove();
             $("#registered").removeClass("d-none");
@@ -264,8 +272,8 @@ function send_order(el) {
             $("#repeatSms").removeClass("d-none");
         }
     })
-
 }
+
 
 // копирование самого популярного адреса
 function offerAddress() {

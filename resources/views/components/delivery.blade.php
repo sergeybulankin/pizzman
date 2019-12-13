@@ -196,16 +196,16 @@
                         <div class="alert alert-success" role="alert">
                             Код не правильный
                         </div>
+                    </div>
 
-                        <div class="row">
-                            <div class="form-group col-lg-12">
-                                <input type="text" class="form-control sms" id="name" name="sms" placeholder="код из смс">
-                            </div>
+                    <div id="addressError" class="d-none">
+                        <div class="alert alert-success" role="alert">
+                            Вы не ввели адрес доставки
                         </div>
                     </div>
 
                     <div id="sms" class="d-none">
-                        <div class="alert alert-primary" role="alert">
+                        <div class="alert alert-primary" id="checkSms" role="alert">
                             На указанный номер телефона был отправлен секретый код, введите его в поле ниже для подтверждения заказа.
                             Этот секретный код будет вашем паролем для авторизации на нашем сайте.
                         </div>

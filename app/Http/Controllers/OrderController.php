@@ -59,6 +59,7 @@ class OrderController extends Controller
 
     /**
      * Добавляем (или обновляем) пользователя
+     * и сразу его авторизуем
      *
      * @param $phone
      * @param $sms
@@ -145,6 +146,7 @@ class OrderController extends Controller
 
     /**
      * Подтверждение заказа
+     * и переход его в новую стадию
      * 
      * @param Request $request
      */
@@ -182,6 +184,7 @@ class OrderController extends Controller
         }
 
         $order = Order::where('u_id', $u_id)->firstOrFail();
+        $order->user_id = Auth::user()->id;
         $order->type_of_time_id = $cooking_time;
         $order->pizzman_address_id = $pizzman_address;
         $order->type_of_delivery = $delivery;
