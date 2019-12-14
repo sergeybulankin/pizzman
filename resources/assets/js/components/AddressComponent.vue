@@ -44,10 +44,11 @@
             }
         },
         mounted() {
-            var $address = $('#address');
-            var $hidden_address = $('#suggest');
+            var address = $('#address');
+            var hidden_address = $('#suggest');
+
             function onChange() {
-                $hidden_address.val($address.val());
+                hidden_address.val(address.val());
             };
             $('#address').change(onChange).keyup(onChange);
         },

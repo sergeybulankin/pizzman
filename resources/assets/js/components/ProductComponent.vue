@@ -13,6 +13,10 @@
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-pizza" role="tabpanel" aria-labelledby="nav-pizza-tab">
                 <div class="container">
+                    <div v-if="LOADER" class="load">
+                        <img src="images/loader.gif" alt="">
+                        <h4>Загружаем товары...</h4>
+                    </div>
                     <div class="row">
                         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"  v-for="(product, index) in ALL_PRODUCTS" :key="index">
                             <div class="one-food">
@@ -87,7 +91,14 @@
             }
         },
         created() {
-            console.log('Стартуем!');
+            console.log(`%c ________________________________________
+< здесь могла бы быть ваша реклама >
+ ----------------------------------------
+        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||`, "font-family:monospace");
             this.SELECTED_ALL_PRODUCTS();
 
             if(this.checkUser == 1) {
@@ -108,7 +119,8 @@
                     'ALL_PRODUCTS',
                     'ALL_CATEGORIES',
                     'ALL_FAVORITE',
-                    'CART_FOR_USER'
+                    'CART_FOR_USER',
+                    'LOADER'
                 ]),
 
             // window.Laravel.user - записывается в хэдэре,
@@ -210,6 +222,7 @@
 
 
             changeFavorite(id) {
+                console.log('Товар добавлен в избранное')
                 if (this.checkUser == 1) {
                     this.ADD_TO_FAVORITE(id)
                 }
@@ -233,6 +246,7 @@
 
 
             deleteFavorite(id) {
+                console.log('Товар удален из избранного')
                 if (this.checkUser == 1) {
                     this.DELETE_OF_FAVORITE(id);
                 }
@@ -279,3 +293,10 @@
         }
     }
 </script>
+
+
+<style>
+    .load {
+        text-align: center;
+    }
+</style>

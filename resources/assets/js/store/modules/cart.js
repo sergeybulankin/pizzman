@@ -83,8 +83,8 @@ export default {
             state.total_weight = total.reduce((total, num) => { return total + num }, 0);
         },
 
-        DELETE_PRODUCT_FROM_CART_FOR_USER(state, product) {
-            state.productsInCart = product
+        LOADER_CLOSED_MUTATION(state) {
+            state.loading = false
         }
     },
     state: {

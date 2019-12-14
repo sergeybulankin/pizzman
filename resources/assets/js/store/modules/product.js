@@ -4,12 +4,14 @@ export default {
             axios.get('/api/catalog-products')
                 .then(response => { ctx.commit('CATALOG_PRODUCTS_MUTATIONS', response.data.data) })
                 .catch( error => { console.log(error)})
+                .finally (() => { ctx.commit('LOADER_CLOSED_MUTATION') })
         },
 
         SELECTED_ALL_PRODUCTS(ctx) {
             axios.get('/api/selected-all-products')
                 .then(response => { ctx.commit('FOOD_PlACEMENT_IN_STORAGE', response.data.data) })
                 .catch( error => { console.log(error) })
+                .finally (() => { ctx.commit('LOADER_CLOSED_MUTATION') })
         },
 
         SELECTED_ALL_PRODUCTS_FOR_USERS(ctx) {
@@ -21,7 +23,8 @@ export default {
         SELECTION_BY_CATEGORY(ctx, id) {
             axios.post('/api/selection-by-category', {id: id})
                 .then( res => {ctx.commit('SELECTED_PRODUCTS_BY_CATEGORY', res.data.data)})
-                .catch (error => (console.log(error)));
+                .catch (error => (console.log(error)))
+                .finally (() => { ctx.commit('LOADER_CLOSED_MUTATION') })
         },
 
         ADD_TO_DATABASE_FROM_LOCAL_STORAGE(ctx, food) {
@@ -45,12 +48,17 @@ export default {
 
         CATALOG_PRODUCTS_MUTATIONS(state, products) {
             state.catalog = products;
+        },
+
+        LOADER_CLOSED_MUTATION(state) {
+            state.loading = false
         }
     },
     state: {
         products: [],
         catalog: [],
-        cart: []
+        cart: [],
+        loading: true
     },
     getters: {
         ALL_PRODUCTS(state) {
@@ -63,7 +71,10 @@ export default {
 
         CART_FOR_USER(state) {
             return state.cart
-        }
+        },
 
+        LOADER(state) {
+            return state.loading
+        }
     }
 }

@@ -82,7 +82,9 @@
         methods: {
             ...mapActions([
                     'SELECT_ALL_FAVORITE',
-                    'DELETE_OF_FAVORITE'
+                    'DELETE_OF_FAVORITE',
+                    'ADD_TO_DATABASE_FROM_LOCAL_STORAGE',
+                    'SELECTED_PRODUCTS_IN_CART'
                 ]),
 
             changeProduct(id) {
@@ -145,10 +147,16 @@
                     this.cart.push(changedProduct);
                 }
 
+                // перегружаем localStorage для определения количества товара
+                setTimeout (() => {
+                    this.SELECTED_PRODUCTS_IN_CART(this.cart)
+                }, 200)
+
                 // если пользователь авторизовован
                 // то кидаем весь localStorage в БД
                 if (this.checkUser == 1) {
-                    this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(this.cart)
+                    var food = {food: id, additive: additiveFood, u_id: u_id};
+                    this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(food)
                 }
             },
 

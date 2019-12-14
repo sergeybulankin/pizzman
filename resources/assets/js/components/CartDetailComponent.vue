@@ -1,8 +1,12 @@
 <template>
     <div>
+        <div class="col-lg-12 count-error d-none">
+            А товаров то в корзине и нет
+        </div>
+
         <form @submit.prevent="sendCart()" id="form" class="row">
             <div class="col-lg-8 col-sm-12 col-xs-12">
-                <div class="d-flex pt-5">
+                <div class="d-flex">
                     <table class="table shopping_basket">
                         <thead>
                         <tr>
@@ -141,8 +145,23 @@
             },
 
             sendCart(){
-                this.SEND_CART_IN_DELIVERY(this.ALL_PRODUCTS_IN_CART)
+                if(this.totalProducts == 0) {
+                    $('.count-error').removeClass('d-none')
+                    console.log('kek')
+                }else {
+                    this.SEND_CART_IN_DELIVERY(this.ALL_PRODUCTS_IN_CART)
+                }
             }
         }
     }
 </script>
+
+<style>
+    .count-error {
+        padding: 8px;
+        background: #d1333c;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+    }
+</style>

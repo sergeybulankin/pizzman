@@ -6,7 +6,7 @@ function init() {
         map,
         placemark;
 
-    $("#address").on("input",function(e){
+    $("#address").on("keyup",function(e){
         $('#timeDelivery').empty();
         geocode();
     });
