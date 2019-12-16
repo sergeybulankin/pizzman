@@ -8,8 +8,8 @@
         @include('components.call')
     @endsection()
 
-    @section('modile-block')
-        @include('components.modile-block')
+    @section('mobile-block')
+        @include('components.mobile-block')
     @endsection()
 
     @section('fixed-navbar')
@@ -34,6 +34,26 @@
 
     @section('catalog')
         @include('components.catalog')
+    @endsection()
+
+    @section('new-food')
+        @include('components.new-food')
+    @endsection()
+
+    @section('addresses')
+        @include('components.addresses')
+    @endsection()
+
+    @section('about')
+        @include('components.about')
+    @endsection()
+
+    @section('reviews')
+        @include('components.reviews')
+    @endsection()
+
+    @section('hits')
+        @include('components.hits')
     @endsection()
 
     @section('footer')

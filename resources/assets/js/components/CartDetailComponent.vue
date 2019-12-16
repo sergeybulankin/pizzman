@@ -142,12 +142,13 @@
                         this.cart.splice(key, 1);
                     }
                 })
+                console.log('Товар удален из корзины');
             },
 
             sendCart(){
                 if(this.totalProducts == 0) {
                     $('.count-error').removeClass('d-none')
-                    console.log('kek')
+                    console.log('Корзина пустая');
                 }else {
                     this.SEND_CART_IN_DELIVERY(this.ALL_PRODUCTS_IN_CART)
                 }

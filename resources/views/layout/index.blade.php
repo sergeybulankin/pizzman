@@ -50,6 +50,7 @@
 
 <!--Header 3 уровень -->
 @yield('category-navbar')
+
 <!--видеоролик-->
 @yield('video-block')
 
@@ -59,6 +60,16 @@
 @yield('cart-details')
 
 @yield('delivery')
+
+@yield('new-food')
+
+@yield('addresses')
+
+@yield('about')
+
+@yield('reviews')
+
+@yield('hits')
 
 @yield('footer')
 

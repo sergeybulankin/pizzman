@@ -218,6 +218,7 @@
                     var food = {food: id, additive: additiveFood, u_id: u_id};
                     this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(food)
                 }
+                console.log('Товар добавлен в корзину');
             },
 
 

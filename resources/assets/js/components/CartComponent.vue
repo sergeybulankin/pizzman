@@ -90,6 +90,7 @@
                         this.cart.splice(key, 1);
                     }
                 })
+                console.log('Товар удален из корзины');
             },
 
             sendCart(){

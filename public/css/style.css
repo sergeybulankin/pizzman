@@ -90,7 +90,7 @@ a:hover {
     .fullscreen-bg {
         height: calc(100% - 198px);
         height: -moz-calc(100% - 198px);
-        height: -webkit-calc.(100% - 198px);
+        height: -webkit-calc(100% - 198px);
     }
 
     .footer_fixed_main
@@ -156,7 +156,7 @@ a:hover {
     {
         height: calc(100% - 50px);
         height: -moz-calc(100% - 50px);
-        height: -webkit-calc.(100% - 50px);
+        height: -webkit-calc(100% - 50px);
         top: 50px;
     }
 
@@ -229,7 +229,7 @@ a:hover {
     line-height: 24px;
 }
 
-.header_main i, header_fixed_main i
+.header_main i, .header_fixed_main i
 {
     margin-right:20px;
 }
@@ -525,7 +525,7 @@ span.fa.fa-info
 }
 
 .overlay {
-    background: url(../video/gridtile.png);
+    background: url(../images/gridtile.png);
     position: absolute;
     top: 0;
     left: 0;
@@ -552,7 +552,7 @@ span.fa.fa-info
 
 @media (max-width: 767px) {
     .fullscreen-bg {
-        background: url('../video/pizza.jpg') center center / cover no-repeat;
+        background: url('../images/pizza.jpg') center center / cover no-repeat;
     }
 
     .fullscreen-bg__video {
