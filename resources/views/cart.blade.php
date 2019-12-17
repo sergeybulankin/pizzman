@@ -9,7 +9,7 @@
     @endsection()
 
     @section('modile-block')
-        @include('components.modile-block')
+        @include('components.mobile-block')
     @endsection()
 
     @section('fixed-navbar')

@@ -17,7 +17,7 @@ class CreateAddressesTable extends Migration
             $table->increments('id');
             $table->string('address');
             $table->integer('kv');
-            $table->float('coordinates');
+            $table->string('coordinates');
             $table->timestamps();
         });
     }

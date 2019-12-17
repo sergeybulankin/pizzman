@@ -166,16 +166,16 @@ class OrderController extends Controller
 
         $date = $request->date;
 
-        $select_address = Address::where('address', $address)->first();
+        $coord = $request->coord;
 
+        $select_address = Address::where('address', $address)->first();
+        
         if (is_null($select_address)) {
-            $address_id = 0;
-        }
-        elseif (empty($select_address)) {
+            //$address_id = 0;
             $new_address = new Address();
             $new_address->address = $address;
             $new_address->kv = $kv;
-            $new_address->coordinates = 0.00;
+            $new_address->coordinates = $coord;
 
             $new_address->save();
             $address_id = $new_address->id;

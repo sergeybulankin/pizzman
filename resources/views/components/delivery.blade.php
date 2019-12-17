@@ -84,6 +84,7 @@
                             <search-address></search-address>
                             <input id="kv" name="kv" type="text" id="kv" placeholder="Номер квартиры" /> <br />
                             <input type="hidden" id="suggest" name="hidden_address" class="input" placeholder="Введите адрес">
+                            <input type="hidden" id="coord" name="coord" class="input">
 
                         @if(Auth::check())
                             @if(($addresses->address)->isEmpty())

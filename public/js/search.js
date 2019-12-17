@@ -22,7 +22,9 @@ function init() {
             var obj = res.geoObjects.get(0),
                 error, hint;
 
+            // добавляем координаты точки доставки
             var cords = obj.geometry.getCoordinates();
+            $('#coord')[0].value = cords;
 
             if (obj) {
                 switch (obj.properties.get('metaDataProperty.GeocoderMetaData.precision')) {
