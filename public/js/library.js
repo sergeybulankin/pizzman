@@ -239,6 +239,8 @@ function send_order(el) {
 
     var coord = $('#coord')[0].value;
 
+    var note = $('#note')[0].value;
+
     var url = document.location.href;
     
     var u_id = url.substring(url.lastIndexOf('/') + 1);
@@ -262,7 +264,8 @@ function send_order(el) {
             'kv': kv,
             'u_id': u_id,
             'date': date,
-            'coord': coord
+            'coord': coord,
+            'note': note
         },
         success: function () {
             localStorage.clear();

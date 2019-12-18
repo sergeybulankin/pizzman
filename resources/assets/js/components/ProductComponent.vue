@@ -82,6 +82,9 @@
 </template>
 
 <script>
+    import notifier from 'codex-notifier';
+    import {ConfirmNotifierOptions, NotifierOptions, PromptNotifierOptions} from 'codex-notifier';
+
     import { mapGetters, mapActions } from 'vuex';
 
     export default {
@@ -218,6 +221,12 @@
                     var food = {food: id, additive: additiveFood, u_id: u_id};
                     this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(food)
                 }
+
+                notifier.show({
+                    message: '<div class="message-alert"><img src="../images/success.png" width="32px"> <span class="notifier-message">Товар добавлен в корзину</span></div>',
+                    style: 'success',
+                    time: 5000
+                });
                 console.log('Товар добавлен в корзину');
             },
 
@@ -299,5 +308,45 @@
 <style>
     .load {
         text-align: center;
+    }
+
+    .cdx-notifies {
+        position: fixed;
+        z-index: 2;
+        top: 0;
+        left: 85%;
+    }
+    .cdx-notify {
+        position: relative;
+        width: 270px;
+        margin-top: 15px;
+        padding: 13px 16px;
+        background: #fff;
+        box-shadow: 0 11px 17px 0 rgba(23,32,61,.13);
+        border-radius: 0;
+        font-size: 14px;
+    }
+    .cdx-notyfy::before {
+        content: '';
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: calc(100% - 6px);
+        margin: 3px;
+        border-radius: 0;
+        background: transparent;
+    }
+    .cdx-notify--success {
+        background: #fafffe !important;
+    }
+
+    .cdx-notify--success::before {
+        background: #41ffb1 !important;
+        width: 5px;
+    }
+    .notifier-message {
+        margin: 0 0 0 10px;
     }
 </style>

@@ -114,7 +114,7 @@
 
                 <div class="row ml-0 w-100 pb-3">
                     <div class="col-lg-12">
-                            <textarea class="w-100" row="3">
+                            <textarea class="w-100" row="3" id="note">
                             </textarea>
                     </div>
                 </div>
@@ -217,7 +217,7 @@
                             </div>
 
                             <div class="col-lg-12">
-                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirmCodeSmsForDeliveryOrder(this)">подвердить2</button>
+                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirmCodeSmsForDeliveryOrder(this)">подвердить</button>
                             </div>
 
                         </div>

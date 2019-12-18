@@ -35,7 +35,7 @@
                 <p><b>{{ totalPrice }} <i class="fa fa-rub mr-0"></i></b></p>
             </div>
 
-            <div class="d-flex justify-content-around">
+            <div class="d-flex justify-content-around" v-if="totalProducts > 0 ">
                 <a href="/cart"><button class="btn btn-default">Корзина</button></a>
                 <form @submit.prevent="sendCart()" id="form" class="row">
                     <button class="btn btn-success">Оформить заказ</button>

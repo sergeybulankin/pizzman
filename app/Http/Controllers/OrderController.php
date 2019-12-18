@@ -168,17 +168,22 @@ class OrderController extends Controller
 
         $coord = $request->coord;
 
+        $note = $request->note;
+
         $select_address = Address::where('address', $address)->first();
         
         if (is_null($select_address)) {
-            //$address_id = 0;
-            $new_address = new Address();
-            $new_address->address = $address;
-            $new_address->kv = $kv;
-            $new_address->coordinates = $coord;
+            if ($delivery == 1) {
+                $address_id = 0;
+            }else {
+                $new_address = new Address();
+                $new_address->address = $address;
+                $new_address->kv = $kv;
+                $new_address->coordinates = $coord;
 
-            $new_address->save();
-            $address_id = $new_address->id;
+                $new_address->save();
+                $address_id = $new_address->id;
+            }
         }else {
             $address_id = $select_address->id;
         }
@@ -189,6 +194,7 @@ class OrderController extends Controller
         $order->pizzman_address_id = $pizzman_address;
         $order->type_of_delivery = $delivery;
         $order->address_id = $address_id;
+        $order->note = $note;
         if (!is_null($date)) {
             $formatedDate = Carbon::createFromFormat('Y-m-d\TH:i', $date);
             $order->date = $formatedDate;
