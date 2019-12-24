@@ -8,7 +8,7 @@
     @include('components.call')
 @endsection()
 
-@section('modile-block')
+@section('mobile-block')
     @include('components.mobile-block')
 @endsection()
 

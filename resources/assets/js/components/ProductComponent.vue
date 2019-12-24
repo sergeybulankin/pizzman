@@ -196,7 +196,9 @@
                 if (_.isEmpty(diff) == true) {
                     _.map(this.cart, function (cart) {
                         if (cart.id == id) {
-                            cart.count++
+                            if (cart.additive_id['additiveFood'].length == additiveFood.length) {
+                                cart.count++
+                            }
                         }
                     })
                 } else {
