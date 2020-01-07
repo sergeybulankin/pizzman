@@ -47775,7 +47775,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "\n.load {\n    text-align: center;\n}\n.cdx-notifies {\n    position: fixed;\n    z-index: 2;\n    top: 0;\n    left: 85%;\n}\n.cdx-notify {\n    position: relative;\n    width: 270px;\n    margin-top: 15px;\n    padding: 13px 16px;\n    background: #fff;\n    box-shadow: 0 11px 17px 0 rgba(23,32,61,.13);\n    border-radius: 0;\n    font-size: 14px;\n}\n.cdx-notyfy::before {\n    content: '';\n    position: absolute;\n    display: block;\n    top: 0;\n    left: 0;\n    width: 3px;\n    height: calc(100% - 6px);\n    margin: 3px;\n    border-radius: 0;\n    background: transparent;\n}\n.cdx-notify--success {\n    background: #fafffe !important;\n}\n.cdx-notify--success::before {\n    background: #41ffb1 !important;\n    width: 5px;\n}\n.notifier-message {\n    margin: 0 0 0 10px;\n}\n", ""]);
+exports.push([module.i, "\n.load {\n    text-align: center;\n}\n.heart-red {\n    color: red;\n}\n.cdx-notifies {\n    position: fixed;\n    z-index: 2;\n    top: 0;\n    left: 85%;\n}\n.cdx-notify {\n    position: relative;\n    width: 270px;\n    margin-top: 15px;\n    padding: 13px 16px;\n    background: #fff;\n    box-shadow: 0 11px 17px 0 rgba(23,32,61,.13);\n    border-radius: 0;\n    font-size: 14px;\n}\n.cdx-notyfy::before {\n    content: '';\n    position: absolute;\n    display: block;\n    top: 0;\n    left: 0;\n    width: 3px;\n    height: calc(100% - 6px);\n    margin: 3px;\n    border-radius: 0;\n    background: transparent;\n}\n.cdx-notify--success {\n    background: #fafffe !important;\n}\n.cdx-notify--success::before {\n    background: #41ffb1 !important;\n    width: 5px;\n}\n.notifier-message {\n    margin: 0 0 0 10px;\n}\n", ""]);
 
 // exports
 
@@ -48219,7 +48219,7 @@ var render = function() {
                                 }
                               }
                             },
-                            [_c("i", { staticClass: "fa fa-trash-o" })]
+                            [_c("i", { staticClass: "fa fa-heart heart-red" })]
                           )
                         ])
                       ]),

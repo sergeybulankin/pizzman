@@ -126,14 +126,19 @@ class OrderController extends Controller
         }
 
         foreach ($cart as $product) {
-            foreach ($product['additive'][0] as $additive) {
-                $foodAdditive = FoodAdditive::select('id')->where('food_id', $product['food']['id'])->where('additive_id', $additive['id'])->first();
+            foreach ($product['additive'] as $additives) {
+                foreach ($additives as $additive) {
+                    $foodAdditive = FoodAdditive::select('id')
+                        ->where('food_id', $product['food']['id'])
+                        ->where('additive_id', $additive['id'])
+                        ->first();
 
-                $foodInOrder = new FoodInOrder();
-                $foodInOrder->order_id = $lastId;
-                $foodInOrder->food_id = $foodAdditive['id'];
-                $foodInOrder->count = $product['food']['count'];
-                $foodInOrder->save();
+                    $foodInOrder = new FoodInOrder();
+                    $foodInOrder->order_id = $lastId;
+                    $foodInOrder->food_id = $foodAdditive['id'];
+                    $foodInOrder->count = $product['food']['count'];
+                    $foodInOrder->save();
+                }
             }
         }
 

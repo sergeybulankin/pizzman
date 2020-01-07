@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use App\User;
 use App\UserRole;
 use App\Account;
+use App\UserPoint;
 
 class UserSeeder extends Seeder
 {
@@ -31,6 +32,11 @@ class UserSeeder extends Seeder
             'link' => '',
             'name' => 'Сергей',
             'second_name' => 'Буланкин'
+        ]);
+
+        UserPoint::create([
+            'user_id' => 1,
+            'pizzman_address_id' => rand(1, 2)
         ]);
     }
 }

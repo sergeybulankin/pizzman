@@ -33,7 +33,7 @@
                                         <button
                                                 @click="deleteFavorite(product.id)"
                                                 class="d-none"
-                                                :class="'delete-favorite-' + product.id"><i class="fa fa-trash-o"></i>
+                                                :class="'delete-favorite-' + product.id"><i class="fa fa-heart heart-red"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -308,6 +308,10 @@
 <style>
     .load {
         text-align: center;
+    }
+
+    .heart-red {
+        color: red;
     }
 
     .cdx-notifies {
