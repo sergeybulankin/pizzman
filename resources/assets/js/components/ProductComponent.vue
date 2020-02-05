@@ -193,14 +193,42 @@
                 // если переменная оказалась пустой, то получается это блюдо с добавкой уже в корзине
                 // и мы увеличиваем только количество этого блюда, найдя его по id
                 // если же разница есть, то записывем в localStorage новое блюдо с добавкой (или без)
+
+                // существует следующий момент: если добавить продукт сперва с добавками, а после без
+                // то продукт не будет добавляться в корзину
+                // для этого на всякий случай сравниваем массивы в корзине на наличие стандартного продукта
+                // и если его нет - то добавляем
                 if (_.isEmpty(diff) == true) {
+                    var search = 0;
+
                     _.map(this.cart, function (cart) {
                         if (cart.id == id) {
                             if (cart.additive_id['additiveFood'].length == additiveFood.length) {
-                                cart.count++
+                                cart.count++;
                             }
+
+                            if (additiveFood == 1) {
+                                _.find(cart.additive_id, function (item){
+                                    var arr = _.values(item);
+
+                                    var equal = _.isEqual(arr, [1]);
+
+                                    if(equal == true){
+                                        search = 0;
+                                    }else {
+                                        search = 1;
+                                    }
+
+                                });
+                            }
+
                         }
                     })
+
+                    if (search == 1) {
+                        this.cart.push(changedProduct);
+                    }
+
                 } else {
                     this.cart.push(changedProduct);
                 }
