@@ -127,17 +127,34 @@ class OrderController extends Controller
 
         foreach ($cart as $product) {
             foreach ($product['additive'] as $additives) {
-                foreach ($additives as $additive) {
-                    $foodAdditive = FoodAdditive::select('id')
-                        ->where('food_id', $product['food']['id'])
-                        ->where('additive_id', $additive['id'])
-                        ->first();
+                if (count($product['additive']) > 1) {
+                    foreach ($additives as $additive) {
+                        if ($additive['id'] != 1) {
+                            $foodAdditive = FoodAdditive::select('id')
+                                ->where('food_id', $product['food']['id'])
+                                ->where('additive_id', $additive['id'])
+                                ->first();
 
-                    $foodInOrder = new FoodInOrder();
-                    $foodInOrder->order_id = $lastId;
-                    $foodInOrder->food_id = $foodAdditive['id'];
-                    $foodInOrder->count = $product['food']['count'];
-                    $foodInOrder->save();
+                            $foodInOrder = new FoodInOrder();
+                            $foodInOrder->order_id = $lastId;
+                            $foodInOrder->food_id = $foodAdditive['id'];
+                            $foodInOrder->count = $product['food']['count'];
+                            $foodInOrder->save();
+                        }
+                    }
+                }else {
+                    foreach ($additives as $additive) {
+                        $foodAdditive = FoodAdditive::select('id')
+                            ->where('food_id', $product['food']['id'])
+                            ->where('additive_id', $additive['id'])
+                            ->first();
+
+                        $foodInOrder = new FoodInOrder();
+                        $foodInOrder->order_id = $lastId;
+                        $foodInOrder->food_id = $foodAdditive['id'];
+                        $foodInOrder->count = $product['food']['count'];
+                        $foodInOrder->save();
+                    }
                 }
             }
         }

@@ -138,7 +138,9 @@
                         <tbody>
                         @foreach($cart as $key => $product)
                             <tr>
-                                <td class="font-weight-bold"><p>{{ $product->food_additive[0]->food[0]->name }} {{ $product->food_additive[0]->food[0]->id }} <small>× {{ $product->count }}</small></p></td>
+                                <td class="font-weight-bold"><p>{{ $product->food_additive[0]->food[0]->name }} <small>× {{ $product->count }}</small></p>
+                                    <small>{{ $product->food_additive[0]->additive[0]->name }}</small>
+                                </td>
                                 <td class="font-weight-bold text-right">{{ $product->food_additive[0]->food[0]->price * $product->count }} <i class="fa fa-rub"></i></td>
                             </tr>
                         @endforeach()

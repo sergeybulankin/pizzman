@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCallsTable extends Migration
+class CreateBlackListsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateCallsTable extends Migration
      */
     public function up()
     {
-        Schema::create('calls', function (Blueprint $table) {
+        Schema::create('black_lists', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->text('phone');
-            $table->boolean('noted');
+            $table->integer('user_id');
+            $table->text('note');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateCallsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('calls');
+        Schema::dropIfExists('black_lists');
     }
 }
