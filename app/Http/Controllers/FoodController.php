@@ -121,6 +121,7 @@ class FoodController extends Controller
                 $preparedFoods[$key]['food'] = $v[0]->food[0];
                 $preparedFoods[$key]['additive'][$k] = $v[0]->additive;
                 $preparedFoods[$key]['food']['count'] = $value[0]['count'];
+                $preparedFoods[$key]['food_key'] = $key;
             }
         }
 

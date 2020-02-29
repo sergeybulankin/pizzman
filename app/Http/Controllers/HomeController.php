@@ -36,7 +36,13 @@ class HomeController extends Controller
      */
     public function account()
     {
-        $orders = OrderStatus::with('order', 'status')->where('status_id', '>', 1)->get();
+        $user = Auth::user()->id;
+
+        $orders = Order::whereHas('order_status', function($query){
+            $query->where('status_id', '>', 1);
+        })
+            ->where('user_id', $user)
+            ->get();
             
         return view('account', compact('orders'));
     }

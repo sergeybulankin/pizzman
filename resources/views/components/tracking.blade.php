@@ -5,11 +5,7 @@
             <li class="mb-4">
                 <h3>{{ $statuses[$i - 1]->name }}</h3>
                 <p class="p-0 m-0">{{ $statuses[$i - 1]->description }}</p>
-                @if($i == 1)
-                    <h5 class="p-0"><small><b><i>время: {{ $statuses[$i - 1]->created_at }}</i></b></small></h5>
-                @elseif($i > 1)
-                    <h5 class="p-0"><small><b><i>время: {{ $statuses[$i - 1]->updated_at }}</i></b></small></h5>
-                @endif()
+                <h5 class="p-0"><small><b><i>время: {{ $statuses[$i - 1]->created_utc->format('d F H:i')  }}</i></b></small></h5>
             </li>
         @endfor()
     </ul>

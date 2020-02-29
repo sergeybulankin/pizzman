@@ -18,6 +18,7 @@ class CreateFoodInOrdersTable extends Migration
             $table->integer('order_id');
             $table->integer('food_id');
             $table->integer('count');
+            $table->integer('u_id');
             $table->timestamps();
         });
     }

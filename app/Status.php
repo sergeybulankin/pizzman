@@ -9,21 +9,33 @@ class Status extends Model
 {
     protected $table = 'statuses';
 
+    protected $appends = [
+        'created_utc',
+        'updated_utc',
+    ];
+
+    protected $dates = [
+        'created_utc',
+        'updated_utc',
+    ];
+
     /**
-     * @param $value
-     * @return mixed|string
+     * @return static
      */
-    public function getUpdatedAtAttribute($value)
+    public function getCreatedUtcAttribute()
     {
-        return Date::parse($value)->format('d F H:i');
+        $timeZone = 'Asia/Yekaterinburg';
+
+        return Date::createFromFormat('Y-m-d H:i:s', $this->getOriginal('created_at'))->timezone($timeZone);
     }
 
     /**
-     * @param $value
-     * @return mixed
+     * @return static
      */
-    public function getCreatedAtAttribute($value)
+    public function getUpdatedUtcAttribute()
     {
-        return Date::parse($value)->format('d F H:i');
+        $timeZone = 'Asia/Yekaterinburg';
+
+        return Date::createFromFormat('Y-m-d H:i:s', $this->getOriginal('updated_at'))->timezone($timeZone);
     }
 }

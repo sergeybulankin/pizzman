@@ -139,6 +139,7 @@ class OrderController extends Controller
                             $foodInOrder->order_id = $lastId;
                             $foodInOrder->food_id = $foodAdditive['id'];
                             $foodInOrder->count = $product['food']['count'];
+                            $foodInOrder->u_id = $product['food_key'];
                             $foodInOrder->save();
                         }
                     }
@@ -153,6 +154,7 @@ class OrderController extends Controller
                         $foodInOrder->order_id = $lastId;
                         $foodInOrder->food_id = $foodAdditive['id'];
                         $foodInOrder->count = $product['food']['count'];
+                        $foodInOrder->u_id = $product['food_key'];
                         $foodInOrder->save();
                     }
                 }
