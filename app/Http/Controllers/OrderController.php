@@ -238,7 +238,9 @@ class OrderController extends Controller
         $order = Order::where('u_id', $u_id)->firstOrFail();
         $order->user_id = Auth::user()->id;
         $order->type_of_time_id = $cooking_time;
-        $order->pizzman_address_id = $pizzman_address;
+        if($pizzman_address !=0) {
+            $order->pizzman_address_id = $pizzman_address;
+        }
         $order->type_of_delivery = $delivery;
         $order->address_id = $address_id;
         $order->note = $note;
