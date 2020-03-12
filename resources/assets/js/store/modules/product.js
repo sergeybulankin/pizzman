@@ -31,6 +31,12 @@ export default {
             axios.post('/api/add-to-database-from-cart', {food: food})
                 .then(response => { console.log('Товар добавился') })
                 .catch (error => (console.log(error)));
+        },
+
+        HIT_SALES(ctx) {
+            axios.get('/api/hit-sales')
+                .then(res => {ctx.commit('HIT_SALES_MUTATION', res.data.data)})
+                .catch(error => {console.log(error)})
         }
     },
     mutations: {
@@ -52,12 +58,17 @@ export default {
 
         LOADER_CLOSED_MUTATION(state) {
             state.loading = false
+        },
+
+        HIT_SALES_MUTATION(state, hit) {
+            state.hits = hit;
         }
     },
     state: {
         products: [],
         catalog: [],
         cart: [],
+        hits: [],
         loading: true
     },
     getters: {
@@ -71,6 +82,10 @@ export default {
 
         CART_FOR_USER(state) {
             return state.cart
+        },
+
+        HITS(state) {
+            return state.hits
         },
 
         LOADER(state) {

@@ -17,14 +17,17 @@
                         <div class="photo-small">
                             <img :src="item.food.image" class="img-fluid">
                         </div>
+
                         <div class="description">
                             <a><b>{{ item.food.name }}</b></a><p><small>{{ item.food.count }}x{{ item.food.price }} <i class="fa fa-rub"></i></small></p>
 
-                            <span class="description" v-for="(additives, additives_index) in item.additive" :key="additives_index">
-                                <span class="description" v-for="(additive, additive_index) in additives" :key="additive_index">
-                                    <a><b>{{ additive.name }}</b></a><p><small>{{ additive.price }} <i class="fa fa-rub"></i></small></p>
+                            <div class="cart-additive">
+                                <span  v-for="(additives, additives_index) in item.additive" :key="additives_index">
+                                    <span class="description" v-for="(additive, additive_index) in additives" :key="additive_index">
+                                        <a><b>{{ additive.name }}</b></a><p><small>{{ additive.price }} <i class="fa fa-rub"></i></small></p>
+                                    </span>
                                 </span>
-                            </span>
+                            </div>
                         </div>
                     </div>
                 </li>

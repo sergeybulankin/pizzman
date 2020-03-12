@@ -51,34 +51,6 @@ function close_cart(btn)
 }
 
 
-// отправка кода на телефон при правильном вводе номера
-function sign_up(phone)
-{
-    var validate = sendSms(phone);
-
-    if(validate != null) {
-        $.ajax({
-            url: "/sms",
-            method: "GET",
-            data: {'phone': phone},
-            success: function(){
-                $("#phone_form").addClass("d-none");
-                $("#password_form").removeClass("d-none");
-                $("#repeatPhone").addClass("d-none");
-            },
-            error: function () {
-                $("#sms").remove();
-                $("#repeatPhone").removeClass("d-none");
-            }
-        })
-    }
-    else {
-        console.log('Номер телефона не введен');
-        $("#repeatPhone").removeClass("d-none");
-    }
-
-}
-
 function update_active(el)
 {
     $(el).parents(".row:eq(0)").find('.btn-success').removeClass("active");
@@ -135,37 +107,6 @@ function send_an_order(el, phone) {
     else {
         $("#repeatSms").css("display", "block");
     }
-}
-
-
-// проверяем правильность номера телефона
-// если все хорошо - отправляем смс-код
-function sendSms(phone) {
-    const regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-
-    return phone.match(regex);
-}
-
-
-// проверяем введеный код с сессией смс-кода
-function confirmCodeSms(el, sms, phone)
-{
-    $.ajax({
-        url: "/checkSms",
-        method: "GET",
-        data: {'sms': sms, 'phone': phone},
-        success: function(){
-            $(el).remove();
-            $("#registered").removeClass("d-none");
-            setTimeout(function(){
-                location.href="/account"
-            } , 2000);
-        },
-        error: function () {
-            $("#sms").remove();
-            $("#repeatSms").removeClass("d-none");
-        }
-    })
 }
 
 

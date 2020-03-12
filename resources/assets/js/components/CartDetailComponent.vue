@@ -35,7 +35,7 @@
                                     {{ item.food.price }}<i class="fa fa-rub"></i>
                                     <span class="description" v-for="(additives, additives_index) in item.additive" :key="additives_index">
                                         <span class="description" v-for="(additive, additive_index) in additives" :key="additive_index">
-                                            <div ref="priceAdditive"><small>{{ additive.price }} <i class="fa fa-rub"></i></small></div>
+                                            <div ref="priceAdditive"><small>{{ additive.name }} - {{ additive.price }} <i class="fa fa-rub"></i></small></div>
                                         </span>
                                     </span>
                                 </td>

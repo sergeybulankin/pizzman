@@ -38,3 +38,8 @@ Route::post('delete-of-favorite', 'FavoriteController@delete');
 Route::post('select-all-favorite', 'FavoriteController@index');
 Route::post('select-all-favorite-for-users', 'FavoriteController@favoriteForUser');
 Route::get('count-favorites', 'FavoriteController@count');
+
+Route::get('hit-sales', 'HitController@index');
+
+Route::get('send-sms', 'OrderController@sendSms');
+Route::post('check-sms', 'OrderController@checkSms');

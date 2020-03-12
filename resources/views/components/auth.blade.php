@@ -8,7 +8,6 @@
 
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-login" role="tabpanel" aria-labelledby="nav-login-tab">
-
             <form method="POST" action="{{ route('login') }}">
                 <div class="d-flex justify-content-center">
                     {{ csrf_field() }}
@@ -33,89 +32,15 @@
                 @endif()
                 </div>
             </form>
+        </div>
 
 
-
-
-
-                <div class="d-flex justify-content-center">
-                    <div class="col-lg-4">
-
-                        <form id="register_form">
-                            <div id="phone_form">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Номер телефона*</label>
-                                    <input type="phone" name="phone" class="form-control">
-                                </div>
-
-                                <h5>*<small>Ваш номер телефона - это логин. Пароль, который Вы получите по смс - пароль.</small></h5>
-                                <!--<button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" onclick="sign_up(phone.value)">зарегистрироваться</button>-->
-                                <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="sign_up(phone.value)">зарегистрироваться</button>
-                            </div>
-
-                            <div id="password_form" class="d-none">
-                                <h5><small>На указанный номер телефона был отправлен пароль, введите его в поле ниже.</small></h5>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Пароль (код из смс)</label>
-                                    <input type="text" name="code" class="form-control">
-                                </div>
-
-                                <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="confirmCodeSms(this, code.value, phone.value)">подтвердить</button>
-                            </div>
-
-
-                            <div id="repeatPhone" class="d-none">
-                                <div class="alert alert-primary" role="alert">
-                                    Номер телефона некоректен. Введите нормально номер телефона и повторите попытку
-                                </div>
-                                <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="sign_up(phone.value)">зарегистрироваться</button>
-                            </div>
-
-
-                            <div id="repeatSms" class="repeat-code d-none">
-                                <div class="alert alert-primary" role="alert">
-                                    Ошибка смс-кода. неправильно введен
-                                </div>
-                                <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" onclick="confirmCodeSms(this, code.value)">подтвердить</button>
-                            </div>
-
-                            <div id="registered" class="alert alert-success d-none" role="alert">Поздравляем! Регистрация прошла успешно! Вы авторизованы</div>
-                        </form>
-                    </div>
-                </div>
-
-
-
-        </div> <!--tab-pizza-->
-
-        <!--<div class="tab-pane fade" id="nav-authorization" role="tabpanel" aria-labelledby="nav-authorization-tab">
+        <div class="tab-pane fade show active" id="nav-authorization" role="tabpanel" aria-labelledby="nav-login-tab">
             <div class="d-flex justify-content-center">
                 <div class="col-lg-4">
-
-                    <div id="phone_form">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Номер телефона*</label>
-                            <input type="phone" class="form-control">
-                        </div>
-
-                        <h5>*<small>Ваш номер телефона - это логин. Пароль, который Вы получите по смс - пароль.</small></h5>
-                        <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" onclick="sign_up()">зарегистрироваться</button>
-                    </div>
-
-
-                    <div id="password_form" class="d-none">
-                        <h5><small>На указанный номер телефона был отправлен пароль, введите его в поле ниже.</small></h5>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Пароль (код из смс)</label>
-                            <input type="phone" class="form-control">
-                        </div>
-
-                        <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" onclick="confirm()">подтвердить</button>
-                    </div>
-
-                    <div class="alert alert-success d-none" role="alert">Поздравляем! Регистрация прошла успешно! Пожалуйста, авторизуйтесь.</div>
+                    <phone-register></phone-register>
                 </div>
             </div>
-        </div>-->
-    </div><!--tab-content-->
+        </div>
+    </div>
 </div>

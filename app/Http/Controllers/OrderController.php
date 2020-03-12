@@ -46,14 +46,15 @@ class OrderController extends Controller
     {
         $session_sms = session('key_sms');
 
-        $phone = $request->phone;
+        $phone = $request->data['phone'];
 
-        $sms = (int)$request->sms;
+        $sms = (int)$request->data['code'];
 
         if ($session_sms == $sms) {
             $this->store($phone, $request->sms);
+            return response(200);
         } else {
-            return false;
+            return 500;
         }
     }
 
