@@ -46,15 +46,16 @@ class OrderController extends Controller
     {
         $session_sms = session('key_sms');
 
-        $phone = $request->data['phone'];
+        $phone = $request->phone;
 
-        $sms = (int)$request->data['code'];
+        $sms = (int)$request->sms;
 
         if ($session_sms == $sms) {
             $this->store($phone, $request->sms);
             return response(200);
         } else {
-            return 500;
+            //return 500;
+            return false;
         }
     }
 
@@ -177,6 +178,7 @@ class OrderController extends Controller
      */
     public function confirmOrder(Request $request)
     {
+        //dd($request->all());
         $u_id = $request->u_id;
 
         $cooking_time = $request->cookingTime;
@@ -221,7 +223,7 @@ class OrderController extends Controller
         $order->address_id = $address_id;
         $order->note = $note;
         if (!is_null($date)) {
-            $formatedDate = Carbon::createFromFormat('Y-m-d\TH:i', $date);
+            $formatedDate = Carbon::parse($date);
             $order->date = $formatedDate;
         }
 

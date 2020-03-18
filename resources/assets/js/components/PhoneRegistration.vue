@@ -2,7 +2,7 @@
     <div>
         <div class="col-lg-12">
             <label>Номер телефона*</label>
-            <the-mask :mask="['+7 (###)-##-##-###']" v-model="phone" />
+            <the-mask :mask="['+7 (###)-##-##-###']" v-model="phone" style="width: 330px" />
 
             <button class="btn btn-default pull-right p-2 pl-3 pr-3 mt-3" type="button" @click="register(phone)">зарегистрироваться</button>
         </div>

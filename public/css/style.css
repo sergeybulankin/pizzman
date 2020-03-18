@@ -1226,6 +1226,11 @@ span.count
 
 
 
+.calendar {
+    margin: 25px 0 0 0;
+}
+
+
 
 
 
@@ -1324,7 +1329,3 @@ span.count
 .dropdown:hover .dropdown-content {display: block;}
 .dropdown:hover .dropbtn {background-color: #eb3644;}
 
-
-.cart-additive {
-    font-size: 8px;
-}

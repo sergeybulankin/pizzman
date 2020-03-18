@@ -14,23 +14,23 @@
                 <div class="row w-100 ml-0">
                     @if (Auth::check())
                         <div class="form-group col-lg-6">
-                            <label for="exampleInputEmail1">Ваше имя</label>
+                            <label for="name">Ваше имя</label>
                             <input type="phone" class="form-control" id="name"  name="name" placeholder="{{ $account->name }}" disabled>
                         </div>
 
                         <div class="form-group col-lg-6">
-                            <label for="exampleInputEmail1">Телефон</label>
+                            <label for="phone">Телефон</label>
                             <input type="text" class="form-control" id="phone" name="phone" placeholder="{{ Auth::user()->name }}" disabled>
                         </div>
                     @else
                         <div class="form-group col-lg-6">
-                            <label for="exampleInputEmail1">Ваше имя</label>
-                            <input type="phone" class="form-control" id="name" name="name">
+                            <label for="name">Ваше имя</label>
+                            <input type="text" class="form-control" id="name" name="name">
                         </div>
 
                         <div class="form-group col-lg-6">
-                            <label for="exampleInputEmail1">Телефон</label>
-                            <input type="text" class="form-control phone" id="phone" name="phone">
+                            <label for="phone">Телефон</label>
+                            <input type="text" class="form-control tel" id="phone" name="phone">
                         </div>
                     @endif()
                 </div>
@@ -49,8 +49,7 @@
                     <div class="col-lg-6">
                         <button class="btn btn-secondary btn-success btn-block cooking-time" type="button" id="1" onclick="type_of_readiness(this,'by_time')">ко времени</button>
 
-                        <!--<div class="d-none" id="time"> ко времени</div>-->
-                        <input type="datetime-local" class="d-none" id="time">
+                        <div class="datepicker-here d-none calendar" data-timepicker="true" data-time-format='hh:ii' id="time"></div>
                     </div>
                 </div>
 
@@ -91,7 +90,9 @@
                             @else
                                 <div style="background-color: lightblue; padding: 4px; margin: 10px 0">
                                     <span>Ваш самый популярный адрес:</span>
-                                    <span style="color: blue; cursor: pointer" id="offerAddress" onclick="offerAddress()">{{ $addresses->address[0]->address }}</span>
+                                    <span style="color: blue; cursor: pointer" id="offerAddress">
+                                        {{ $addresses->address[0]->address }}
+                                    </span>
                                 </div>
                             @endif()
                         @endif()

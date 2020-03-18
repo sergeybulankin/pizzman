@@ -9,8 +9,6 @@ $(window).scroll(function(){
     }
 });
 
-
-
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 })
@@ -19,18 +17,6 @@ $(document).ready(function () {
     //РџРћРРЎРљ
 
     $('[data-toggle="popover"]').popover({'html':true});
-    /*
-     $('[data-toggle="popover"]:not(.cart)').popover({'html':true}).on('shown.bs.popover', function(e) {
-     var current_popover = '#' + $(e.target).attr('aria-describedby');
-     $(current_popover).find(".popover-header").append('<a class="close" href="#" style="margin-left: 15px; margin-top: -2px;">&times;</a>');
-
-
-
-     $(current_popover).find('.close').click(function(){
-     $(this).parents(".popover").popover('hide');
-     });
-     });
-     */
 
     $("input[type='number']").inputSpinner();
 
@@ -49,7 +35,6 @@ function close_cart(btn)
     $(btn).parents("div").find("#cart_info").removeClass("d-block");
     $(btn).parents("div").find("#cart_info").addClass("d-none");
 }
-
 
 function update_active(el)
 {
@@ -70,34 +55,49 @@ function type_of_readiness(el,type)
     }
 }
 
-
-
-function delivery_type(el, type, totalPrice)
+function update_star(el)
 {
-    update_active(el);
+    $("#star").children("div").each(function(){
+        $(this).removeClass("fa-star");
+        $(this).removeClass("fa-star-o");
 
-    $("#pickup,#courier").addClass("d-none");
-    $("#"+type).removeClass("d-none");
+        if ($(this).index()<=$(el).index())
+        {
+            $(this).addClass("fa-star");
+        }
+        else
+        {
+            $(this).addClass("fa-star-o");
+        }
+    })
+}
 
-    var priceCurier = 65;
-    if (type != 'courier') {
-        document.getElementById('curierPrice').innerHTML = "<p>" + 0 + " <i class='fa fa-rub mr-0'></i></p>";
-        document.getElementById('timeDelivery').innerHTML = "";
-        document.getElementById('totalPrice').innerHTML = "<p>" + totalPrice + "<i class='fa fa-rub mr-0'></i></p>";
-    } else {
-        var finalPrice = totalPrice + priceCurier;
-        document.getElementById('curierPrice').innerHTML = "<p>" + priceCurier + " <i class='fa fa-rub mr-0'></i></p>";
-        document.getElementById('totalPrice').innerHTML = "<p>" + finalPrice + "<i class='fa fa-rub mr-0'></i></p>";
-    }
+function close_modal(el)
+{
+    $(el).parents(".modal").modal('hide');
 }
 
 
 
-// отправка заказа
+
+
+
+
+
+
+// ----- DELIVERY ----- //
+
+// возвращаем длину номера телефона
+function sendSms(phone) {
+    return phone.length;
+}
+
+// если с номером все нормально
+// то отправляем на этот номер смс
 function send_an_order(el, phone) {
     var validate = sendSms(phone);
 
-    if(validate != null) {
+    if(validate == 17) {
         $.get("/sms", {phone: phone});
 
         $(el).remove();
@@ -109,16 +109,12 @@ function send_an_order(el, phone) {
     }
 }
 
-
 // подтверждение смс у неавторизованного пользователя
 function confirmCodeSmsForDeliveryOrder(el)
 {
-    var phone = $('.phone#phone')[0].value;
-
+    var phone = $('.tel#phone')[0].value;
     var sms = $('.sms#sms')[0].value;
-
     var address = $('#suggest')[0].value;
-
     var delivery = $('.active.delivery').attr('id');
 
     if (address == '' && delivery == 0) {
@@ -151,47 +147,21 @@ function confirmCodeSmsForDeliveryOrder(el)
     }
 }
 
-function update_star(el)
-{
-    $("#star").children("div").each(function(){
-        $(this).removeClass("fa-star");
-        $(this).removeClass("fa-star-o");
-
-        if ($(this).index()<=$(el).index())
-        {
-            $(this).addClass("fa-star");
-        }
-        else
-        {
-            $(this).addClass("fa-star-o");
-        }
-    })
-}
-
 // подтверждаем заказ и оформляем его
 function send_order(el) {
     var cookingTime = $('.active.cooking-time').attr('id');
-
     var delivery = $('.active.delivery').attr('id');
-
     var address = $('#suggest')[0].value;
-
     var kv = $('#kv')[0].value;
-
     var coord = $('#coord')[0].value;
-
     var note = $('#note')[0].value;
-
     var url = document.location.href;
-    
     var u_id = url.substring(url.lastIndexOf('/') + 1);
-
     if (delivery == 1) {
         var pizzmanAddress = $('.active.delivery-pickup').attr('id');
     } else {
         var pizzmanAddress = 0;
     }
-
     var date = $('#time')[0].value;
 
     $.ajax({
@@ -221,19 +191,28 @@ function send_order(el) {
     })
 }
 
-
-// копирование самого популярного адреса
-function offerAddress() {
-    var address = $('#offerAddress')[0].innerText;
-    $('#address').val(address);
-    $('#suggest').val(address);
-}
-
-
-function close_modal(el)
+// изменение доставки и её стоимости
+function delivery_type(el, type, totalPrice)
 {
-    $(el).parents(".modal").modal('hide');
+    update_active(el);
+
+    $("#pickup,#courier").addClass("d-none");
+    $("#"+type).removeClass("d-none");
+
+    var priceCurier = 65;
+    if (type != 'courier') {
+        document.getElementById('curierPrice').innerHTML = "<p>" + 0 + " <i class='fa fa-rub mr-0'></i></p>";
+        document.getElementById('timeDelivery').innerHTML = "";
+        document.getElementById('totalPrice').innerHTML = "<p>" + totalPrice + "<i class='fa fa-rub mr-0'></i></p>";
+    } else {
+        var finalPrice = totalPrice + priceCurier;
+        document.getElementById('curierPrice').innerHTML = "<p>" + priceCurier + " <i class='fa fa-rub mr-0'></i></p>";
+        document.getElementById('totalPrice').innerHTML = "<p>" + finalPrice + "<i class='fa fa-rub mr-0'></i></p>";
+    }
 }
+
+// ----- DELIVERY ----- //
+
 
 // очистка localStorage после выхода из аккаунта
 $(document).ready(function(){
@@ -241,3 +220,18 @@ $(document).ready(function(){
         localStorage.clear();
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

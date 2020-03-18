@@ -40,18 +40,20 @@
                                     </span>
                                 </td>
                                 <td class="align-middle">
-                                    <input type="number" value="1" min="1" max="30" step="1" style="display: none;"><div class="input-group  ">
-                                    <div class="input-group-prepend">
-                                        <button style="min-width: 2.5rem" class="btn btn-decrement btn-outline-secondary" type="button" @click="MINUS(index)"><strong>-</strong></button>
+                                    <input type="number" value="1" min="1" max="30" step="1" style="display: none;">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <button style="min-width: 2.5rem" class="btn btn-decrement btn-outline-secondary" type="button" @click="MINUS(index)"><strong>-</strong></button>
+                                        </div>
+
+                                        <span class="final-count" v-if="item.food.count >= 1">{{ item.food.count }}</span>
+                                        <span class="final-count" v-else>{{ POSITIVE_NUMBERS(index) }}</span>
+
+                                        <div class="input-group-append">
+                                            <button style="min-width: 2.5rem" class="btn btn-increment btn-outline-secondary" type="button" @click="PLUS(index)"><strong>+</strong></button>
+                                        </div>
                                     </div>
-
-                                    <span class="final-count" v-if="item.food.count >= 1">{{ item.food.count }}</span>
-                                    <span class="final-count" v-else>{{ POSITIVE_NUMBERS(index) }}</span>
-
-                                    <div class="input-group-append">
-                                    <button style="min-width: 2.5rem" class="btn btn-increment btn-outline-secondary" type="button" @click="PLUS(index)"><strong>+</strong></button>
-                                </div>
-                                </div></td>
+                                </td>
                                 <td class="font-weight-bold align-middle">{{ item.food.count * item.food.price + ADDITIVE_PRICE[index] }} <i class="fa fa-rub"></i></td>
                             </tr>
                         </tbody>

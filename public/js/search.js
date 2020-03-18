@@ -6,11 +6,27 @@ function init() {
         map,
         placemark;
 
-    $("#address").on("keyup",function(e){
-        $('#timeDelivery').empty();
-        geocode();
+    $("#address").on("keydown",function(e){
+        //$('#timeDelivery').empty();
+        var newElement = document.createElement('div');
+        newElement.id = 'timeDelivery';
     });
 
+    $("#address").on("keyup",function(e){
+        geocode();
+
+        $('#timeDelivery').html('');
+    });
+
+    $('#offerAddress').on('click', function (e) {
+        $('#timeDelivery').empty();
+
+        var address = $('#offerAddress')[0].innerText;
+        $('#address').val(address);
+        $('#suggest').val(address);
+
+        geocode();
+    });
 
     function geocode() {
         // Забираем запрос из поля ввода.

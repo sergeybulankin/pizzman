@@ -23,7 +23,7 @@ Route::get('/auth', 'HomeController@auth')->name('auth');
 Route::get('/account', 'HomeController@account')->middleware('auth');
 Route::get('account/tracking/{order_id}', 'HomeController@tracking')->middleware('auth');
 Route::get('/profile', 'HomeController@showProfile')->middleware('auth');
-Route::put('/profile/edit/{id}', 'HomeController@updateProfile')->middleware('auth');
+Route::put('/profile/update/{id}', 'HomeController@updateProfile')->middleware('auth');
 Route::get('/history', 'HomeController@history')->middleware('auth');
 Route::delete('/order/delete/{id}', 'HomeController@deleteOrder')->middleware('auth');
 

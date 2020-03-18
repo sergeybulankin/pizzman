@@ -22,9 +22,10 @@
                             <a><b>{{ item.food.name }}</b></a><p><small>{{ item.food.count }}x{{ item.food.price }} <i class="fa fa-rub"></i></small></p>
 
                             <div class="cart-additive">
-                                <span  v-for="(additives, additives_index) in item.additive" :key="additives_index">
-                                    <span class="description" v-for="(additive, additive_index) in additives" :key="additive_index">
-                                        <a><b>{{ additive.name }}</b></a><p><small>{{ additive.price }} <i class="fa fa-rub"></i></small></p>
+                                <span v-for="(additives, additives_index) in item.additive" :key="additives_index">
+                                    <span v-for="(additive, additive_index) in additives" :key="additive_index">
+                                        <a style="font-size: 12px;"><b>{{ additive.name }}</b></a>
+                                        <p style="font-size: 12px"><small>{{ additive.price }} <i class="fa fa-rub"></i></small></p>
                                     </span>
                                 </span>
                             </div>
