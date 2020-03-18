@@ -18,7 +18,7 @@ class CreateAccountsTable extends Migration
             $table->integer('user_id');
             $table->string('name');
             $table->string('second_name');
-            $table->string('link');
+            $table->string('link')->nullable();
             $table->timestamps();
         });
     }

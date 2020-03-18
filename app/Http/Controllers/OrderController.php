@@ -167,6 +167,29 @@ class OrderController extends Controller
         $orderStatus->order_id = $lastId;
         $orderStatus->status_id = 1;
         $orderStatus->save();
+
+
+        // добавляем точку где будут готовить блюдо
+         $cart = FoodInOrder::with('food_additive', 'pizzman_address')
+             ->where('order_id', $lastId)
+             ->get();
+
+         $pointPizzmanAddress = [];
+         foreach ($cart as $key => $value) {
+             if (collect($value->pizzman_address)->isEmpty()) {
+                 $pointPizzmanAddress[] = 1;
+             }else {
+                 foreach ($value->pizzman_address as $k => $v) {
+                     $pointPizzmanAddress[] = $v->pizzman_address_id;
+                 }
+             }
+         }
+
+         $point = array_values((array_unique($pointPizzmanAddress)))[0];
+
+         $order = Order::all()->where('id', $lastId)->first();
+         $order->pizzman_address_id = $point;
+         $order->save();
     }
 
 
@@ -218,7 +241,9 @@ class OrderController extends Controller
         $order = Order::where('u_id', $u_id)->firstOrFail();
         $order->user_id = Auth::user()->id;
         $order->type_of_time_id = $cooking_time;
-        $order->pizzman_address_id = $pizzman_address;
+        if($pizzman_address !=0) {
+            $order->pizzman_address_id = $pizzman_address;
+        }
         $order->type_of_delivery = $delivery;
         $order->address_id = $address_id;
         $order->note = $note;
