@@ -29,7 +29,10 @@ class FoodController extends Controller
     {
         $category = Category::orderBy('id', 'ASC')->first();
 
-        $foods = Food::with('type', 'additive')->where('category_id', $category->id)->get();
+        $foods = Food::with('type', 'additive')
+            ->where('category_id', $category->id)
+            ->where('visibility', 0)
+            ->get();
 
         return FoodResource::collection($foods);
     }
@@ -137,7 +140,10 @@ class FoodController extends Controller
      */
     public function selectByCategory(Request $request)
     {
-        $foods = Food::with('category')->where('category_id', $request->id)->get();
+        $foods = Food::with('category')
+            ->where('category_id', $request->id)
+            ->where('visibility', 0)
+            ->get();
 
         return FoodResource::collection($foods);
     }

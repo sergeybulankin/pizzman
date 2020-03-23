@@ -47874,7 +47874,7 @@ var content = __webpack_require__(65);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("5a09079e", content, false, {});
+var update = __webpack_require__(6)("7ee07b3e", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -47947,6 +47947,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(2);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//
 //
 //
 //
@@ -48341,7 +48342,11 @@ var render = function() {
                       _c("div", { staticClass: "c-product" }, [
                         _c("img", {
                           staticClass: "img-fluid",
-                          attrs: { src: product.image }
+                          attrs: {
+                            src:
+                              "http://pizza.admin/public/images/foods/" +
+                              product.image
+                          }
                         }),
                         _vm._v(" "),
                         _c("div", { staticClass: "search-heart" }, [
@@ -48595,7 +48600,7 @@ var content = __webpack_require__(71);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("0d235370", content, false, {});
+var update = __webpack_require__(6)("2e56f2b0", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -48973,7 +48978,7 @@ var content = __webpack_require__(76);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("1add39b8", content, false, {});
+var update = __webpack_require__(6)("3ee9cb84", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -49623,7 +49628,7 @@ var content = __webpack_require__(84);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("24edaf20", content, false, {});
+var update = __webpack_require__(6)("12609c10", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -55012,7 +55017,7 @@ var content = __webpack_require__(102);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("caa1e7ec", content, false, {});
+var update = __webpack_require__(6)("328edc6a", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -55872,6 +55877,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 
 
@@ -55902,7 +55908,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             this.CHECK_CODE_SMS(data);
 
-            this.redirectAccount();
+            //this.redirectAccount();
         },
         redirectAccount: function redirectAccount() {
             window.location.href = "/account";
@@ -56056,8 +56062,11 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n            Поздравляем! Регистрация прошла успешно! Вы авторизованы\n        "
-              )
+                "\n            Поздравляем! Регистрация прошла успешно! Вы авторизованы "
+              ),
+              _c("br"),
+              _vm._v(" "),
+              _c("a", { attrs: { href: "/account" } }, [_vm._v("Мой аккаунт")])
             ]
           )
         : _vm.ANSWER == 500

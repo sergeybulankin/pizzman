@@ -17,6 +17,7 @@ class CreateAdditivesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->integer('price');
+            $table->string('icon');
             $table->timestamps();
         });
     }

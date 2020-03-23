@@ -23,7 +23,7 @@
                                 <div id="recommend"
                                      v-if="product.recommend == true">рекомендуем</div>
                                 <div class="c-product">
-                                    <img :src="product.image" class="img-fluid">
+                                    <img :src="'http://pizza.admin/public/images/foods/' + product.image" class="img-fluid">
                                     <div class="search-heart">
                                         <button
                                                 @click="changeFavorite(product.id)"
@@ -37,6 +37,7 @@
                                         </button>
                                     </div>
                                 </div>
+
                                 <div class="c-product-info">
                                     <a class="product_title">{{ product.name }} </a>
                                     <span> Масса: {{ product.weight }}г<br>Калорийность: {{ product.calories }}<br>Белки: {{ product.protein }}<br>Углеводы: {{ product.carbohydrates }} <br> <br></span>

@@ -1,4 +1,9 @@
 <div id="login" class="container home-tabs pb-5">
+
+    @if(Auth::check())
+        <script>window.location = "/history";</script>
+    @endif
+
     <nav>
         <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-login-tab" data-toggle="tab" href="#nav-login" role="tab" aria-controls="nav-login" aria-selected="true">Войти</a>

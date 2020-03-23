@@ -1,13 +1,15 @@
 <div class="container" id="track">
     <h1 class="text-center text-uppercase font-weight-bold">Отслеживание заказа</h1>
     <ul class="pt-5">
-        @for($i = 1; $i <= $orderStatus->status_id; $i++)
-            <li class="mb-4">
-                <h3>{{ $statuses[$i - 1]->name }}</h3>
-                <p class="p-0 m-0">{{ $statuses[$i - 1]->description }}</p>
-                <h5 class="p-0"><small><b><i>время: {{ $statuses[$i - 1]->created_utc->format('d F H:i')  }}</i></b></small></h5>
-            </li>
-        @endfor()
+        @foreach($order as $item)
+            @foreach($item->order_status as $status)
+                <li class="mb-4">
+                    <h3>{{ $status->status->name }}</h3>
+                    <p class="p-0 m-0">{{ $status->status->description }}</p>
+                    <h5 class="p-0"><small><b><i>время: {{ $status->created_utc->format('d F H:i') }}</i></b></small></h5>
+                </li>
+            @endforeach()
+        @endforeach()
     </ul>
 
     <!--

@@ -89,7 +89,7 @@
                             @if(($addresses->address)->isEmpty())
                             @else
                                 <div style="background-color: lightblue; padding: 4px; margin: 10px 0">
-                                    <span>Ваш самый популярный адрес:</span>
+                                    <span>Это ваш любимый адресс?</span>
                                     <span style="color: blue; cursor: pointer" id="offerAddress">
                                         {{ $addresses->address[0]->address }}
                                     </span>
@@ -139,7 +139,8 @@
                         <tbody>
                         @foreach($cart as $key => $product)
                             <tr>
-                                <td class="font-weight-bold"><p>{{ $product->food_additive[0]->food[0]->name }} <small>× {{ $product->count }}</small></p>
+                                <td class="font-weight-bold">
+                                    <p>{{ $product->food_additive[0]->food[0]->name }} <small>× {{ $product->count }}</small></p>
                                     <small>{{ $product->food_additive[0]->additive[0]->name }}</small>
                                 </td>
                                 <td class="font-weight-bold text-right">{{ $product->food_additive[0]->food[0]->price * $product->count }} <i class="fa fa-rub"></i></td>

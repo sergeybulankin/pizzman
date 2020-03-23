@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="track">
     <h1 class="text-center text-uppercase font-weight-bold">Истории заказов</h1>
 
     <div style="margin: 10px 0">
@@ -27,9 +27,9 @@
                             <button>Удалить заказ</button>
                         </form>
                     @else
-                        <a href="/account/tracking/{{ $order->id }}">Просмотреть</a>
                     @endif()
                 @endforeach()
+                <a href="/account/tracking/{{ $order->id }}">Просмотреть</a>
             </div>
         @endforeach()
     </div>

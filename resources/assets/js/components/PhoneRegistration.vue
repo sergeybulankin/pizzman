@@ -25,7 +25,8 @@
 
         <div style="margin: 80px 0 0 0">
             <div id="registered" class="alert alert-success" role="alert" v-if="ANSWER == 200">
-                Поздравляем! Регистрация прошла успешно! Вы авторизованы
+                Поздравляем! Регистрация прошла успешно! Вы авторизованы <br>
+                <a href="/account">Мой аккаунт</a>
             </div>
             <div id="repeatSms" class="repeat-code" v-else-if="ANSWER == 500">
                 <div class="alert alert-primary" role="alert">
@@ -75,7 +76,7 @@
 
                 this.CHECK_CODE_SMS(data);
 
-                this.redirectAccount();
+                //this.redirectAccount();
             },
 
             redirectAccount() {

@@ -53,15 +53,9 @@ class HomeController extends Controller
      */
     public function tracking($order_id)
     {
-        $order = Order::where('id', $order_id)->first();
+        $order = Order::with('order_status')->where('id', $order_id)->get();
 
-        $orderStatus = OrderStatus::with('status')->where('order_id', $order['id'])->first();
-
-        $statuses = Status::all();
-
-        $food = FoodInOrder::with('food_additive', 'pizzman_address')->where('order_id', $order['id'])->get();
-
-        return view('tracking', compact('food', 'orderStatus', 'statuses'));
+        return view('tracking', compact('order'));
     }
 
     /**
