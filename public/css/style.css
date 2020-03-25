@@ -874,7 +874,7 @@ span.phone
     border: 1px solid #9e9e9e6b;
     border-radius: 8px;
     font-size: 16px;
-    margin: 20px 0px;
+    margin: 0;
     display: inline-block;
 }
 
@@ -1329,3 +1329,35 @@ span.count
 .dropdown:hover .dropdown-content {display: block;}
 .dropdown:hover .dropbtn {background-color: #eb3644;}
 
+
+
+
+
+.type-delivery {
+    margin: 0 0 50px 0;
+}
+.type-delivery--name {
+    background-color: #d1333c;
+    padding: 10px;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+}
+.type-delivery--name:hover {
+    background-color: #f93546;
+}
+
+.point {
+    margin: 15px 0;
+}
+.point--name {
+    background-color: yellow;
+    padding: 10px;
+    color: black;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+}
+.point--name:hover {
+    background-color: #c0c000;
+}

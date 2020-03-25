@@ -32,29 +32,6 @@
                 <li class="nav-item">
                     <span class="nav-link" style="font-size:16px;"> <i class="fa fa-phone"></i>  +7(917)805-89-36 </span>
                 </li>
-
-                <li class="nav-item">
-                    <a  href="#" data-toggle="modal" data-target="#call_me_back"><span class="nav-link"> перезвоните мне</span></a>
-                </li>
-            </ul>
-
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    @if(\Illuminate\Support\Facades\Auth::check())
-                        <div class="dropdown" style="float:right;">
-                            <button class="dropbtn">
-                                <a href="/account">{{ \Illuminate\Support\Facades\Auth::user()->name }}</a>
-                            </button>
-                            <div class="dropdown-content">
-                                <a href="/profile">Изменить данные</a>
-                                <a href="/history">История заказов</a>
-                                <a class="nav-link" id="logout" href="/logout"><i class="fa fa-user"></i> Выйти</a>
-                            </div>
-                        </div>
-                    @else
-                        <a class="nav-link" href="/auth"><i class="fa fa-user"></i> Войти</a>
-                    @endif()
-                </li>
             </ul>
         </div>
     </div>

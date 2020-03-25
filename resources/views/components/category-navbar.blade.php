@@ -1,7 +1,6 @@
 <div class="navbar navbar-expand-lg header_main header_menu">
     <!--Отсюда собирается toggler -->
     <div class="collapse navbar-collapse justify-content-md-center ">
-        <category-navbar></category-navbar>
 
         <ul class="navbar-nav d-lg-none">
             <li class="nav-item">

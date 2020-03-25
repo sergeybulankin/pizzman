@@ -1,9 +1,5 @@
 @extends('layout.index')
 
-    @section('search')
-        @include('components.search')
-    @endsection()
-
     @section('call')
         @include('components.call')
     @endsection()
@@ -36,24 +32,12 @@
         @include('components.catalog')
     @endsection()
 
-    @section('new-food')
-        @include('components.new-food')
-    @endsection()
-
     @section('addresses')
         @include('components.addresses')
     @endsection()
 
     @section('about')
         @include('components.about')
-    @endsection()
-
-    @section('reviews')
-        @include('components.reviews')
-    @endsection()
-
-    @section('hits')
-        @include('components.hits')
     @endsection()
 
     @section('footer')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PizzmanAddressResource;
 use App\PizzmanAddress;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,18 @@ class PizzmanAddressController extends Controller
      */
     public function index()
     {
-        //
+        $points = PizzmanAddress::with('address_delivery')->get();
+
+        return PizzmanAddressResource::collection($points);
+    }
+
+    public function info(Request $request)
+    {
+        $points = PizzmanAddress::with('address_delivery')
+            ->where('id', $request->point)
+            ->get();
+
+        return PizzmanAddressResource::collection($points);
     }
 
     /**

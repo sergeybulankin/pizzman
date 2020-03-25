@@ -30341,7 +30341,9 @@ Vue.prototype._ = __WEBPACK_IMPORTED_MODULE_0_lodash___default.a;
 
 var cartState = {
   cart: [],
-  favorite: []
+  favorite: [],
+  type: [],
+  pointsDelivery: []
 };
 
 window.Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_persistent_state___default.a, cartState);
@@ -47434,6 +47436,7 @@ if (typeof JSON !== "object") {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_category__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_favorite__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_register__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modules_delivery__ = __webpack_require__(112);
 
 
 
@@ -47449,13 +47452,15 @@ var debug = "development" !== 'production';
 
 
 
+
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     modules: {
         product: __WEBPACK_IMPORTED_MODULE_2__modules_product__["a" /* default */],
         cart: __WEBPACK_IMPORTED_MODULE_3__modules_cart__["a" /* default */],
         categories: __WEBPACK_IMPORTED_MODULE_4__modules_category__["a" /* default */],
         favorite: __WEBPACK_IMPORTED_MODULE_5__modules_favorite__["a" /* default */],
-        register: __WEBPACK_IMPORTED_MODULE_6__modules_register__["a" /* default */]
+        register: __WEBPACK_IMPORTED_MODULE_6__modules_register__["a" /* default */],
+        delivery: __WEBPACK_IMPORTED_MODULE_7__modules_delivery__["a" /* default */]
     },
     strict: debug
 }));
@@ -47511,6 +47516,13 @@ var debug = "development" !== 'production';
         HIT_SALES: function HIT_SALES(ctx) {
             axios.get('/api/hit-sales').then(function (res) {
                 ctx.commit('HIT_SALES_MUTATION', res.data.data);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        SELECTED_ALL_PRODUCTS_FOR_POINT: function SELECTED_ALL_PRODUCTS_FOR_POINT(ctx, point) {
+            axios.post('/api/selected-food-for-point', { point: point }).then(function (res) {
+                ctx.commit('FOOD_PlACEMENT_IN_STORAGE', res.data.data);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -48037,6 +48049,30 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -48046,7 +48082,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            checkedAdditive: []
+            checkedAdditive: [],
+            typeDeliveryCategory: null,
+            pointDelivery: null,
+            catalog: false,
+            points: false,
+            nav: false
         };
     },
     created: function created() {
@@ -48077,7 +48118,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }, 1000);
     },
 
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["c" /* mapGetters */])(['ALL_PRODUCTS', 'ALL_CATEGORIES', 'ALL_FAVORITE', 'CART_FOR_USER', 'LOADER']), {
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["c" /* mapGetters */])(['ALL_PRODUCTS', 'ALL_CATEGORIES', 'ALL_FAVORITE', 'CART_FOR_USER', 'ALL_POINTS_DELIVERY', 'LOADER']), {
 
         // window.Laravel.user - записывается в хэдэре,
         // если пользователь авторизовался
@@ -48085,7 +48126,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return window.Laravel.user;
         }
     }),
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapActions */])(['SELECTED_ALL_PRODUCTS', 'SELECTED_ALL_PRODUCTS_FOR_USERS', 'SELECTION_BY_CATEGORY', 'SELECTED_PRODUCTS_IN_CART', 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE', 'SELECT_ALL_FAVORITE', 'SELECT_ALL_FAVORITE_FOR_USERS', 'CHECK_PRODUCT_IN_FAVORITE', 'ADD_TO_FAVORITE', 'COUNT_FAVORITE', 'DELETE_OF_FAVORITE']), {
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapActions */])(['SELECTED_ALL_PRODUCTS', 'SELECTED_ALL_PRODUCTS_FOR_USERS', 'SELECTION_BY_CATEGORY', 'SELECTED_PRODUCTS_IN_CART', 'SELECTED_POINTS_DELIVERY', 'SELECTED_ALL_CATEGORIES', 'SELECTED_ALL_PRODUCTS_FOR_POINT', 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE', 'SELECT_ALL_FAVORITE', 'SELECT_ALL_FAVORITE_FOR_USERS', 'CHECK_PRODUCT_IN_FAVORITE', 'ADD_TO_FAVORITE', 'COUNT_FAVORITE', 'DELETE_OF_FAVORITE']), {
         changeProduct: function changeProduct(id) {
             var _this3 = this;
 
@@ -48189,6 +48230,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(food);
             }
 
+            this.type.push(this.typeDeliveryCategory);
+            this.pointsDelivery.push(this.pointDelivery);
+
             __WEBPACK_IMPORTED_MODULE_0_codex_notifier___default.a.show({
                 message: '<div class="message-alert"><img src="../images/success.png" width="32px"> <span class="notifier-message">Товар добавлен в корзину</span></div>',
                 style: 'success',
@@ -48265,6 +48309,49 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             _.each(this.ALL_FAVORITE, function (value, key) {
                 _this7.favorite.push(value);
             });
+        },
+        typeDelivery: function typeDelivery(type) {
+            if (type == 1) {
+                this.SELECTED_POINTS_DELIVERY();
+                this.typeDeliveryCategory = 1;
+                this.points = !this.point;
+                this.catalog = false;
+                this.nav = false;
+            } else {
+                this.deleteProductsFromCart();
+                this.SELECTED_ALL_CATEGORIES();
+                this.SELECTED_ALL_PRODUCTS();
+                this.typeDeliveryCategory = 2;
+                this.catalog = true;
+                this.nav = true;
+                this.points = false;
+            }
+        },
+        catalogPoint: function catalogPoint(point) {
+            this.SELECTED_ALL_PRODUCTS_FOR_POINT(point);
+            this.catalog = true;
+            this.pointDelivery = point;
+            this.deleteProductsFromCart();
+        },
+        deleteProductsFromCart: function deleteProductsFromCart() {
+            var _this8 = this;
+
+            var length = this.cart.length;
+            var lengthType = this.type.length;
+            var lengthPoints = this.pointsDelivery.length;
+
+            _.each(this.cart, function (value, key) {
+                _this8.cart.splice(key, length);
+            });
+
+            _.each(this.type, function (value, key) {
+                _this8.type.splice(key, lengthType);
+            });
+
+            _.each(this.pointsDelivery, function (value, key) {
+                _this8.pointsDelivery.splice(key, lengthPoints);
+            });
+            console.log('Корзина очищена');
         }
     })
 });
@@ -48278,229 +48365,350 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("nav", [
+    _c("div", { staticClass: "col-lg-12 row type-delivery" }, [
       _c(
         "div",
         {
-          staticClass: "nav nav-tabs justify-content-center",
-          attrs: { id: "nav-tab", role: "tablist" }
+          staticClass: "col-lg-4 type-delivery--name",
+          on: {
+            click: function($event) {
+              return _vm.typeDelivery(1)
+            }
+          }
         },
-        _vm._l(_vm.ALL_CATEGORIES, function(category, index) {
-          return _c("div", { key: index }, [
-            _c(
-              "a",
-              {
-                staticClass: "nav-item nav-link active",
-                attrs: { "data-toggle": "tab", "aria-selected": "true" },
-                on: {
-                  click: function($event) {
-                    return _vm.selectProducts(category.id)
-                  }
-                }
-              },
-              [_vm._v(_vm._s(category.name) + "\n                ")]
-            )
-          ])
-        }),
-        0
+        [_vm._v("\n            Приду покушать\n        ")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "col-lg-4 type-delivery--name",
+          on: {
+            click: function($event) {
+              return _vm.typeDelivery(1)
+            }
+          }
+        },
+        [_vm._v("\n            Самовывоз\n        ")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "col-lg-4 type-delivery--name",
+          on: {
+            click: function($event) {
+              return _vm.typeDelivery(2)
+            }
+          }
+        },
+        [_vm._v("\n            Курьерская доставка\n        ")]
       )
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "tab-content", attrs: { id: "nav-tabContent" } }, [
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.points,
+            expression: "points"
+          }
+        ],
+        staticClass: "col-lg-12 row point"
+      },
+      _vm._l(_vm.ALL_POINTS_DELIVERY, function(point, i) {
+        return _c(
+          "div",
+          {
+            key: i,
+            staticClass: "col-lg-4 point--name",
+            on: {
+              click: function($event) {
+                return _vm.catalogPoint(point.id)
+              }
+            }
+          },
+          [
+            _vm._v(
+              "\n            Точка на " +
+                _vm._s(point.points.address) +
+                "\n        "
+            )
+          ]
+        )
+      }),
+      0
+    ),
+    _vm._v(" "),
+    _c("div", [
+      _c(
+        "nav",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.nav,
+              expression: "nav"
+            }
+          ]
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "nav nav-tabs justify-content-center",
+              attrs: { id: "nav-tab", role: "tablist" }
+            },
+            _vm._l(_vm.ALL_CATEGORIES, function(category, index) {
+              return _c("div", { key: index }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "nav-item nav-link active",
+                    attrs: { "data-toggle": "tab", "aria-selected": "true" },
+                    on: {
+                      click: function($event) {
+                        return _vm.selectProducts(category.id)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(category.name) + "\n                    ")]
+                )
+              ])
+            }),
+            0
+          )
+        ]
+      ),
+      _vm._v(" "),
       _c(
         "div",
         {
-          staticClass: "tab-pane fade show active",
-          attrs: {
-            id: "nav-pizza",
-            role: "tabpanel",
-            "aria-labelledby": "nav-pizza-tab"
-          }
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.catalog,
+              expression: "catalog"
+            }
+          ],
+          staticClass: "tab-content",
+          attrs: { id: "nav-tabContent" }
         },
         [
-          _c("div", { staticClass: "container" }, [
-            _vm.LOADER
-              ? _c("div", { staticClass: "load" }, [
-                  _c("img", { attrs: { src: "images/loader.gif", alt: "" } }),
-                  _vm._v(" "),
-                  _c("h4", [_vm._v("Загружаем товары...")])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "row" },
-              _vm._l(_vm.ALL_PRODUCTS, function(product, index) {
-                return _c(
-                  "div",
-                  {
-                    key: index,
-                    staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12"
-                  },
-                  [
-                    _c("div", { staticClass: "one-food" }, [
-                      product.recommend == true
-                        ? _c("div", { attrs: { id: "recommend" } }, [
-                            _vm._v("рекомендуем")
-                          ])
-                        : _vm._e(),
+          _c(
+            "div",
+            {
+              staticClass: "tab-pane fade show active",
+              attrs: {
+                id: "nav-pizza",
+                role: "tabpanel",
+                "aria-labelledby": "nav-pizza-tab"
+              }
+            },
+            [
+              _c("div", { staticClass: "container" }, [
+                _vm.LOADER
+                  ? _c("div", { staticClass: "load" }, [
+                      _c("img", {
+                        attrs: { src: "images/loader.gif", alt: "" }
+                      }),
                       _vm._v(" "),
-                      _c("div", { staticClass: "c-product" }, [
-                        _c("img", {
-                          staticClass: "img-fluid",
-                          attrs: {
-                            src:
-                              "http://pizza.admin/images/foods/" + product.image
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "search-heart" }, [
-                          _c(
-                            "button",
-                            {
-                              class: "favorite-" + product.id,
-                              on: {
-                                click: function($event) {
-                                  return _vm.changeFavorite(product.id)
-                                }
+                      _c("h4", [_vm._v("Загружаем товары...")])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "row" },
+                  _vm._l(_vm.ALL_PRODUCTS, function(product, index) {
+                    return _c(
+                      "div",
+                      {
+                        key: index,
+                        staticClass: "col-lg-3 col-md-6 col-sm-6 col-xs-12"
+                      },
+                      [
+                        _c("div", { staticClass: "one-food" }, [
+                          product.recommend == true
+                            ? _c("div", { attrs: { id: "recommend" } }, [
+                                _vm._v("рекомендуем")
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "c-product" }, [
+                            _c("img", {
+                              staticClass: "img-fluid",
+                              attrs: {
+                                src:
+                                  "http://pizza.admin/images/foods/" +
+                                  product.image
                               }
-                            },
-                            [_c("i", { staticClass: "fa fa-heart" })]
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "search-heart" }, [
+                              _c(
+                                "button",
+                                {
+                                  class: "favorite-" + product.id,
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.changeFavorite(product.id)
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "fa fa-heart" })]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "d-none",
+                                  class: "delete-favorite-" + product.id,
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.deleteFavorite(product.id)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("i", {
+                                    staticClass: "fa fa-heart heart-red"
+                                  })
+                                ]
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "c-product-info" },
+                            [
+                              _c("a", { staticClass: "product_title" }, [
+                                _vm._v(_vm._s(product.name) + " ")
+                              ]),
+                              _vm._v(" "),
+                              _c("br"),
+                              _vm._v(" "),
+                              _c("span", [
+                                _vm._v(
+                                  " Масса: " + _vm._s(product.weight) + "г"
+                                ),
+                                _c("br"),
+                                _vm._v(
+                                  "Калорийность: " + _vm._s(product.calories)
+                                ),
+                                _c("br"),
+                                _vm._v("Белки: " + _vm._s(product.protein)),
+                                _c("br"),
+                                _vm._v(
+                                  "Углеводы: " +
+                                    _vm._s(product.carbohydrates) +
+                                    " "
+                                ),
+                                _c("br"),
+                                _vm._v(" "),
+                                _c("br")
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(product.types, function(type, index_type) {
+                                return _c("span", { key: index_type }, [
+                                  _vm._v(" " + _vm._s(type.name))
+                                ])
+                              }),
+                              _vm._v(" "),
+                              _vm._m(0, true),
+                              _vm._v(" "),
+                              _c("h5", [
+                                _c("small", [_vm._v(_vm._s(product.structure))])
+                              ])
+                            ],
+                            2
                           ),
                           _vm._v(" "),
                           _c(
-                            "button",
+                            "div",
                             {
-                              staticClass: "d-none",
-                              class: "delete-favorite-" + product.id,
-                              on: {
-                                click: function($event) {
-                                  return _vm.deleteFavorite(product.id)
-                                }
-                              }
+                              staticClass: "btn-group btn-group-toggle",
+                              attrs: { "data-toggle": "buttons" }
                             },
-                            [_c("i", { staticClass: "fa fa-heart heart-red" })]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "c-product-info" },
-                        [
-                          _c("a", { staticClass: "product_title" }, [
-                            _vm._v(_vm._s(product.name) + " ")
-                          ]),
-                          _vm._v(" "),
-                          _c("br"),
-                          _vm._v(" "),
-                          _c("span", [
-                            _vm._v(" Масса: " + _vm._s(product.weight) + "г"),
-                            _c("br"),
-                            _vm._v("Калорийность: " + _vm._s(product.calories)),
-                            _c("br"),
-                            _vm._v("Белки: " + _vm._s(product.protein)),
-                            _c("br"),
-                            _vm._v(
-                              "Углеводы: " + _vm._s(product.carbohydrates) + " "
-                            ),
-                            _c("br"),
-                            _vm._v(" "),
-                            _c("br")
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(product.types, function(type, index_type) {
-                            return _c("span", { key: index_type }, [
-                              _vm._v(" " + _vm._s(type.name))
-                            ])
-                          }),
-                          _vm._v(" "),
-                          _vm._m(0, true),
-                          _vm._v(" "),
-                          _c("h5", [
-                            _c("small", [_vm._v(_vm._s(product.structure))])
-                          ])
-                        ],
-                        2
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass: "btn-group btn-group-toggle",
-                          attrs: { "data-toggle": "buttons" }
-                        },
-                        _vm._l(product.additives, function(
-                          additive,
-                          additive_index
-                        ) {
-                          return _c(
-                            "label",
-                            {
-                              key: additive_index,
-                              staticClass: "btn btn-secondary",
-                              class: {
-                                active: additive.id === 1,
-                                "d-none": additive.id === 1
-                              },
-                              on: {
-                                click: function($event) {
-                                  return _vm.changeAdditive($event)
-                                }
-                              }
-                            },
-                            [
-                              _c("input", {
-                                attrs: {
-                                  type: "checkbox",
-                                  name: "options",
-                                  id: product.id,
-                                  autocomplete: "off"
+                            _vm._l(product.additives, function(
+                              additive,
+                              additive_index
+                            ) {
+                              return _c(
+                                "label",
+                                {
+                                  key: additive_index,
+                                  staticClass: "btn btn-secondary",
+                                  class: {
+                                    active: additive.id === 1,
+                                    "d-none": additive.id === 1
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.changeAdditive($event)
+                                    }
+                                  }
                                 },
-                                domProps: { value: additive.id }
-                              }),
-                              _vm._v(
-                                " " +
-                                  _vm._s(additive.name) +
-                                  "\n                                "
+                                [
+                                  _c("input", {
+                                    attrs: {
+                                      type: "checkbox",
+                                      name: "options",
+                                      id: product.id,
+                                      autocomplete: "off"
+                                    },
+                                    domProps: { value: additive.id }
+                                  }),
+                                  _vm._v(
+                                    " " +
+                                      _vm._s(additive.name) +
+                                      "\n                                    "
+                                  )
+                                ]
                               )
-                            ]
-                          )
-                        }),
-                        0
-                      ),
-                      _vm._v(" "),
-                      _c("a", { staticClass: "product_title" }, [
-                        _vm._v(_vm._s(product.price) + " P")
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { class: "add-product-id-" + product.id }, [
-                        _c(
-                          "button",
-                          {
-                            staticClass:
-                              "btn btn-block btn-success btn-add_to-cart",
-                            on: {
-                              click: function($event) {
-                                return _vm.changeProduct(product.id)
-                              }
-                            }
-                          },
-                          [
-                            _c("i", { staticClass: "fa fa-shopping-cart" }),
-                            _vm._v(
-                              "   Добавить в корзину\n                                "
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          _c("a", { staticClass: "product_title" }, [
+                            _vm._v(_vm._s(product.price) + " P")
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { class: "add-product-id-" + product.id }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "btn btn-block btn-success btn-add_to-cart",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.changeProduct(product.id)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "fa fa-shopping-cart" }),
+                                _vm._v(
+                                  "   Добавить в корзину\n                                    "
+                                )
+                              ]
                             )
-                          ]
-                        )
-                      ])
-                    ])
-                  ]
+                          ])
+                        ])
+                      ]
+                    )
+                  }),
+                  0
                 )
-              }),
-              0
-            )
-          ])
+              ])
+            ]
+          )
         ]
       )
     ])
@@ -48704,6 +48912,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -48712,7 +48928,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         this.SELECTED_PRODUCTS_IN_CART(this.cart);
     },
 
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['ALL_PRODUCTS_IN_CART']), {
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])(['ALL_PRODUCTS_IN_CART', 'POINT_INFO']), {
 
         // window.Laravel.user - записывается в хэдэре,
         // если пользователь авторизовался
@@ -48726,9 +48942,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         totalPrice: function totalPrice() {
             this.$store.dispatch('COUNTING_TOTAL_PRICE');
             return this.$store.getters.TOTAl_PRICE_CART;
+        },
+        selectPointDelivery: function selectPointDelivery() {
+            this.SELECTED_INFO_POINT_DELIVERY(this.pointsDelivery);
+            return this.$store.getters.POINT_INFO;
         }
     }),
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY', 'DELETE_PRODUCT_FROM_CART_FOR_USER', 'SELECTED_ALL_PRODUCTS_FOR_USERS']), {
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])(['SELECTED_PRODUCTS_IN_CART', 'SEND_CART_IN_DELIVERY', 'DELETE_PRODUCT_FROM_CART_FOR_USER', 'SELECTED_ALL_PRODUCTS_FOR_USERS', 'SELECTED_INFO_POINT_DELIVERY']), {
         deleteProductFromCart: function deleteProductFromCart(index) {
             var _this = this;
 
@@ -48815,6 +49035,18 @@ var render = function() {
                 )
               ])
             : _vm._e(),
+          _vm._v(" "),
+          _vm._l(_vm.selectPointDelivery, function(address, i) {
+            return _c("div", { key: i, staticClass: "point-delivery-cart" }, [
+              _vm._v(
+                "\n            " + _vm._s(address.points.address) + "\n        "
+              )
+            ])
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "point-delivery-cart" }, [
+            _vm._v("\n            " + _vm._s(_vm.POINT_INFO) + "\n        ")
+          ]),
           _vm._v(" "),
           _vm._l(_vm.ALL_PRODUCTS_IN_CART, function(item, index) {
             return _c("ul", { key: index }, [
@@ -56219,6 +56451,49 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-7bbeb8a0", module.exports)
   }
 }
+
+/***/ }),
+/* 112 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+    actions: {
+        SELECTED_POINTS_DELIVERY: function SELECTED_POINTS_DELIVERY(ctx) {
+            axios.get('/api/selected-points').then(function (res) {
+                ctx.commit('SELECTED_POINTS_DELIVERY_MUTATION', res.data.data);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        SELECTED_INFO_POINT_DELIVERY: function SELECTED_INFO_POINT_DELIVERY(ctx, point) {
+            axios.post('/api/selected-info-point', { point: point }).then(function (res) {
+                ctx.commit('SELECTED_INFO_POINT_DELIVERY_MUTATION', res.data.data);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    },
+    mutations: {
+        SELECTED_POINTS_DELIVERY_MUTATION: function SELECTED_POINTS_DELIVERY_MUTATION(state, points) {
+            state.points = points;
+        },
+        SELECTED_INFO_POINT_DELIVERY_MUTATION: function SELECTED_INFO_POINT_DELIVERY_MUTATION(state, point) {
+            state.points = point;
+        }
+    },
+    state: {
+        points: []
+    },
+    getters: {
+        ALL_POINTS_DELIVERY: function ALL_POINTS_DELIVERY(state) {
+            return state.points;
+        },
+        POINT_INFO: function POINT_INFO(state) {
+            return state.points;
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

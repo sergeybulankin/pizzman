@@ -14,6 +14,14 @@
                 </div>
             </div>
 
+            <div class="point-delivery-cart" v-for="(address, i) in selectPointDelivery" :key="i">
+                {{ address.points.address }}
+            </div>
+
+            <div class="point-delivery-cart">
+                {{ POINT_INFO }}
+            </div>
+
             <ul v-for="(item, index) in ALL_PRODUCTS_IN_CART" :key="index">
                 <li>
                     <div class="d-flex">
@@ -61,11 +69,14 @@
     import { mapGetters, mapActions } from 'vuex';
 
     export default{
-        mounted() {
+         mounted() {
             this.SELECTED_PRODUCTS_IN_CART(this.cart);
         },
         computed: {
-            ...mapGetters(['ALL_PRODUCTS_IN_CART']),
+            ...mapGetters([
+                'ALL_PRODUCTS_IN_CART',
+                'POINT_INFO'
+            ]),
 
             // window.Laravel.user - записывается в хэдэре,
             // если пользователь авторизовался
@@ -81,6 +92,12 @@
             totalPrice(){
                 this.$store.dispatch('COUNTING_TOTAL_PRICE')
                 return this.$store.getters.TOTAl_PRICE_CART;
+            },
+
+            selectPointDelivery()
+            {
+                this.SELECTED_INFO_POINT_DELIVERY(this.pointsDelivery);
+                return this.$store.getters.POINT_INFO;
             }
         },
         methods: {
@@ -88,7 +105,8 @@
                 'SELECTED_PRODUCTS_IN_CART',
                 'SEND_CART_IN_DELIVERY',
                 'DELETE_PRODUCT_FROM_CART_FOR_USER',
-                'SELECTED_ALL_PRODUCTS_FOR_USERS'
+                'SELECTED_ALL_PRODUCTS_FOR_USERS',
+                'SELECTED_INFO_POINT_DELIVERY'
             ]),
 
             deleteProductFromCart(index) {

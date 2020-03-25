@@ -12,10 +12,6 @@
         </div>
 
         <div class="col-lg-4 d-flex justify-content-end">
-            <!--Поиск-->
-            <a class="" href="#">
-                <i class="fa fa-search" data-toggle="modal" data-target="#search-modal"></i>
-            </a>
 
             <!--Избранное-->
             <favorite></favorite>

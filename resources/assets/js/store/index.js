@@ -12,6 +12,7 @@ import cart from './modules/cart';
 import categories from './modules/category';
 import favorite from './modules/favorite';
 import register from './modules/register';
+import delivery from './modules/delivery';
 
 export default new Vuex.Store({
     modules: {
@@ -19,7 +20,8 @@ export default new Vuex.Store({
         cart,
         categories,
         favorite,
-        register
+        register,
+        delivery
     },
     strict: debug
 });

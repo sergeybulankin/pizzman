@@ -37,6 +37,12 @@ export default {
             axios.get('/api/hit-sales')
                 .then(res => {ctx.commit('HIT_SALES_MUTATION', res.data.data)})
                 .catch(error => {console.log(error)})
+        },
+
+        SELECTED_ALL_PRODUCTS_FOR_POINT(ctx, point) {
+            axios.post('/api/selected-food-for-point', {point: point})
+                .then(res => {ctx.commit('FOOD_PlACEMENT_IN_STORAGE', res.data.data)})
+                .catch(error => {console.log(error)})
         }
     },
     mutations: {

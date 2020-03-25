@@ -15,4 +15,12 @@ class PizzmanAddressFood extends Model
     {
         return $this->hasOne(Food::class, 'id', 'food_id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function address()
+    {
+        return $this->hasManyThrough(Address::class, PizzmanAddress::class, 'address_id', 'id', 'id');
+    }
 }

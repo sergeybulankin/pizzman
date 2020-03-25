@@ -16,7 +16,9 @@ import persistentState from 'vue-persistent-state';
 
 let cartState = {
     cart: [],
-    favorite: []
+    favorite: [],
+    type: [],
+    pointsDelivery: []
 };
 
 window.Vue.use(persistentState, cartState);

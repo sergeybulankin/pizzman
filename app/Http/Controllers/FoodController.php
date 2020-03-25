@@ -7,6 +7,7 @@ use App\FoodAdditive;
 use App\FoodCart;
 use App\Http\Resources\FoodResource;
 use App\Food;
+use App\PizzmanAddressFood;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -289,6 +290,29 @@ class FoodController extends Controller
         }
 
         return $result = FoodCart::all()->where('u_id', $uId);
+    }
+
+
+    /**
+     * Блюда исходя из точки доступа
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function selectForPoint(Request $request)
+    {
+        $foods = PizzmanAddressFood::with('food')
+            ->where('pizzman_address_id', $request->point)
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $result = [];
+        foreach ($foods as $food)
+        {
+            $result[] = $food->food;
+        }
+
+        return FoodResource::collection(collect($result));
     }
 
 

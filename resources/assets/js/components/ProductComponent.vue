@@ -1,83 +1,107 @@
 <template>
     <div>
-        <nav>
-            <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
-                <div v-for="(category, index) in ALL_CATEGORIES" :key="index">
-                    <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true"
-                       @click="selectProducts(category.id)">{{ category.name }}
-                    </a>
-                </div>
+
+        <div class="col-lg-12 row type-delivery">
+            <div class="col-lg-4 type-delivery--name" @click="typeDelivery(1)">
+                Приду покушать
             </div>
-        </nav>
+            <div class="col-lg-4 type-delivery--name" @click="typeDelivery(1)">
+                Самовывоз
+            </div>
+            <div class="col-lg-4 type-delivery--name" @click="typeDelivery(2)">
+                Курьерская доставка
+            </div>
+        </div>
 
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-pizza" role="tabpanel" aria-labelledby="nav-pizza-tab">
-                <div class="container">
-                    <div v-if="LOADER" class="load">
-                        <img src="images/loader.gif" alt="">
-                        <h4>Загружаем товары...</h4>
+        <div class="col-lg-12 row point" v-show="points">
+            <div class="col-lg-4 point--name"
+                 v-for="(point, i) in ALL_POINTS_DELIVERY" :key="i"
+                 @click="catalogPoint(point.id)"
+            >
+                Точка на {{ point.points.address }}
+            </div>
+        </div>
+
+        <div>
+            <nav v-show="nav">
+                <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
+                    <div v-for="(category, index) in ALL_CATEGORIES" :key="index">
+                        <a class="nav-item nav-link active" data-toggle="tab" aria-selected="true"
+                           @click="selectProducts(category.id)">{{ category.name }}
+                        </a>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"  v-for="(product, index) in ALL_PRODUCTS" :key="index">
-                            <div class="one-food">
-                                <div id="recommend"
-                                     v-if="product.recommend == true">рекомендуем</div>
-                                <div class="c-product">
-                                    <img :src="'http://pizza.admin/images/foods/' + product.image" class="img-fluid">
-                                    <div class="search-heart">
-                                        <button
-                                                @click="changeFavorite(product.id)"
-                                                :class="'favorite-' + product.id">
-                                                <i class="fa fa-heart"></i>
-                                        </button>
-                                        <button
-                                                @click="deleteFavorite(product.id)"
-                                                class="d-none"
-                                                :class="'delete-favorite-' + product.id"><i class="fa fa-heart heart-red"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                </div>
+            </nav>
 
-                                <div class="c-product-info">
-                                    <a class="product_title">{{ product.name }} </a> <br>
-                                    <span> Масса: {{ product.weight }}г<br>Калорийность: {{ product.calories }}<br>Белки: {{ product.protein }}<br>Углеводы: {{ product.carbohydrates }} <br> <br></span>
-                                    <span v-for="(type, index_type) in product.types" :key="index_type"> {{ type.name }}</span>
-                                    <div class="c-markers">
+            <div class="tab-content" id="nav-tabContent" v-show="catalog">
+                <div class="tab-pane fade show active" id="nav-pizza" role="tabpanel" aria-labelledby="nav-pizza-tab">
+                    <div class="container">
+                        <div v-if="LOADER" class="load">
+                            <img src="images/loader.gif" alt="">
+                            <h4>Загружаем товары...</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"  v-for="(product, index) in ALL_PRODUCTS" :key="index">
+                                <div class="one-food">
+                                    <div id="recommend"
+                                         v-if="product.recommend == true">рекомендуем</div>
+                                    <div class="c-product">
+                                        <img :src="'http://pizza.admin/images/foods/' + product.image" class="img-fluid">
+                                        <div class="search-heart">
+                                            <button
+                                                    @click="changeFavorite(product.id)"
+                                                    :class="'favorite-' + product.id">
+                                                <i class="fa fa-heart"></i>
+                                            </button>
+                                            <button
+                                                    @click="deleteFavorite(product.id)"
+                                                    class="d-none"
+                                                    :class="'delete-favorite-' + product.id"><i class="fa fa-heart heart-red"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="c-product-info">
+                                        <a class="product_title">{{ product.name }} </a> <br>
+                                        <span> Масса: {{ product.weight }}г<br>Калорийность: {{ product.calories }}<br>Белки: {{ product.protein }}<br>Углеводы: {{ product.carbohydrates }} <br> <br></span>
+                                        <span v-for="(type, index_type) in product.types" :key="index_type"> {{ type.name }}</span>
+                                        <div class="c-markers">
                                     <span>
                                         <img data-toggle="tooltip" data-placement="top" title="Вегетарианская" src="images/demo1-1944807851-1.svg" alt="Vegetarian">
                                     </span>
-                                        <span class="fa fa-info" data-toggle="popover" title="Пищевая ценность" data-content="Масса:340г<br>Калорийность: 1000<br>Белки:130<br>Углеводы:120"></span>
+                                            <span class="fa fa-info" data-toggle="popover" title="Пищевая ценность" data-content="Масса:340г<br>Калорийность: 1000<br>Белки:130<br>Углеводы:120"></span>
+                                        </div>
+
+                                        <h5><small>{{ product.structure }}</small></h5>
                                     </div>
 
-                                    <h5><small>{{ product.structure }}</small></h5>
-                                </div>
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-secondary" v-for="(additive, additive_index) in product.additives"
+                                               :key="additive_index"
+                                               :class="{ 'active': additive.id === 1, 'd-none': additive.id === 1 }"
+                                               @click="changeAdditive($event)">
+                                            <input type="checkbox" name="options"
+                                                   :value="additive.id"
+                                                   :id="product.id"
+                                                   autocomplete="off"> {{ additive.name }}
+                                        </label>
+                                    </div>
 
-                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-secondary" v-for="(additive, additive_index) in product.additives"
-                                           :key="additive_index"
-                                           :class="{ 'active': additive.id === 1, 'd-none': additive.id === 1 }"
-                                           @click="changeAdditive($event)">
-                                        <input type="checkbox" name="options"
-                                               :value="additive.id"
-                                               :id="product.id"
-                                               autocomplete="off"> {{ additive.name }}
-                                    </label>
-                                </div>
+                                    <a class="product_title">{{ product.price }} P</a>
 
-                                <a class="product_title">{{ product.price }} P</a>
-
-                                <div :class="'add-product-id-' + product.id">
-                                    <button class="btn btn-block btn-success btn-add_to-cart"
-                                            @click="changeProduct(product.id)">
+                                    <div :class="'add-product-id-' + product.id">
+                                        <button class="btn btn-block btn-success btn-add_to-cart"
+                                                @click="changeProduct(product.id)">
                                             <i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Добавить в корзину
-                                    </button>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </div>
     </div>
 </template>
@@ -91,7 +115,12 @@
     export default {
         data() {
             return {
-                checkedAdditive: []
+                checkedAdditive: [],
+                typeDeliveryCategory: null,
+                pointDelivery: null,
+                catalog: false,
+                points: false,
+                nav: false
             }
         },
         created() {
@@ -124,6 +153,7 @@
                     'ALL_CATEGORIES',
                     'ALL_FAVORITE',
                     'CART_FOR_USER',
+                    'ALL_POINTS_DELIVERY',
                     'LOADER'
                 ]),
 
@@ -139,6 +169,9 @@
                 'SELECTED_ALL_PRODUCTS_FOR_USERS',
                 'SELECTION_BY_CATEGORY',
                 'SELECTED_PRODUCTS_IN_CART',
+                'SELECTED_POINTS_DELIVERY',
+                'SELECTED_ALL_CATEGORIES',
+                'SELECTED_ALL_PRODUCTS_FOR_POINT',
                 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE',
                 'SELECT_ALL_FAVORITE',
                 'SELECT_ALL_FAVORITE_FOR_USERS',
@@ -253,6 +286,9 @@
                     this.ADD_TO_DATABASE_FROM_LOCAL_STORAGE(food)
                 }
 
+                this.type.push(this.typeDeliveryCategory);
+                this.pointsDelivery.push(this.pointDelivery);
+
                 notifier.show({
                     message: '<div class="message-alert"><img src="../images/success.png" width="32px"> <span class="notifier-message">Товар добавлен в корзину</span></div>',
                     style: 'success',
@@ -330,7 +366,53 @@
                 _.each(this.ALL_FAVORITE, (value, key) => {
                     this.favorite.push(value);
                 })
-            }
+            },
+
+
+            typeDelivery(type) {
+                if (type == 1) {
+                    this.SELECTED_POINTS_DELIVERY();
+                    this.typeDeliveryCategory = 1;
+                    this.points = !this.point;
+                    this.catalog = false;
+                    this.nav = false;
+                }else {
+                    this.deleteProductsFromCart();
+                    this.SELECTED_ALL_CATEGORIES();
+                    this.SELECTED_ALL_PRODUCTS();
+                    this.typeDeliveryCategory = 2;
+                    this.catalog = true;
+                    this.nav = true;
+                    this.points = false;
+                }
+            },
+
+            catalogPoint(point) {
+                this.SELECTED_ALL_PRODUCTS_FOR_POINT(point);
+                this.catalog = true;
+                this.pointDelivery = point;
+                this.deleteProductsFromCart();
+            },
+
+            deleteProductsFromCart() {
+                let length = this.cart.length;
+                let lengthType = this.type.length;
+                let lengthPoints = this.pointsDelivery.length;
+
+                _.each(this.cart, (value, key) => {
+                    this.cart.splice(key, length);
+                });
+
+                _.each(this.type, (value, key) => {
+                    this.type.splice(key, lengthType);
+                });
+
+                _.each(this.pointsDelivery, (value, key) => {
+                    this.pointsDelivery.splice(key, lengthPoints);
+                });
+                console.log('Корзина очищена');
+            },
+
         }
     }
 </script>

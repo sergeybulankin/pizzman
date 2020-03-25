@@ -26,6 +26,7 @@ Route::get('selected-all-products', 'FoodController@index');
 Route::get('selected-all-products-for-users', 'FoodController@cartForUser');
 Route::get('catalog-products', 'FoodController@catalog');
 Route::post('selection-by-category', 'FoodController@selectByCategory');
+Route::post('selected-food-for-point', 'FoodController@selectForPoint');
 Route::post('selected-products-in-cart', 'FoodController@informationProductInCart');
 Route::post('add-to-database-from-cart', 'FoodController@storeFromLocalStorage');
 Route::post('delete-product-from-cart', 'FoodController@deleteFromCart');
@@ -43,3 +44,6 @@ Route::get('hit-sales', 'HitController@index');
 
 Route::get('send-sms', 'OrderController@sendSms');
 Route::post('check-sms', 'OrderController@checkSmsForRegistration');
+
+Route::get('selected-points', 'PizzmanAddressController@index');
+Route::post('selected-info-point', 'PizzmanAddressController@info');
