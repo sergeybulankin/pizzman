@@ -46,6 +46,32 @@ class OrderController extends Controller
     {
         $session_sms = session('key_sms');
 
+        $phone = $request->phone;
+        //$phone = $request->data['phone'];
+
+        $sms = (int)$request->sms;
+        //$sms = (int)$request->data['code'];
+
+        if ($session_sms == $sms) {
+            //$this->store($phone, $request->sms);
+            $this->store($phone, $request->data['code']);
+            return response(200);
+        } else {
+            //return response(500);
+            return false;
+        }
+    }
+
+    /**
+     * только для осознанной регистрации
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function checkSmsForRegistration(Request $request)
+    {
+        $session_sms = session('key_sms');
+
         //$phone = $request->phone;
         $phone = $request->data['phone'];
 
@@ -53,8 +79,8 @@ class OrderController extends Controller
         $sms = (int)$request->data['code'];
 
         if ($session_sms == $sms) {
-            //$this->store($phone, $request->sms);
-            $this->store($phone, $request->data['code']);
+            $this->store($phone, $request->sms);
+            //$this->store($phone, $request->data['code']);
             return response(200);
         } else {
             return response(500);

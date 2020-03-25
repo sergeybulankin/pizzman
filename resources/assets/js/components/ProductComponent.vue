@@ -23,7 +23,7 @@
                                 <div id="recommend"
                                      v-if="product.recommend == true">рекомендуем</div>
                                 <div class="c-product">
-                                    <img :src="'http://pizza.admin/public/images/foods/' + product.image" class="img-fluid">
+                                    <img :src="'http://pizza.admin/images/foods/' + product.image" class="img-fluid">
                                     <div class="search-heart">
                                         <button
                                                 @click="changeFavorite(product.id)"
@@ -39,7 +39,7 @@
                                 </div>
 
                                 <div class="c-product-info">
-                                    <a class="product_title">{{ product.name }} </a>
+                                    <a class="product_title">{{ product.name }} </a> <br>
                                     <span> Масса: {{ product.weight }}г<br>Калорийность: {{ product.calories }}<br>Белки: {{ product.protein }}<br>Углеводы: {{ product.carbohydrates }} <br> <br></span>
                                     <span v-for="(type, index_type) in product.types" :key="index_type"> {{ type.name }}</span>
                                     <div class="c-markers">
@@ -224,7 +224,7 @@
                             }
 
                         }
-                    })
+                    });
 
                     if (search == 1) {
                         this.cart.push(changedProduct);

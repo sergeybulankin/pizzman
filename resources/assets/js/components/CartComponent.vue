@@ -7,6 +7,13 @@
         </a>
 
         <div id='cart_info' class="d-none">
+            <div v-if="totalProducts <= 0" style="text-align: center">
+                <img src="images/empty_cart.jpg" alt="" width="100px">
+                <div style="padding: 10px; text-transform: uppercase;">
+                    ваша корзина пуста :(
+                </div>
+            </div>
+
             <ul v-for="(item, index) in ALL_PRODUCTS_IN_CART" :key="index">
                 <li>
                     <div class="d-flex">
@@ -15,7 +22,7 @@
                         </div>
 
                         <div class="photo-small">
-                            <img :src="item.food.image" class="img-fluid">
+                            <img :src="'http://pizza.admin/images/foods/' + item.food.image" class="img-fluid">
                         </div>
 
                         <div class="description">

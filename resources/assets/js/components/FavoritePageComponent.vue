@@ -6,7 +6,7 @@
                 <div class="one-food">
                     <div id="recommend">рекомендуем</div>
                     <div class="c-product">
-                        <img :src="food.image"  class="img-fluid">
+                        <img :src="'http://pizza.admin/images/foods/' + food.image" class="img-fluid">
                         <div class="search-heart">
                             <button
                                     @click="deleteFavorite(food.id)"

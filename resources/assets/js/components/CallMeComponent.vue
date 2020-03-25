@@ -17,6 +17,12 @@
                         </ul>
                     </div>
 
+                    <div v-show="errorNumberPhone" class="errors-article">
+                        <div class="alert alert-primary" role="alert">
+                            Номер телефона некоректен. Введите нормально номер телефона и повторите попытку
+                        </div>
+                    </div>
+
                     <div class="form-group col-lg-8 col-md-8 offset-lg-2 offset-md-2">
                         <label for="name">Меня зовут</label>
                         <input type="text" class="form-control" name="name" id="name" v-model="user.name">
@@ -24,7 +30,8 @@
 
                     <div class="form-group col-lg-8 col-md-8 offset-lg-2 offset-md-2">
                         <label for="phone">Мой номер телефона</label>
-                        <input type="text" class="form-control" id="phone" name="phone" v-model="user.phone">
+                        <the-mask :mask="['+7 (###)-##-##-###']" class="form-control" v-model="user.phone" id="phone" />
+                        <!--<input type="text" class="form-control" id="phone" name="phone" v-model="user.phone">-->
                     </div>
 
                     <div class="form-group col-lg-8 col-md-8 offset-lg-2 offset-md-2">
@@ -46,6 +53,8 @@
 </template>
 
 <script>
+    import { mask } from 'vue-the-mask';
+
     export default {
         data(){
             return {
@@ -58,7 +67,9 @@
                 errors: [],
 
                 modal: true,
-                success: false
+                success: false,
+
+                errorNumberPhone: false
             }
         },
         methods: {
@@ -67,14 +78,19 @@
                 if (!this.user.name) this.errors.push("Имя не введено");
                 if (!this.user.phone) this.errors.push("Телефон не введен");
 
-                axios.post('/api/insert-call-me-number', this.user)
-                    .then(res => {
-                        console.log('Удача')
-                        this.modal = !this.modal;
-                        this.success = !this.success;
+                if (this.user.phone.length < 9) {
+                    this.errorNumberPhone = true
+                }else {
+                    axios.post('/api/insert-call-me-number', this.user)
+                        .then(res => {
+                            console.log('Удача')
+                            this.modal = !this.modal;
+                            this.success = !this.success;
                         })
-                    .catch (res => { console.log('Ошибка') })
+                        .catch (res => { console.log('Ошибка') })
+                }
             }
-        }
+        },
+        directives: { mask }
     }
 </script>

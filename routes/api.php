@@ -42,4 +42,4 @@ Route::get('count-favorites', 'FavoriteController@count');
 Route::get('hit-sales', 'HitController@index');
 
 Route::get('send-sms', 'OrderController@sendSms');
-Route::post('check-sms', 'OrderController@checkSms');
+Route::post('check-sms', 'OrderController@checkSmsForRegistration');

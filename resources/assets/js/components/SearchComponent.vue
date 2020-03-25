@@ -22,7 +22,7 @@
                             <div class="one-food">
                                 <div id="recommend">рекомендуем</div>
                                 <div class="c-product">
-                                    <img :src="product.image"  class="img-fluid">
+                                    <img :src="'http://pizza.admin/images/foods/' + product.image" class="img-fluid">
                                     <div class="search-heart">
                                         <button class="success right"><i class="fa fa-heart"></i></button>
                                     </div>

@@ -25,7 +25,7 @@
                                         <img src="/images/delete_icon.svg" @click="deleteProductFromCart(index)">
                                     </div>
                                     <div class="photo-small">
-                                        <img :src="item.food.image" class="img-fluid">
+                                        <img :src="'http://pizza.admin/images/foods/' + item.food.image" class="img-fluid">
                                     </div>
                                     <div class="description pl-3">
                                         <a><b>{{ item.food.name }}</b></a><p><small>{{ item.food.structure }}</small></p>

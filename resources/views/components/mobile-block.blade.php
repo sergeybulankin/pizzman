@@ -64,7 +64,10 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a  href="#" data-toggle="modal" data-target="#call_me_back" onclick="close_modal(this)"><span class="nav-link"> перезвоните мне</span></a>
+                                    <a  href="#" data-toggle="modal" data-target="#call_me_back"><span class="nav-link"> перезвоните мне</span></a>
+                                    <div class="modal" tabindex="-1" role="dialog" id="call_me_back">
+                                        <call-me></call-me>
+                                    </div>
                                 </li>
                             </ul>
 

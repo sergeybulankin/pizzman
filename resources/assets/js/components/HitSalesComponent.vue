@@ -7,7 +7,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" v-for="(product, i) in HITS" :key="i">
                     <div class="one-food">
                         <div class="c-product">
-                            <img :src="product.image"  class="img-fluid">
+                            <img :src="'http://pizza.admin/images/foods/' + product.image" class="img-fluid">
                             <div class="search-heart">
                                 <button
                                         @click="changeFavorite(product.id)"
