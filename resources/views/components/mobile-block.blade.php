@@ -46,12 +46,6 @@
                                     <a class="nav-link" href="http://laravel.arimle.ru/#about_us_link" onclick="close_modal(this)">О компании</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="http://laravel.arimle.ru/#menu_link" onclick="close_modal(this)">Меню</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="http://laravel.arimle.ru/#testimonials_link" onclick="close_modal(this)">Отзывы</a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="nav-link" href="http://laravel.arimle.ru/#contacts" onclick="close_modal(this)">Контакты</a>
                                 </li>
                             </ul>
@@ -77,10 +71,6 @@
                                         <a href="#"><i class="fa fa-facebook "></i></a>
                                         <a href="#"><i class="fa fa-instagram "></i></a>
                                         <a href="#"><i class="fa fa-vk "></i></a>
-                                    </div>
-
-                                    <div>
-                                        <a class="nav-link p-0" href="/auth" onclick="close_modal(this)"><i class="fa fa-user"></i> Войти</a>
                                     </div>
                                 </li>
                             </ul>

@@ -1,16 +1,19 @@
 <template>
     <div>
-
         <div class="col-lg-12 row type-delivery">
             <div class="col-lg-4 type-delivery--name" @click="typeDelivery(1)">
                 Приду покушать
             </div>
-            <div class="col-lg-4 type-delivery--name" @click="typeDelivery(1)">
+            <div class="col-lg-4 type-delivery--name" @click="typeDelivery(3)">
                 Самовывоз
             </div>
             <div class="col-lg-4 type-delivery--name" @click="typeDelivery(2)">
                 Курьерская доставка
             </div>
+        </div>
+
+        <div class="type-delivery-info">
+            Выбранный тип доставки: <span class="selected-type-delivery">{{ typeDeliveryClickedName }}</span>
         </div>
 
         <div class="col-lg-12 row point" v-show="points">
@@ -36,10 +39,6 @@
             <div class="tab-content" id="nav-tabContent" v-show="catalog">
                 <div class="tab-pane fade show active" id="nav-pizza" role="tabpanel" aria-labelledby="nav-pizza-tab">
                     <div class="container">
-                        <div v-if="LOADER" class="load">
-                            <img src="images/loader.gif" alt="">
-                            <h4>Загружаем товары...</h4>
-                        </div>
                         <div class="row">
                             <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"  v-for="(product, index) in ALL_PRODUCTS" :key="index">
                                 <div class="one-food">
@@ -63,7 +62,6 @@
 
                                     <div class="c-product-info">
                                         <a class="product_title">{{ product.name }} </a> <br>
-                                        <span> Масса: {{ product.weight }}г<br>Калорийность: {{ product.calories }}<br>Белки: {{ product.protein }}<br>Углеводы: {{ product.carbohydrates }} <br> <br></span>
                                         <span v-for="(type, index_type) in product.types" :key="index_type"> {{ type.name }}</span>
                                         <div class="c-markers">
                                     <span>
@@ -117,6 +115,7 @@
             return {
                 checkedAdditive: [],
                 typeDeliveryCategory: null,
+                typeDeliveryClicked: null,
                 pointDelivery: null,
                 catalog: false,
                 points: false,
@@ -133,16 +132,6 @@
                 ||----w |
                 ||     ||`, "font-family:monospace");
             this.SELECTED_ALL_PRODUCTS();
-
-            if(this.checkUser == 1) {
-                console.log('Собираем ваше избранное');
-                this.SELECT_ALL_FAVORITE_FOR_USERS();
-                setTimeout (() => {this.differenceUserFavorite()}, 1000)
-
-                console.log('Собираем вашу корзину');
-                this.SELECTED_ALL_PRODUCTS_FOR_USERS();
-                setTimeout (() => {this.differenceUserCart()}, 1000)
-            }
         },
         mounted() {
             setTimeout (() => { this.CHECK_PRODUCT_IN_FAVORITE(this.favorite) }, 1000)
@@ -161,7 +150,46 @@
             // если пользователь авторизовался
             checkUser() {
                 return window.Laravel.user;
-            }
+            },
+
+            typeDeliveryChecked() {
+                if (this.type.length > 0) {
+                    var type = this.type[0];
+                    var message;
+
+                    if (type == 1) {
+                        message = 'Приду покушать'
+                    }
+                    if (type == 3) {
+                        message = 'Самовывоз'
+                    }
+                    if(type == 2) {
+                        message = 'Курьерска доставка'
+                    }
+
+                    return message;
+                }
+            },
+
+            typeDeliveryClickedName() {
+                    var type = this.typeDeliveryClicked;
+                    var message;
+
+                    if (type == null) {
+                        message = 'Не выбран'
+                    }
+                    if (type == 1) {
+                        message = 'Приду покушать'
+                    }
+                    if (type == 3) {
+                        message = 'Самовывоз'
+                    }
+                    if(type == 2) {
+                        message = 'Курьерска доставка'
+                    }
+
+                    return message;
+                }
         },
         methods: {
             ...mapActions([
@@ -172,13 +200,15 @@
                 'SELECTED_POINTS_DELIVERY',
                 'SELECTED_ALL_CATEGORIES',
                 'SELECTED_ALL_PRODUCTS_FOR_POINT',
+                'SELECTED_INFO_POINT_DELIVERY',
                 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE',
                 'SELECT_ALL_FAVORITE',
                 'SELECT_ALL_FAVORITE_FOR_USERS',
                 'CHECK_PRODUCT_IN_FAVORITE',
                 'ADD_TO_FAVORITE',
                 'COUNT_FAVORITE',
-                'DELETE_OF_FAVORITE'
+                'DELETE_OF_FAVORITE',
+                'CLEAR_POINT_INFO'
             ]),
 
 
@@ -289,11 +319,7 @@
                 this.type.push(this.typeDeliveryCategory);
                 this.pointsDelivery.push(this.pointDelivery);
 
-                notifier.show({
-                    message: '<div class="message-alert"><img src="../images/success.png" width="32px"> <span class="notifier-message">Товар добавлен в корзину</span></div>',
-                    style: 'success',
-                    time: 5000
-                });
+                this.SELECTED_INFO_POINT_DELIVERY(this.pointsDelivery[0]);
                 console.log('Товар добавлен в корзину');
             },
 
@@ -370,9 +396,11 @@
 
 
             typeDelivery(type) {
-                if (type == 1) {
+                this.typeDeliveryClicked = type;
+
+                if ((type == 1) || (type == 3)) {
                     this.SELECTED_POINTS_DELIVERY();
-                    this.typeDeliveryCategory = 1;
+                    this.typeDeliveryCategory = type;
                     this.points = !this.point;
                     this.catalog = false;
                     this.nav = false;
@@ -410,6 +438,8 @@
                 _.each(this.pointsDelivery, (value, key) => {
                     this.pointsDelivery.splice(key, lengthPoints);
                 });
+
+                this.CLEAR_POINT_INFO();
                 console.log('Корзина очищена');
             },
 
@@ -425,45 +455,5 @@
 
     .heart-red {
         color: red;
-    }
-
-    .cdx-notifies {
-        position: fixed;
-        z-index: 2;
-        top: 0;
-        left: 85%;
-    }
-    .cdx-notify {
-        position: relative;
-        width: 270px;
-        margin-top: 15px;
-        padding: 13px 16px;
-        background: #fff;
-        box-shadow: 0 11px 17px 0 rgba(23,32,61,.13);
-        border-radius: 0;
-        font-size: 14px;
-    }
-    .cdx-notyfy::before {
-        content: '';
-        position: absolute;
-        display: block;
-        top: 0;
-        left: 0;
-        width: 3px;
-        height: calc(100% - 6px);
-        margin: 3px;
-        border-radius: 0;
-        background: transparent;
-    }
-    .cdx-notify--success {
-        background: #fafffe !important;
-    }
-
-    .cdx-notify--success::before {
-        background: #41ffb1 !important;
-        width: 5px;
-    }
-    .notifier-message {
-        margin: 0 0 0 10px;
     }
 </style>

@@ -1,9 +1,5 @@
 @extends('layout.index')
 
-    @section('search')
-        @include('components.search')
-    @endsection()
-
     @section('call')
         @include('components.call')
     @endsection()

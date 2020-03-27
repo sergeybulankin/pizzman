@@ -20,6 +20,10 @@ class PizzmanAddressController extends Controller
         return PizzmanAddressResource::collection($points);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function info(Request $request)
     {
         $points = PizzmanAddress::with('address_delivery')

@@ -10,7 +10,12 @@ export default {
             axios.post('/api/selected-info-point', {point: point})
                 .then(res => {ctx.commit('SELECTED_INFO_POINT_DELIVERY_MUTATION', res.data.data)})
                 .catch(error => {console.log(error)});
+        },
+
+        CLEAR_POINT_INFO(ctx) {
+            ctx.commit('CLEAR_POINT_INFO_MUTATION');
         }
+
     },
     mutations: {
         SELECTED_POINTS_DELIVERY_MUTATION(state, points) {
@@ -18,11 +23,16 @@ export default {
         },
 
         SELECTED_INFO_POINT_DELIVERY_MUTATION(state, point) {
-            state.points = point
+            state.point_info = point
+        },
+
+        CLEAR_POINT_INFO_MUTATION(state) {
+            state.point_point = []
         }
     },
     state: {
-        points: []
+        points: [],
+        point_info: []
     },
     getters: {
         ALL_POINTS_DELIVERY(state) {
@@ -30,7 +40,7 @@ export default {
         },
 
         POINT_INFO(state) {
-            return state.points
+            return state.point_info
         }
     }
 }

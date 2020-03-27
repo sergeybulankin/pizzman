@@ -5,7 +5,7 @@
     @endsection()
 
     @section('mobile-block')
-        @include('components.mobile-block')
+
     @endsection()
 
     @section('fixed-navbar')
@@ -38,6 +38,10 @@
 
     @section('about')
         @include('components.about')
+    @endsection()
+
+    @section('mobile-cart')
+        @include('components.mobile-cart')
     @endsection()
 
     @section('footer')

@@ -75,35 +75,8 @@
 
 @yield('footer')
 
+@yield('mobile-cart')
 
-<!-- МЕНЮ залипающее к footer НАЧАЛО -->
-<div class="d-flex justify-content-around bd-highlight footer_fixed_main fixed-bottom">
-    <div class="p-2">
-        <a href="http://laravel.arimle.ru">
-            <button class="btn footer-icon"><i class="fa fa-home"></i>Главная</button>
-        </a>
-    </div>
-    <div class="p-2">
-        <a href="/favorites">
-            <button class="btn footer-icon">
-                <span class="count">2</span>
-                <i class="fa fa-heart"></i>Избранное
-            </button>
-        </a>
-
-    </div>
-    <div class="p-2">
-        <a href="http://laravel.arimle.ru/login">
-            <button class="btn footer-icon"><i class="fa fa-user"></i>Войти</button>
-        </a>
-    </div>
-    <div class="p-2">
-        <a href="http://laravel.arimle.ru/shopping_basket">
-            <button class="btn footer-icon"><i class="fa fa-shopping-cart"></i>Корзина</button>
-        </a>
-    </div>
-</div>
-<!-- МЕНЮ залипающее к footer КОНЕЦ-->
 </div>
 
 @yield('dadata')

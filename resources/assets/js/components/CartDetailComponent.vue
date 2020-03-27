@@ -75,6 +75,20 @@
                     <div class="d-flex justify-content-between subtutorial">
                         <p><b>Итого:</b></p><p>{{ totalPrice }} <i class="fa fa-rub"></i></p>
                     </div>
+
+                    <div class="d-flex justify-content-between subtutorial">
+                        <p><b>Тип</b></p><p v-for="(point, i) in POINT_INFO" :key="i">{{ typeDeliveryChecked }}</p>
+                    </div>
+
+                    <div class="d-flex justify-content-between subtutorial">
+                        <span v-if="POINT_INFO.length > 0">
+                            <p><b>Точка</b></p><p v-for="(point, i) in POINT_INFO" :key="i">{{ point.points.address }}</p>
+                        </span>
+
+                        <span v-if="POINT_INFO.length == 0">
+                            <p><b>Точка</b></p><p> Автоматически </p>
+                        </span>
+                    </div>
                 </div>
 
                 <button class="btn btn-default btn-block text-uppercase">перейти к оформление</button>
@@ -95,7 +109,8 @@
                     'ALL_PRODUCTS_IN_CART',
                     'TOTAl_PRICE_CART',
                     'TOTAl_WEIGHT_CART',
-                    'ADDITIVE_PRICE'
+                    'ADDITIVE_PRICE',
+                    'POINT_INFO'
                 ]),
 
             checkUser() {
@@ -115,6 +130,27 @@
             totalWeight(){
                 this.COUNTING_TOTAL_WEIGHT();
                 return this.TOTAl_WEIGHT_CART;
+            },
+
+            typeDeliveryChecked() {
+                var type = this.type[0];
+                var message;
+
+                if (type == 1) {
+                    message = 'Приду покушать'
+                }
+                if (type == 3) {
+                    message = 'Самовывоз'
+                }
+                if(type == 2) {
+                    message = 'Курьерска доставка'
+                }
+
+                if (this.cart.length == 0) {
+                    message = 'Корзина пуста'
+                }
+
+                return message;
             }
         },
         methods: {

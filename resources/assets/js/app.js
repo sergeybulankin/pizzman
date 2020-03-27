@@ -37,11 +37,9 @@ Vue.component('cart-detail', require('./components/CartDetailComponent.vue'));
 Vue.component('category-navbar', require('./components/CategoryComponent.vue'));
 Vue.component('search-address', require('./components/AddressComponent.vue'));
 Vue.component('call-me', require('./components/CallMeComponent.vue'));
-Vue.component('search', require('./components/SearchComponent.vue'));
 Vue.component('favorite', require('./components/FavoriteComponent.vue'));
 Vue.component('favorite-page', require('./components/FavoritePageComponent.vue'));
-Vue.component('hit', require('./components/HitSalesComponent.vue'));
-Vue.component('phone-register', require('./components/PhoneRegistration'));
+Vue.component('mobile-cart', require('./components/MobileCartComponent.vue'));
 
 const app = new Vue({
     el: '#app',

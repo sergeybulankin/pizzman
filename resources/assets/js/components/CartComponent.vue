@@ -14,14 +14,6 @@
                 </div>
             </div>
 
-            <div class="point-delivery-cart" v-for="(address, i) in selectPointDelivery" :key="i">
-                {{ address.points.address }}
-            </div>
-
-            <div class="point-delivery-cart">
-                {{ POINT_INFO }}
-            </div>
-
             <ul v-for="(item, index) in ALL_PRODUCTS_IN_CART" :key="index">
                 <li>
                     <div class="d-flex">
@@ -49,6 +41,16 @@
                 </li>
             </ul>
 
+            <div class="point-delivery-cart">
+                <div class="delivery-cart-description">
+                    Тип: <span class="point-delivery-cart-info">{{ typeDelivery }}</span>
+                </div>
+
+                <div class="delivery-cart-description">
+                    Точка: <span class="point-delivery-cart-info" v-for="(point, i) in POINT_INFO" :key="i">{{ point.points.address }}</span>
+                </div>
+            </div>
+
             <div class="d-flex justify-content-between subtutorial">
                 <strong>Итого:</strong>
                 <p><b>{{ totalPrice }} <i class="fa fa-rub mr-0"></i></b></p>
@@ -71,6 +73,7 @@
     export default{
          mounted() {
             this.SELECTED_PRODUCTS_IN_CART(this.cart);
+            this.SELECTED_INFO_POINT_DELIVERY(this.pointsDelivery[0]);
         },
         computed: {
             ...mapGetters([
@@ -94,10 +97,21 @@
                 return this.$store.getters.TOTAl_PRICE_CART;
             },
 
-            selectPointDelivery()
-            {
-                this.SELECTED_INFO_POINT_DELIVERY(this.pointsDelivery);
-                return this.$store.getters.POINT_INFO;
+            typeDelivery() {
+                var type = this.type[0];
+                var message;
+
+                if (type == 1) {
+                    message = 'Приду покушать'
+                }
+                if (type == 3) {
+                    message = 'Самовывоз'
+                }
+                if(type == 2) {
+                    message = 'Курьерска доставка'
+                }
+
+                return message;
             }
         },
         methods: {
@@ -106,7 +120,7 @@
                 'SEND_CART_IN_DELIVERY',
                 'DELETE_PRODUCT_FROM_CART_FOR_USER',
                 'SELECTED_ALL_PRODUCTS_FOR_USERS',
-                'SELECTED_INFO_POINT_DELIVERY'
+                'SELECTED_INFO_POINT_DELIVERY',
             ]),
 
             deleteProductFromCart(index) {

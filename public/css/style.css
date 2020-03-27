@@ -1361,3 +1361,39 @@ span.count
 .point--name:hover {
     background-color: #c0c000;
 }
+
+
+
+.point-delivery-cart {
+    padding: 10px 0;
+    text-align: left;
+}
+
+.delivery-cart-description {
+    padding: 5px 0;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.point-delivery-cart-info {
+    font-size: 10px;
+    font-weight: 100;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.type-delivery-info {
+    margin: 0 0 15px 0;
+    font-size: 10px;
+    text-align: center;
+}
+
+.selected-type-delivery {
+    padding: 5px 0;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
