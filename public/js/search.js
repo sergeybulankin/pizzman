@@ -122,37 +122,9 @@ function init() {
     function definationPoint(state, caption) {
         var city = "Стерлитамак, ";
 
-        var points = [
-            "Стерлитамак, Ленина, 29а",
-            "Стерлитамак, Артема, 10"
-        ];
+        var point = $("#pointMap").val();
 
-        // координаты точки доставки
-        ymaps.geocode(city + caption).then(function (res) {
-            var pointDelivery = res.geoObjects.get(0).geometry.getCoordinates();
-
-            // координаты точек отправки
-            ymaps.geocode(points[0]).then(function (res) {
-                var point1 = res.geoObjects.get(0).geometry.getCoordinates();
-
-                ymaps.geocode(points[1]).then(function (res) {
-                    var point2 = res.geoObjects.get(0).geometry.getCoordinates();
-                    // Расстояние
-                    var one = ymaps.coordSystem.geo.getDistance(pointDelivery, point1);
-                    var two = ymaps.coordSystem.geo.getDistance(pointDelivery, point2);
-
-                    if (one >= two)
-                    {
-                        var point = points[1];
-                    } else {
-                        var point = points[0];
-                    }
-
-                    createMap(state, caption, point);
-                });
-
-            });
-        });
+        createMap(state, caption, point);
     }
 
 

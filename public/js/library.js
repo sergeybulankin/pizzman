@@ -92,13 +92,52 @@ function sendSms(phone) {
     return phone.length;
 }
 
-// если с номером все нормально
-// то отправляем на этот номер смс
-function send_an_order(el, phone) {
+// подтверждаем заказ и оформляем его
+function send_order(el, phone) {
+    var cookingTime = $('.active.cooking-time').attr('id');
+
+    var delivery = $('#typeDelivery')[0].value;
+
+    if (delivery == 2) {
+        var address = $('#suggest')[0].value;
+        var kv = $('#kv')[0].value;
+        var coord = $('#coord')[0].value;
+    }else {
+        var address = null;
+        var kv = null;
+        var coord = null;
+    }
+
+    var url = document.location.href;
+    var u_id = url.substring(url.lastIndexOf('/') + 1);
+    var date = $('#time')[0].value;
     var validate = sendSms(phone);
 
     if(validate == 17) {
-        $.get("/sms", {phone: phone});
+        $.ajax({
+            url: "/confirmOrder",
+            method: "GET",
+            data: {
+                'phone': phone,
+                'cookingTime': cookingTime,
+                'delivery': delivery,
+                'address': address,
+                'kv': kv,
+                'u_id': u_id,
+                'date': date,
+                'coord': coord
+            },
+            success: function () {
+                localStorage.clear();
+                $(el).remove();
+                $("#registered").removeClass("d-none");
+                $("#answer").removeClass("d-none");
+            },
+            error: function () {
+                $("#sms").remove();
+                $("#repeatSms").removeClass("d-none");
+            }
+        })
 
         $(el).remove();
         $("#sms").removeClass("d-none");
@@ -108,130 +147,4 @@ function send_an_order(el, phone) {
         $("#repeatSms").css("display", "block");
     }
 }
-
-// подтверждение смс у неавторизованного пользователя
-function confirmCodeSmsForDeliveryOrder(el)
-{
-    var phone = $('.tel#phone')[0].value;
-    var sms = $('.sms#sms')[0].value;
-    var address = $('#suggest')[0].value;
-    var delivery = $('.active.delivery').attr('id');
-
-    if (address == '' && delivery == 0) {
-        console.log('Не введен адрес доставки');
-        $("#addressError").removeClass("d-none");
-    }else {
-        $.ajax({
-            url: "/checkSms",
-            method: "GET",
-            data: {
-                'sms': sms,
-                'phone': phone
-            },
-            success: function(){
-                console.log('Заказ оформлен');
-                $(el).remove();
-                $("#answerError").addClass('d-none');
-                $("#addressError").addClass("d-none");
-                $("#registered").removeClass("d-none");
-                $('#sms').remove();
-
-                send_order();
-            },
-            error: function () {
-                console.log('Ошибка в оформлении заказа');
-                $("#checkSms").addClass('d-none');
-                $("#answerError").removeClass("d-none");
-            }
-        })
-    }
-}
-
-// подтверждаем заказ и оформляем его
-function send_order(el) {
-    var cookingTime = $('.active.cooking-time').attr('id');
-    var delivery = $('.active.delivery').attr('id');
-    var address = $('#suggest')[0].value;
-    var kv = $('#kv')[0].value;
-    var coord = $('#coord')[0].value;
-    var note = $('#note')[0].value;
-    var url = document.location.href;
-    var u_id = url.substring(url.lastIndexOf('/') + 1);
-    if (delivery == 1) {
-        var pizzmanAddress = $('.active.delivery-pickup').attr('id');
-    } else {
-        var pizzmanAddress = 0;
-    }
-    var date = $('#time')[0].value;
-
-    $.ajax({
-        url: "/confirmOrder",
-        method: "GET",
-        data: {
-            'cookingTime': cookingTime,
-            'delivery': delivery,
-            'pizzmanAddress': pizzmanAddress,
-            'address': address,
-            'kv': kv,
-            'u_id': u_id,
-            'date': date,
-            'coord': coord,
-            'note': note
-        },
-        success: function () {
-            localStorage.clear();
-            $(el).remove();
-            $("#registered").removeClass("d-none");
-            $("#answer").removeClass("d-none");
-        },
-        error: function () {
-            $("#sms").remove();
-            $("#repeatSms").removeClass("d-none");
-        }
-    })
-}
-
-// изменение доставки и её стоимости
-function delivery_type(el, type, totalPrice)
-{
-    update_active(el);
-
-    $("#pickup,#courier").addClass("d-none");
-    $("#"+type).removeClass("d-none");
-
-    var priceCurier = 65;
-    if (type != 'courier') {
-        document.getElementById('curierPrice').innerHTML = "<p>" + 0 + " <i class='fa fa-rub mr-0'></i></p>";
-        document.getElementById('timeDelivery').innerHTML = "";
-        document.getElementById('totalPrice').innerHTML = "<p>" + totalPrice + "<i class='fa fa-rub mr-0'></i></p>";
-    } else {
-        var finalPrice = totalPrice + priceCurier;
-        document.getElementById('curierPrice').innerHTML = "<p>" + priceCurier + " <i class='fa fa-rub mr-0'></i></p>";
-        document.getElementById('totalPrice').innerHTML = "<p>" + finalPrice + "<i class='fa fa-rub mr-0'></i></p>";
-    }
-}
-
 // ----- DELIVERY ----- //
-
-
-// очистка localStorage после выхода из аккаунта
-$(document).ready(function(){
-    $('#logout').click(function(){
-        localStorage.clear();
-    });
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

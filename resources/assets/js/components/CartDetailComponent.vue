@@ -77,7 +77,7 @@
                     </div>
 
                     <div class="d-flex justify-content-between subtutorial">
-                        <p><b>Тип</b></p><p v-for="(point, i) in POINT_INFO" :key="i">{{ typeDeliveryChecked }}</p>
+                        <p><b>Тип</b></p><p>{{ typeDeliveryChecked }}</p>
                     </div>
 
                     <div class="d-flex justify-content-between subtutorial">

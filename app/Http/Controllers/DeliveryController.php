@@ -19,6 +19,8 @@ class DeliveryController extends Controller
     {
         $order = Order::where('u_id', $u_id)->first();
 
+        $typeDelivery = $order->type_of_delivery;
+
         $cart = FoodInOrder::with('food_additive', 'pizzman_address')
             ->where('order_id', $order['id'])
             ->get();
@@ -41,36 +43,18 @@ class DeliveryController extends Controller
 
         $pointDelivery = PizzmanAddress::with('pizzman_address_food', 'address_delivery')->where('address_id', $point)->first();
 
-        // ищем повторяющиеся адреса в заказах у пользователя
-        // если такиех нет, то выдаем последний адрес
-        if (Auth::check()) {
-            $offerAddress = Order::select('address_id')
-                ->with('address')
-                ->where('user_id', Auth::user()->id)
-                ->get()
-                ->toArray();
-
-            $offerAddressArray = [];
-            foreach ($offerAddress as $value) {
-                $offerAddressArray[] = $value['address_id'];
-            }
-
-            $result = array_keys(array_filter(array_count_values($offerAddressArray), function($value){
-                return $value > 2;
-            }));
-
-            if(is_null($result)) {
-                $addresses = Order::with('address')->where('address_id', $result[0])->first();
-            }else {
-                $addresses = Order::with('address')->first();
-            }
-        }
+        $pointDeliveryMap = PizzmanAddress::with('address_delivery')->where('id', $order->pizzman_address_id)->first();
 
         $totalPrice = 0;
 
         $totalWeight = 0;
 
-        $courierPrice = 65;
+        if ($typeDelivery == 2) {
+            $courierPrice = 65;
+        }else {
+            $courierPrice = 0;
+        }
+
 
         $productsCount = count($cart);
 
@@ -81,6 +65,7 @@ class DeliveryController extends Controller
             $totalWeight = $totalWeight + $value->food_additive[0]->food[0]->weight;
         }
 
-        return view('delivery', compact('cart', 'totalPrice', 'totalWeight', 'courierPrice', 'productsCount', 'pointDelivery', 'account', 'addresses'));
+        return view('delivery',
+            compact('cart', 'totalPrice', 'totalWeight', 'courierPrice', 'productsCount', 'pointDelivery', 'account', 'addresses', 'pointDeliveryMap', 'typeDelivery'));
     }
 }

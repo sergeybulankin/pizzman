@@ -15,7 +15,10 @@ export default {
         },
 
         SEND_CART_IN_DELIVERY(ctx, cart, u_id = Date.now()) {
-            axios.post('/api/post-cart-in-delivery', {order: cart, u_id: u_id })
+            var type = localStorage.type[1];
+            var point = localStorage.pointsDelivery[1];
+
+            axios.post('/api/post-cart-in-delivery', {order: cart, u_id: u_id, type: type, point: point })
                 .then(
                     setTimeout( () => window.location.href = '/delivery/' + u_id, 1000)
                     )

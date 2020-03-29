@@ -136,6 +136,8 @@ class OrderController extends Controller
     {
         $cart = $request->order;
         $u_id = $request->u_id;
+        $type = $request->type;
+        $point = $request->point;
 
         $order = new Order();
         if (Auth::check()) {
@@ -146,8 +148,12 @@ class OrderController extends Controller
 
         $order->type_of_time_id = 0;
         $order->address_id = 0;
-        $order->pizzman_address_id = 0;
-        $order->type_of_delivery = 0;
+        if (empty($point)) {
+            $order->pizzman_address_id = 0;
+        }else {
+            $order->pizzman_address_id = $point;
+        }
+        $order->type_of_delivery = $type;
         $order->date = Carbon::now();
         $order->note = '';
         $order->u_id = $u_id;
@@ -217,7 +223,9 @@ class OrderController extends Controller
          $point = array_values((array_unique($pointPizzmanAddress)))[0];
 
          $order = Order::all()->where('id', $lastId)->first();
-         $order->pizzman_address_id = $point;
+         if ($order->pizzman_address_id == 0) {
+             $order->pizzman_address_id = $point;
+         }
          $order->save();
     }
 
@@ -230,7 +238,8 @@ class OrderController extends Controller
      */
     public function confirmOrder(Request $request)
     {
-        //dd($request->all());
+        $this->store($request->phone, rand(1000, 9999));
+
         $u_id = $request->u_id;
 
         $cooking_time = $request->cookingTime;
@@ -249,22 +258,28 @@ class OrderController extends Controller
 
         $note = $request->note;
 
-        $select_address = Address::where('address', $address)->first();
+        if (!is_null($address)) {
+            $select_address = Address::where('address', $address)->first();
+        }else {
+            $select_address = 0;
+        }
         
         if (is_null($select_address)) {
             if ($delivery == 1) {
                 $address_id = 0;
             }else {
-                $new_address = new Address();
-                $new_address->address = $address;
-                $new_address->kv = $kv;
-                $new_address->coordinates = $coord;
+                if (!is_null($address) OR !is_null($kv) OR !is_null($coord)) {
+                    $new_address = new Address();
+                    $new_address->address = $address;
+                    $new_address->kv = $kv;
+                    $new_address->coordinates = $coord;
 
-                $new_address->save();
-                $address_id = $new_address->id;
+                    $new_address->save();
+                    $address_id = $new_address->id;
+                }
             }
         }else {
-            $address_id = $select_address->id;
+            $address_id = 0;
         }
 
         $order = Order::where('u_id', $u_id)->firstOrFail();
@@ -287,7 +302,6 @@ class OrderController extends Controller
         $status->status_id = 2;
 
         $status->save();
-
 
         if (Auth::check()) {
             $food_cart_for_user = FoodCart::all()->where('user_id', Auth::user()->id);

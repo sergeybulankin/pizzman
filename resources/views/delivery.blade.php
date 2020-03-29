@@ -1,15 +1,7 @@
 @extends('layout.index')
-    @section('yandex')
-        @include('components.yandex')
-    @endsection()
-
     @section('calendar')
         <link href={{ asset('css/datepicker.css') }} type="text/css" rel="stylesheet">
         <script src={{ asset('js/datepicker.js') }} type="text/javascript"></script>
-    @endsection()
-
-    @section('search')
-        @include('components.search')
     @endsection()
 
     @section('call')

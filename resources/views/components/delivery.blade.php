@@ -1,3 +1,9 @@
+@if($typeDelivery == 2)
+    @section('yandex')
+        @include('components.yandex')
+    @endsection()
+@endif()
+
 <div class="container" id="checkout">
     <h1 class="text-center text-uppercase font-weight-bold">Оформление заказа</h1>
 
@@ -12,18 +18,17 @@
                 </div>
 
                 <div class="row w-100 ml-0">
-                    @if (Auth::check())
-                        <div class="form-group col-lg-6">
-                            <label for="name">Ваше имя</label>
-                            <input type="phone" class="form-control" id="name"  name="name" placeholder="{{ $account->name }}" disabled>
-                        </div>
+                    <div class="form-group col-lg-6">
+                        <input type="hidden" class="form-control" id="pointMap" value="{{ $pointDeliveryMap->address_delivery->address }}">
+                    </div>
 
-                        <div class="form-group col-lg-6">
-                            <label for="phone">Телефон</label>
-                            <input type="text" class="form-control" id="phone" name="phone" placeholder="{{ Auth::user()->name }}" disabled>
-                        </div>
-                    @else
-                        <div class="form-group col-lg-6">
+                    <div class="form-group col-lg-6">
+                        <input type="hidden" class="form-control" id="typeDelivery" value="{{ $typeDelivery }}">
+                    </div>
+                </div>
+
+                <div class="row w-100 ml-0">
+                         <div class="form-group col-lg-6">
                             <label for="name">Ваше имя</label>
                             <input type="text" class="form-control" id="name" name="name">
                         </div>
@@ -32,7 +37,6 @@
                             <label for="phone">Телефон</label>
                             <input type="text" class="form-control tel" id="phone" name="phone">
                         </div>
-                    @endif()
                 </div>
 
                 <div class="row w-100 ml-0 pt-5">
@@ -53,73 +57,28 @@
                     </div>
                 </div>
 
-
-                <div class="row w-100 ml-0 pt-5">
-                    <div class="col-lg-12">
-                        <h2 class=" text-uppercase font-weight-bold">Способ получения</h2>
+                @if($typeDelivery == 2)
+                    <div class="row w-100 ml-0 pt-5">
+                        <div class="col-lg-12">
+                            <h2 class=" text-uppercase font-weight-bold">Введите адрес доставки</h2>
+                        </div>
                     </div>
-                </div>
-
-                <div class="row w-100 ml-0">
-                    <div class="col-lg-6">
-                        <button class="btn btn-secondary btn-success btn-block delivery" type="button" id="1" onclick="delivery_type(this,'pickup', {{ $totalPrice }})">самовывоз</button>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <button class="btn btn-secondary btn-success btn-block active delivery" type="button" id="0" onclick="delivery_type(this,'courier', {{ $totalPrice }})">курьерская доставка</button>
-                    </div>
-                </div>
-
-                <div class="row w-100 ml-0 d-none pt-3" id="pickup">
-                        <div class="col-lg-4">
-                            <button class="btn btn-secondary btn-success btn-block active delivery-pickup" type="button" id="{{ $pointDelivery->address_delivery->id }}" onclick="update_active(this)">{{ $pointDelivery->address_delivery->address }}</button>
+                    <div class="row w-100 ml-0 pt-3" id="courier">
+                        <div class="form-group col-lg-12">
+                                <search-address></search-address>
+                                <input id="kv" name="kv" type="text" id="kv" placeholder="Номер квартиры" /> <br />
+                                <input type="hidden" id="suggest" name="hidden_address" class="input" placeholder="Введите адрес">
+                                <input type="hidden" id="coord" name="coord" class="input">
                         </div>
 
-                </div>
-
-                <div class="row w-100 ml-0 pt-3" id="courier">
-                    <div class="form-group col-lg-12">
-                        <label for="exampleInputEmail1">Введите адрес доставки</label>
-                            <search-address></search-address>
-                            <input id="kv" name="kv" type="text" id="kv" placeholder="Номер квартиры" /> <br />
-                            <input type="hidden" id="suggest" name="hidden_address" class="input" placeholder="Введите адрес">
-                            <input type="hidden" id="coord" name="coord" class="input">
-
-                        @if(Auth::check())
-                            @if(($addresses->address)->isEmpty())
-                            @else
-                                <div style="background-color: lightblue; padding: 4px; margin: 10px 0">
-                                    <span>Это ваш любимый адресс?</span>
-                                    <span style="color: blue; cursor: pointer" id="offerAddress">
-                                        {{ $addresses->address[0]->address }}
-                                    </span>
-                                </div>
-                            @endif()
-                        @endif()
+                        <div class="map">
+                            <p id="notice">Адрес не найден</p>
+                            <div id="map"></div>
+                            <div id="message"></div>
+                            <div id="viewContainer"></div>
+                        </div>
                     </div>
-
-                    <div class="map">
-                        <p id="notice">Адрес не найден</p>
-                        <div id="map"></div>
-                        <div id="message"></div>
-                        <div id="viewContainer"></div>
-                    </div>
-                </div>
-
-
-                <div class="row w-100 ml-0 pt-5">
-                    <div class="col-lg-12">
-                        <h2 class=" text-uppercase font-weight-bold">Комментарий</h2>
-                    </div>
-                </div>
-
-                <div class="row ml-0 w-100 pb-3">
-                    <div class="col-lg-12">
-                            <textarea class="w-100" row="3" id="note">
-                            </textarea>
-                    </div>
-                </div>
-
+                @endif()
             </div>
 
             <div class="col-lg-4">
@@ -159,8 +118,16 @@
 
                         <tbody>
                         <tr>
-                            <td class="font-weight-bold"><p>Курьером</p></td>
-                            <td class="font-weight-bold text-right" id="curierPrice">{{ $courierPrice }} <i class="fa fa-rub"></i></td>
+                            @if($typeDelivery == 2)
+                                <td class="font-weight-bold"><p>Курьером</p></td>
+                                <td class="font-weight-bold text-right" id="curierPrice">{{ $courierPrice }} <i class="fa fa-rub"></i></td>
+                            @elseif($typeDelivery == 3)
+                                <td class="font-weight-bold"><p>Самовывоз</p></td>
+                                <td class="font-weight-bold text-right" id="curierPrice">{{ $courierPrice }} <i class="fa fa-rub"></i></td>
+                            @elseif($typeDelivery == 1)
+                                <td class="font-weight-bold"><p>Приду покушать</p></td>
+                                <td class="font-weight-bold text-right" id="curierPrice">{{ $courierPrice }} <i class="fa fa-rub"></i></td>
+                            @endif()
                         </tr>
                         </tbody>
                     </table>
@@ -180,58 +147,26 @@
                         </tr>
                         </tbody>
                     </table>
-
-
                 </div>
 
 
-                @if(Auth::check())
-                    <button class="btn btn-default btn-block text-uppercase" type="button"
-                            onclick="send_order(this)">отправить заказ</button>
-                @else
-                    <div id="repeatSms" class="repeat-sms">
-                        <div class="alert alert-primary" role="alert">
-                            Номер телефона некоректен. Введите нормально номер телефона и повторите попытку
-                        </div>
+                <div id="repeatSms" class="repeat-sms">
+                    <div class="alert alert-primary" role="alert">
+                        Номер телефона некоректен. Введите нормально номер телефона и повторите попытку
                     </div>
+                </div>
 
-                    <button class="btn btn-default btn-block text-uppercase" type="button" onclick="send_an_order(this, phone.value)">отправить заказ</button>
+                <button class="btn btn-default btn-block text-uppercase" type="button" onclick="send_order(this, phone.value)">отправить заказ</button>
 
-                    <div id="answerError" class="d-none">
-                        <div class="alert alert-success" role="alert">
-                            Код не правильный
-                        </div>
+                <div id="addressError" class="d-none">
+                    <div class="alert alert-success" role="alert">
+                        Вы не ввели адрес доставки
                     </div>
-
-                    <div id="addressError" class="d-none">
-                        <div class="alert alert-success" role="alert">
-                            Вы не ввели адрес доставки
-                        </div>
-                    </div>
-
-                    <div id="sms" class="d-none">
-                        <div class="alert alert-primary" id="checkSms" role="alert">
-                            На указанный номер телефона был отправлен секретый код, введите его в поле ниже для подтверждения заказа.
-                            Этот секретный код будет вашем паролем для авторизации на нашем сайте.
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-lg-12">
-                                <input type="text" class="form-control sms" id="sms" name="sms" placeholder="код из смс">
-                            </div>
-
-                            <div class="col-lg-12">
-                                <button class="btn btn-default btn-block text-uppercase col-lg-12" type="button" onclick="confirmCodeSmsForDeliveryOrder(this)">подвердить</button>
-                            </div>
-
-                        </div>
-                    </div>
-                @endif()
-
+                </div>
 
                 <div id="answer" class="d-none">
                     <div class="alert alert-success" role="alert">
-                        Ваш заказ успешно получен. Пройдите по <a href="/account/">ссылке</a> для того, чтобы отследить статус заявки.
+                        Ваш заказ успешно получен. Мы с вами свяжемся
                     </div>
                 </div>
 
