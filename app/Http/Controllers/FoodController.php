@@ -134,8 +134,37 @@ class FoodController extends Controller
 
 
     /**
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function selectByCategoryWithPoint(Request $request)
+    {
+        $id = $request->data['id'];
+        $point = $request->data['point'];
+
+        $foods = PizzmanAddressFood::whereHas('food', function($q) use($id)
+        {
+            $q->where('category_id', $id);
+            $q->where('visibility', 0);
+
+        })->where('pizzman_address_id', $point)
+            ->with('food')
+            ->get();
+
+        $result =[];
+        foreach ($foods as $food) {
+            $result[] = $food->food;
+        }
+
+        $result = collect($result);
+
+        return FoodResource::collection($result);
+    }
+
+
+    /**
      * Выборка товаров по категории
-     *
+     * 
      * @param Request $request
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */

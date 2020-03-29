@@ -26,6 +26,7 @@ Route::get('selected-all-products', 'FoodController@index');
 Route::get('selected-all-products-for-users', 'FoodController@cartForUser');
 Route::get('catalog-products', 'FoodController@catalog');
 Route::post('selection-by-category', 'FoodController@selectByCategory');
+Route::post('selection-by-category-with-point', 'FoodController@selectByCategoryWithPoint');
 Route::post('selected-food-for-point', 'FoodController@selectForPoint');
 Route::post('selected-products-in-cart', 'FoodController@informationProductInCart');
 Route::post('add-to-database-from-cart', 'FoodController@storeFromLocalStorage');

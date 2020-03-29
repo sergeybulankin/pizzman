@@ -32,3 +32,5 @@ Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Route::get('/sms', 'OrderController@sendSms');
 Route::get('/checkSms', 'OrderController@checkSms');
 Route::get('/confirmOrder', 'OrderController@confirmOrder');
+
+Route::get('/pay', 'SberbankController@index');

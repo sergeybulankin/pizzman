@@ -201,6 +201,7 @@
                 'SELECTED_ALL_CATEGORIES',
                 'SELECTED_ALL_PRODUCTS_FOR_POINT',
                 'SELECTED_INFO_POINT_DELIVERY',
+                'SELECTION_BY_CATEGORY_WITH_POINT',
                 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE',
                 'SELECT_ALL_FAVORITE',
                 'SELECT_ALL_FAVORITE_FOR_USERS',
@@ -366,7 +367,17 @@
 
 
             selectProducts(id) {
-                this.SELECTION_BY_CATEGORY(id);
+                if(this.typeDeliveryClicked == 2) {
+                    this.SELECTION_BY_CATEGORY(id);
+                }else {
+                    var data = {
+                        id: id,
+                        point: this.pointDelivery
+                    };
+
+                    this.SELECTION_BY_CATEGORY_WITH_POINT(data);
+                }
+
                 setTimeout (() => { this.CHECK_PRODUCT_IN_FAVORITE(this.favorite) }, 200)
             },
 
@@ -416,8 +427,10 @@
             },
 
             catalogPoint(point) {
-                this.SELECTED_ALL_PRODUCTS_FOR_POINT(point);
+                this.SELECTED_ALL_CATEGORIES();
+                //this.SELECTED_ALL_PRODUCTS_FOR_POINT(point);
                 this.catalog = true;
+                this.nav = true;
                 this.pointDelivery = point;
                 this.deleteProductsFromCart();
             },

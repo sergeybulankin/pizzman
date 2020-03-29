@@ -47498,6 +47498,15 @@ var debug = "development" !== 'production';
                 ctx.commit('LOADER_CLOSED_MUTATION');
             });
         },
+        SELECTION_BY_CATEGORY_WITH_POINT: function SELECTION_BY_CATEGORY_WITH_POINT(ctx, data) {
+            axios.post('/api/selection-by-category-with-point', { data: data }).then(function (res) {
+                ctx.commit('SELECTED_PRODUCTS_BY_CATEGORY', res.data.data);
+            }).catch(function (error) {
+                return console.log(error);
+            }).finally(function () {
+                ctx.commit('LOADER_CLOSED_MUTATION');
+            });
+        },
         ADD_TO_DATABASE_FROM_LOCAL_STORAGE: function ADD_TO_DATABASE_FROM_LOCAL_STORAGE(ctx, food) {
             axios.post('/api/add-to-database-from-cart', { food: food }).then(function (response) {
                 console.log('Товар добавился');
@@ -47937,7 +47946,7 @@ var content = __webpack_require__(66);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("5a09079e", content, false, {});
+var update = __webpack_require__(6)("7ee07b3e", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -48191,7 +48200,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return message;
         }
     }),
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapActions */])(['SELECTED_ALL_PRODUCTS', 'SELECTED_ALL_PRODUCTS_FOR_USERS', 'SELECTION_BY_CATEGORY', 'SELECTED_PRODUCTS_IN_CART', 'SELECTED_POINTS_DELIVERY', 'SELECTED_ALL_CATEGORIES', 'SELECTED_ALL_PRODUCTS_FOR_POINT', 'SELECTED_INFO_POINT_DELIVERY', 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE', 'SELECT_ALL_FAVORITE', 'SELECT_ALL_FAVORITE_FOR_USERS', 'CHECK_PRODUCT_IN_FAVORITE', 'ADD_TO_FAVORITE', 'COUNT_FAVORITE', 'DELETE_OF_FAVORITE', 'CLEAR_POINT_INFO']), {
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapActions */])(['SELECTED_ALL_PRODUCTS', 'SELECTED_ALL_PRODUCTS_FOR_USERS', 'SELECTION_BY_CATEGORY', 'SELECTED_PRODUCTS_IN_CART', 'SELECTED_POINTS_DELIVERY', 'SELECTED_ALL_CATEGORIES', 'SELECTED_ALL_PRODUCTS_FOR_POINT', 'SELECTED_INFO_POINT_DELIVERY', 'SELECTION_BY_CATEGORY_WITH_POINT', 'ADD_TO_DATABASE_FROM_LOCAL_STORAGE', 'SELECT_ALL_FAVORITE', 'SELECT_ALL_FAVORITE_FOR_USERS', 'CHECK_PRODUCT_IN_FAVORITE', 'ADD_TO_FAVORITE', 'COUNT_FAVORITE', 'DELETE_OF_FAVORITE', 'CLEAR_POINT_INFO']), {
         changeProduct: function changeProduct(id) {
             var _this2 = this;
 
@@ -48341,7 +48350,17 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         selectProducts: function selectProducts(id) {
             var _this4 = this;
 
-            this.SELECTION_BY_CATEGORY(id);
+            if (this.typeDeliveryClicked == 2) {
+                this.SELECTION_BY_CATEGORY(id);
+            } else {
+                var data = {
+                    id: id,
+                    point: this.pointDelivery
+                };
+
+                this.SELECTION_BY_CATEGORY_WITH_POINT(data);
+            }
+
             setTimeout(function () {
                 _this4.CHECK_PRODUCT_IN_FAVORITE(_this4.favorite);
             }, 200);
@@ -48391,8 +48410,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }
         },
         catalogPoint: function catalogPoint(point) {
-            this.SELECTED_ALL_PRODUCTS_FOR_POINT(point);
+            this.SELECTED_ALL_CATEGORIES();
+            //this.SELECTED_ALL_PRODUCTS_FOR_POINT(point);
             this.catalog = true;
+            this.nav = true;
             this.pointDelivery = point;
             this.deleteProductsFromCart();
         },
@@ -48856,7 +48877,7 @@ var content = __webpack_require__(72);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("0d235370", content, false, {});
+var update = __webpack_require__(6)("2e56f2b0", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -49323,7 +49344,7 @@ var content = __webpack_require__(77);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("1add39b8", content, false, {});
+var update = __webpack_require__(6)("3ee9cb84", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -50081,7 +50102,7 @@ var content = __webpack_require__(85);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("24edaf20", content, false, {});
+var update = __webpack_require__(6)("12609c10", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -55050,7 +55071,7 @@ var content = __webpack_require__(101);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("caa1e7ec", content, false, {});
+var update = __webpack_require__(6)("328edc6a", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -55511,7 +55532,7 @@ var content = __webpack_require__(106);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("4b137997", content, false, {});
+var update = __webpack_require__(6)("d1283c12", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags

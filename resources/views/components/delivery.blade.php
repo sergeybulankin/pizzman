@@ -53,7 +53,7 @@
                     <div class="col-lg-6">
                         <button class="btn btn-secondary btn-success btn-block cooking-time" type="button" id="1" onclick="type_of_readiness(this,'by_time')">ко времени</button>
 
-                        <div class="datepicker-here d-none calendar" data-timepicker="true" data-time-format='hh:ii' id="time"></div>
+                        <input class="d-none calendar" id="time" placeholder="Выбрать дату">
                     </div>
                 </div>
 
@@ -157,6 +157,10 @@
                 </div>
 
                 <button class="btn btn-default btn-block text-uppercase" type="button" onclick="send_order(this, phone.value)">отправить заказ</button>
+
+                <form action="/pay" method="GET">
+                    <button type="submit">Оплатить</button>
+                </form>
 
                 <div id="addressError" class="d-none">
                     <div class="alert alert-success" role="alert">

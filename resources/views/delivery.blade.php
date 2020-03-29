@@ -1,7 +1,6 @@
 @extends('layout.index')
     @section('calendar')
         <link href={{ asset('css/datepicker.css') }} type="text/css" rel="stylesheet">
-        <script src={{ asset('js/datepicker.js') }} type="text/javascript"></script>
     @endsection()
 
     @section('call')
@@ -73,6 +72,51 @@
 
                 });
 
+            });
+        </script>
+    @endsection()
+
+    @section('calendar-script')
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.2.3/js/datepicker.js'></script>
+        <script id="rendered-js">
+            $(document).ready(function () {
+                var wat = 0;
+                var now = new Date();
+                now.setSeconds(0);
+                now.setMilliseconds(0);
+                now.setHours(now.getHours() + 1);
+
+                var startHours = 10;
+
+                var options = {
+                    autoClose: true,
+                    view: 'days',
+                    minView: 'days',
+                    dateFormat: 'dd MM',
+                    minDate: now,
+                    minHours: startHours,
+                    maxHours: 22,
+                    timepicker: true,
+                    onSelect: function (fd, d, picker) {
+                        if (!d) {
+                            console.log("Дата не выбрана");
+                            return;
+                        }
+
+                        if (picker.minDate && d < picker.minDate && wat < 3) {
+                            wat++;
+                            console.log(fd.toString());
+                            console.log(d.toString());
+                            console.log(picker.date);
+                            console.log(picker.minDate);
+
+                            setTimeout(function () {
+                                picker.selectDate(new Date(picker.minDate.getTime()));
+                            });
+                        }
+                    } };
+
+                $("#time").datepicker(options);
             });
         </script>
     @endsection()

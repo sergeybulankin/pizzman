@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "92797d030e13e4a3dc71f3f9b6fd4aa5",
+    "content-hash": "db14308e1f146481357743fbe0763a2f",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -733,49 +733,6 @@
             "time": "2019-03-10T08:50:58+00:00"
         },
         {
-            "name": "kenvel/laravel-sberbank",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kenvel/laravel-sberbank.git",
-                "reference": "9b872f8d5cc730dcfdef5ecbde528606ced9315b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kenvel/laravel-sberbank/zipball/9b872f8d5cc730dcfdef5ecbde528606ced9315b",
-                "reference": "9b872f8d5cc730dcfdef5ecbde528606ced9315b",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Kenvel\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dmitry Kenvel",
-                    "email": "dimult@yahoo.com",
-                    "homepage": "https://github.com/kenvel/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Simple Tinkoff bank acquiring library.",
-            "homepage": "https://github.com/kenvel/laravel-sberbank",
-            "keywords": [
-                "acquiring",
-                "sberbank"
-            ],
-            "time": "2019-04-08T06:30:05+00:00"
-        },
-        {
             "name": "kylekatarnls/update-helper",
             "version": "1.2.0",
             "source": {
@@ -1098,6 +1055,12 @@
                 "s3",
                 "sftp",
                 "storage"
+            ],
+            "funding": [
+                {
+                    "url": "https://offset.earth/frankdejonge",
+                    "type": "other"
+                }
             ],
             "time": "2020-03-17T18:58:12+00:00"
         },
@@ -2072,6 +2035,20 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-02-03T15:10:40+00:00"
         },
         {
@@ -2393,6 +2370,20 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-02-29T10:16:41+00:00"
         },
         {
@@ -2978,6 +2969,20 @@
                 "uri",
                 "url"
             ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-02-04T08:04:52+00:00"
         },
         {
@@ -3180,6 +3185,20 @@
                 "debug",
                 "dump"
             ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-02-14T12:39:29+00:00"
         },
         {
@@ -3281,6 +3300,50 @@
                 "environment"
             ],
             "time": "2019-01-29T11:11:52+00:00"
+        },
+        {
+            "name": "voronkovich/sberbank-acquiring-client",
+            "version": "v2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/voronkovich/sberbank-acquiring-client.git",
+                "reference": "3a74b71e8ca25d3fa0d3c59ad72bf6552dc297fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/voronkovich/sberbank-acquiring-client/zipball/3a74b71e8ca25d3fa0d3c59ad72bf6552dc297fd",
+                "reference": "3a74b71e8ca25d3fa0d3c59ad72bf6552dc297fd",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Voronkovich\\SberbankAcquiring\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oleg Voronkovich",
+                    "email": "oleg-voronkovich@yandex.ru"
+                }
+            ],
+            "description": "Client for working with Sberbank's acquiring REST API",
+            "homepage": "https://github.com/voronkovich/sberbank-acquiring-client",
+            "keywords": [
+                "acquiring",
+                "client",
+                "credit card",
+                "sberbank"
+            ],
+            "time": "2019-07-08T19:43:38+00:00"
         }
     ],
     "packages-dev": [
@@ -3498,6 +3561,49 @@
                 "test"
             ],
             "time": "2016-01-20T08:20:44+00:00"
+        },
+        {
+            "name": "kenvel/laravel-sberbank",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kenvel/laravel-sberbank.git",
+                "reference": "9b872f8d5cc730dcfdef5ecbde528606ced9315b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kenvel/laravel-sberbank/zipball/9b872f8d5cc730dcfdef5ecbde528606ced9315b",
+                "reference": "9b872f8d5cc730dcfdef5ecbde528606ced9315b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Kenvel\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Kenvel",
+                    "email": "dimult@yahoo.com",
+                    "homepage": "https://github.com/kenvel/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Simple Tinkoff bank acquiring library.",
+            "homepage": "https://github.com/kenvel/laravel-sberbank",
+            "keywords": [
+                "acquiring",
+                "sberbank"
+            ],
+            "time": "2019-04-08T06:30:05+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -5020,5 +5126,6 @@
     "platform": {
         "php": ">=7.0.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

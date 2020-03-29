@@ -27,6 +27,13 @@ export default {
                 .finally (() => { ctx.commit('LOADER_CLOSED_MUTATION') })
         },
 
+        SELECTION_BY_CATEGORY_WITH_POINT(ctx, data) {
+            axios.post('/api/selection-by-category-with-point', {data})
+                .then( res => {ctx.commit('SELECTED_PRODUCTS_BY_CATEGORY', res.data.data)})
+                .catch (error => (console.log(error)))
+                .finally (() => { ctx.commit('LOADER_CLOSED_MUTATION') })
+        },
+
         ADD_TO_DATABASE_FROM_LOCAL_STORAGE(ctx, food) {
             axios.post('/api/add-to-database-from-cart', {food: food})
                 .then(response => { console.log('Товар добавился') })

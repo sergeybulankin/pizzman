@@ -85,5 +85,7 @@
 
 <script src={{ asset('js/app.js') }} type="text/javascript"></script>
 
+@yield('calendar-script')
+
 </body>
 </html>
