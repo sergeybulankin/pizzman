@@ -84,6 +84,24 @@ function close_modal(el)
 
 
 
+// ----- TYPE PAY ----- //
+function type_of_pay(el,type)
+{
+    update_active(el);
+    if (type=="courier")
+    {
+        $("#typePay").removeClass("d-none");
+    }
+    else
+    {
+        $("#typePay").addClass("d-none");
+    }
+}
+// ----- TYPE PAY ----- //
+
+
+
+
 
 // ----- DELIVERY ----- //
 

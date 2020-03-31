@@ -112,7 +112,7 @@ ymaps.modules.define('MultiRouteCustomView', [
         // Метод, формирующий общую часть описания для всех типов маршрутов.
         createCommonRouteOutput: function (route) {
             return "<div class='description-delivery'>(Протяженность маршрута: <strong>" + route.properties.get("distance").text + "</strong><br/>" +
-                "Время в пути: <strong>" + route.properties.get("durationInTraffic").text + "</strong> + 30 минут готовки)</div>";
+                "Время в пути: 30 минут готовки + <strong>" + route.properties.get("durationInTraffic").text + "</strong> в пути)</div>";
         },
 
         // Метод, возвращающий только время

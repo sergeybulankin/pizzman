@@ -299,7 +299,8 @@ div.cart:hover
 
 .header_menu li
 {
-    margin-left:25px;
+    //margin-left:25px;
+    margin-left: 0;
 }
 
 .header_menu span
@@ -551,6 +552,15 @@ span.fa.fa-info
 }
 
 @media (max-width: 767px) {
+    #cart_form
+    {
+        margin: 50px 0 0 0;
+    }
+
+    .mobile-information {
+        display: block;
+    }
+
     .fullscreen-bg {
         background: url('../images/pizza.jpg') center center / cover no-repeat;
     }
@@ -563,7 +573,8 @@ span.fa.fa-info
         font-size: 40px;
     }
 
-    .shopping_basket .photo-small, .shopping_basket .input-group-prepend, .shopping_basket .input-group-append
+    /*.shopping_basket .photo-small, .shopping_basket .input-group-prepend, .shopping_basket .input-group-append*/
+    .shopping_basket .photo-small
     {
         display: none;
     }
@@ -1337,6 +1348,7 @@ span.count
     margin: 0 0 50px 0;
 }
 .type-delivery--name {
+    margin: 0 0 10px 0;
     background-color: #d1333c;
     padding: 10px;
     color: white;
@@ -1347,10 +1359,38 @@ span.count
     background-color: #f93546;
 }
 
+.back-menu-delivery:after, .back-menu-delivery:before{
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 50%;
+    right: 100%;
+}
+.back-menu-delivery:after{
+    bottom:0;
+    background: linear-gradient(to left bottom, #d1333c 50%, transparent 50%);
+}
+.back-menu-delivery:before{
+    top:0;
+    background: linear-gradient(to left top, #d1333c 50%, transparent 50%);
+}
+
+.back-menu-delivery:hover:before{
+    top:0;
+    background: linear-gradient(to left top, #f93546 50%, transparent 50%);
+}
+.back-menu-delivery:hover:after{
+    bottom:0;
+    background: linear-gradient(to left bottom, #f93546 50%, transparent 50%);
+}
+
+
+
 .point {
     margin: 15px 0;
 }
 .point--name {
+    margin: 0 0 10px 0;
     background-color: yellow;
     padding: 10px;
     color: black;
@@ -1396,4 +1436,98 @@ span.count
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+
+
+
+
+
+
+.cart_info--mobile {
+    width: 100%;
+    background: none;
+}
+
+.cart--mobile {
+    background-color: rgb(166, 41, 48);
+    border-radius: 5px;
+}
+
+.cart--mobile--title {
+    margin: 0 0 15px 0;
+    font-size: 25px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.subtutorial--mobile {
+    border-top: 3px solid rgb(84, 21, 24);
+    padding-top: 10px;
+}
+
+.point-delivery-cart--mobile {
+    background-color: rgb(122, 30, 34);
+    padding: 10px 10px;
+    text-align: left;
+}
+
+.cart--mobile--button {
+    margin-right: 30px;
+    background-color: rgb(122, 30, 34);
+    border: none;
+}
+
+.success--mobile--button {
+    background-color: yellow;
+    border: none;
+    color: #232323;
+}
+
+
+.delete_icon--mobile
+{
+    position: relative;
+    margin-left: -20px;
+    cursor: pointer;
+}
+
+.delete_icon--mobile img
+{
+    display: block;
+    position: absolute;
+    top: 50%;
+    margin-top: -4px;
+}
+
+
+
+span.mobile-count
+{
+    position: absolute;
+    margin-top: 0px;
+    margin-left: 2px;
+    left: 5%;
+    top: 12px;
+    background: #fe8127;
+    border-radius: 10px;
+    padding: 3px 6px;
+    color: wheat;
+    font-size: 14px;
+    font-weight: 700;
+    z-index: 1;
+}
+
+
+
+.sleeping-cat {
+    flex-direction: column;
+
+}
+
+
+.repeat-sms, #answer {
+    margin: 15px 0 0 0;
 }

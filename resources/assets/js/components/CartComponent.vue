@@ -8,9 +8,9 @@
 
         <div id='cart_info' class="d-none">
             <div v-if="totalProducts <= 0" style="text-align: center">
-                <img src="images/empty_cart.jpg" alt="" width="100px">
+                <img src="images/sleeping_cat.gif" alt="" width="150px">
                 <div style="padding: 10px; text-transform: uppercase;">
-                    ваша корзина пуста :(
+                    ваша корзина пока пуста :(
                 </div>
             </div>
 

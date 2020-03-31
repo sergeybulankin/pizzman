@@ -1,19 +1,31 @@
 <template>
     <div>
-        <div class="col-lg-12 row type-delivery">
-            <div class="col-lg-4 type-delivery--name" @click="typeDelivery(1)">
+        <div class="col-lg-12 row type-delivery--name back-menu-delivery" v-show="returnDelivery" @click="returnDeliveryMenu()">
+            Назад
+        </div>
+
+        <div class="col-lg-12 row type-delivery" v-show="delivery">
+            <div class="col-lg-4 type-delivery--name" @click="typeDelivery(1)" id="1">
                 Приду покушать
             </div>
-            <div class="col-lg-4 type-delivery--name" @click="typeDelivery(3)">
+            <div class="col-lg-4 type-delivery--name" @click="typeDelivery(3)" id="3">
                 Самовывоз
             </div>
-            <div class="col-lg-4 type-delivery--name" @click="typeDelivery(2)">
+            <div class="col-lg-4 type-delivery--name" @click="typeDelivery(2)" id="2">
                 Курьерская доставка
             </div>
         </div>
 
         <div class="type-delivery-info">
             Выбранный тип доставки: <span class="selected-type-delivery">{{ typeDeliveryClickedName }}</span>
+        </div>
+
+        <div class="type-delivery-info" v-if="typeDeliveryPointName">
+            Выбранная точка:
+            <span class="selected-type-delivery"
+                  v-for="(point, i) in ALL_POINTS_DELIVERY" :key="i" v-if="point.id == typeDeliveryPointName">
+                {{ point.points.address }}
+            </span>
         </div>
 
         <div class="col-lg-12 row point" v-show="points">
@@ -119,7 +131,9 @@
                 pointDelivery: null,
                 catalog: false,
                 points: false,
-                nav: false
+                nav: false,
+                delivery: true,
+                returnDelivery: false
             }
         },
         created() {
@@ -189,7 +203,11 @@
                     }
 
                     return message;
-                }
+                },
+
+            typeDeliveryPointName() {
+                return this.pointDelivery;
+            }
         },
         methods: {
             ...mapActions([
@@ -408,6 +426,8 @@
 
             typeDelivery(type) {
                 this.typeDeliveryClicked = type;
+                this.delivery = !this.delivery;
+                this.returnDelivery = !this.returnDelivery;
 
                 if ((type == 1) || (type == 3)) {
                     this.SELECTED_POINTS_DELIVERY();
@@ -424,6 +444,13 @@
                     this.nav = true;
                     this.points = false;
                 }
+            },
+
+            returnDeliveryMenu() {
+                this.delivery = !this.delivery;
+                this.returnDelivery = !this.returnDelivery;
+                this.points = false;
+                this.typeDeliveryClicked = null;
             },
 
             catalogPoint(point) {

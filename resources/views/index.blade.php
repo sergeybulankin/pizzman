@@ -5,7 +5,7 @@
     @endsection()
 
     @section('mobile-block')
-
+        @include('components.mobile-block')
     @endsection()
 
     @section('fixed-navbar')

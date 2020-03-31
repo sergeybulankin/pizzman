@@ -1,13 +1,20 @@
 @extends('layout.index')
     @section('calendar')
         <link href={{ asset('css/datepicker.css') }} type="text/css" rel="stylesheet">
+        <style>
+            @media (max-width: 767px) {
+                .datepicker {
+                    width: 100%;
+                }
+            }
+        </style>
     @endsection()
 
     @section('call')
         @include('components.call')
     @endsection()
 
-    @section('modile-block')
+    @section('mobile-block')
         @include('components.mobile-block')
     @endsection()
 
@@ -92,7 +99,7 @@
                     autoClose: true,
                     view: 'days',
                     minView: 'days',
-                    dateFormat: 'dd MM',
+                    //dateFormat: 'dd MM',
                     minDate: now,
                     minHours: startHours,
                     maxHours: 22,
@@ -114,6 +121,8 @@
                                 picker.selectDate(new Date(picker.minDate.getTime()));
                             });
                         }
+
+                        $('.cooking-time#1').text(fd);
                     } };
 
                 $("#time").datepicker(options);

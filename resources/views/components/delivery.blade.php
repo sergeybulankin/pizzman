@@ -53,7 +53,24 @@
                     <div class="col-lg-6">
                         <button class="btn btn-secondary btn-success btn-block cooking-time" type="button" id="1" onclick="type_of_readiness(this,'by_time')">ко времени</button>
 
-                        <input class="d-none calendar" id="time" placeholder="Выбрать дату">
+                        <div class="d-none calendar" id="time"></div>
+                    </div>
+                </div>
+
+
+                <div class="row w-100 ml-0 pt-5">
+                    <div class="col-lg-12">
+                        <h2 class=" text-uppercase font-weight-bold">Оплата</h2>
+                    </div>
+                </div>
+
+                <div class="row w-100 ml-0">
+                    <div class="col-lg-6">
+                        <button class="btn btn-secondary btn-success btn-block active type-pay" type="button" id="0" onclick="type_of_pay(this,'courier')">курьеру</button>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <button class="btn btn-secondary btn-success btn-block type-pay" type="button" id="1" onclick="type_of_pay(this,'online')">онлайн</button>
                     </div>
                 </div>
 
@@ -136,7 +153,9 @@
                         <thead>
                         <tr>
                             <td>Итого</td>
-                            <td class="text-right">Время доставки</td>
+                            @if($typeDelivery == 2)
+                                <td class="text-right">Время доставки</td>
+                            @endif()
                         </tr>
                         </thead>
 
@@ -157,10 +176,6 @@
                 </div>
 
                 <button class="btn btn-default btn-block text-uppercase" type="button" onclick="send_order(this, phone.value)">отправить заказ</button>
-
-                <form action="/pay" method="GET">
-                    <button type="submit">Оплатить</button>
-                </form>
 
                 <div id="addressError" class="d-none">
                     <div class="alert alert-success" role="alert">

@@ -24,7 +24,6 @@ function init() {
         var address = $('#offerAddress')[0].innerText;
         $('#address').val(address);
         $('#suggest').val(address);
-
         geocode();
     });
 
