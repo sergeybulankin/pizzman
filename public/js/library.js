@@ -160,6 +160,8 @@ function send_order(el, phone) {
         $(el).remove();
         $("#sms").removeClass("d-none");
         $("#repeatSms").remove();
+
+        setTimeout(() => window.location.href = '/', 2000);
     }
     else {
         $("#repeatSms").css("display", "block");

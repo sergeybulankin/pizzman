@@ -1,7 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Montserrat&family=Open+Sans&family=Roboto+Slab&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Montserrat&family=Open+Sans&family=Raleway&family=Roboto&family=Roboto+Slab&display=swap');
+
 html, body {
     color: rgb(57, 61, 74);
-    font-family: Roboto, sans-serif !important;
-    background-color: rgb(119, 122, 131);
     height: 100vh;
     font-size: 14px;
     line-height: 24px;
@@ -67,7 +68,6 @@ a:hover {
 @media (min-width: 992px) {
     .nav-gray
     {
-        background-color:#f4f5f7;
         font-size:14px;
 
     }
@@ -167,14 +167,34 @@ a:hover {
 
     #menu
     {
+        margin: 50px 0 0 0;
         padding: 90px 0px;
         padding-bottom: 60px;
+    }
+
+    #checkout {
+        margin-top: 50px;
     }
 
     .search-block
     {
         width: 90%;
     }
+
+    .final-count {
+        width: 100%;
+        text-align: center;
+    }
+
+    .input-group-append, .input-group-prepend {
+        width: 100%;
+        margin-left: 25%;
+    }
+
+    .cart-detail {
+        margin-top: 55px;
+    }
+
 
 }
 
@@ -493,7 +513,7 @@ span.fa.fa-info
     margin-top: 13px;
     font-weight: 700;
     font-size: 14px;
-    visibility:hidden;
+    //visibility:hidden;
 }
 
 /************** MENU-TABS ****************/
@@ -507,6 +527,7 @@ span.fa.fa-info
     font-size: 70px;
     position: absolute;
     text-align: center;
+    letter-spacing: 3px;
     width: 100%;
     top: 50%;
     margin-top: -200px;
@@ -1459,7 +1480,6 @@ span.count
     font-size: 25px;
     font-weight: 600;
     color: white;
-    text-transform: uppercase;
     letter-spacing: 1px;
 }
 
@@ -1509,8 +1529,8 @@ span.mobile-count
     position: absolute;
     margin-top: 0px;
     margin-left: 2px;
-    left: 5%;
-    top: 12px;
+    left: 30px;
+    top: 20px;
     background: #fe8127;
     border-radius: 10px;
     padding: 3px 6px;

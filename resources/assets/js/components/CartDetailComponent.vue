@@ -28,7 +28,7 @@
                                         <img :src="'http://pizza.admin/images/foods/' + item.food.image" class="img-fluid">
                                     </div>
                                     <div class="description pl-3">
-                                        <a><b>{{ item.food.name }}</b></a><p><small>{{ item.food.structure }}</small></p>
+                                        <a><b>{{ item.food.name }}</b></a>
                                     </div>
                                 </td>
                                 <td class="font-weight-bold align-middle">
@@ -66,7 +66,8 @@
                 <div id="cart_form" class="p-3">
 
                     <div class="d-flex justify-content-between pt-3 pb-3">
-                        <h4 class="text-uppercase">Ваша корзина</h4><h4><small>Товаров - {{ totalProducts }} - {{ totalWeight }} гр</small></h4>
+                        <h4 class="text-uppercase">Ваша корзина</h4>
+                        <h4><small>Товаров - {{ totalProducts }} - {{ totalWeight }} гр</small></h4>
                     </div>
 
                     <div class="d-flex justify-content-between pt-3 pb-3">
