@@ -451,15 +451,20 @@
                 this.returnDelivery = !this.returnDelivery;
                 this.points = false;
                 this.typeDeliveryClicked = null;
+                this.nav = false;
+                this.catalog = false;
+                this.pointDelivery = 0;
             },
 
             catalogPoint(point) {
-                this.SELECTED_ALL_CATEGORIES();
-                //this.SELECTED_ALL_PRODUCTS_FOR_POINT(point);
-                this.catalog = true;
-                this.nav = true;
-                this.pointDelivery = point;
-                this.deleteProductsFromCart();
+                setTimeout (() => {
+                    this.catalog = false;
+                    this.SELECTED_ALL_CATEGORIES();
+                    this.catalog = true;
+                    this.nav = true;
+                    this.pointDelivery = point;
+                    this.deleteProductsFromCart();
+                }, 1000)
             },
 
             deleteProductsFromCart() {
