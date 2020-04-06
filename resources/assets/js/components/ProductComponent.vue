@@ -48,6 +48,13 @@
                 </div>
             </nav>
 
+            <div class="tab-content"  v-show="loader" style="margin: 15px 0;">
+                <center>
+                    <img src="images/loader.gif" alt="">
+                </center>
+            </div>
+
+
             <div class="tab-content" id="nav-tabContent" v-show="catalog">
                 <div class="tab-pane fade show active" id="nav-pizza" role="tabpanel" aria-labelledby="nav-pizza-tab">
                     <div class="container">
@@ -57,7 +64,7 @@
                                     <div id="recommend"
                                          v-if="product.recommend == true">рекомендуем</div>
                                     <div class="c-product">
-                                        <img :src="'http://pizza.admin/images/foods/' + product.image" class="img-fluid">
+                                        <img :src="'http://adminpizza.toltekplus.ru/images/foods/' + product.image" class="img-fluid">
                                         <div class="search-heart">
                                             <button
                                                     @click="changeFavorite(product.id)"
@@ -133,7 +140,8 @@
                 points: false,
                 nav: false,
                 delivery: true,
-                returnDelivery: false
+                returnDelivery: false,
+                loader: false
             }
         },
         created() {
@@ -385,16 +393,21 @@
 
 
             selectProducts(id) {
-                if(this.typeDeliveryClicked == 2) {
-                    this.SELECTION_BY_CATEGORY(id);
-                }else {
-                    var data = {
-                        id: id,
-                        point: this.pointDelivery
-                    };
+                this.loader = !this.loader;
 
-                    this.SELECTION_BY_CATEGORY_WITH_POINT(data);
-                }
+                setTimeout (() => {
+                        if(this.typeDeliveryClicked == 2) {
+                            this.SELECTION_BY_CATEGORY(id);
+                        }else {
+                            var data = {
+                                id: id,
+                                point: this.pointDelivery
+                            };
+
+                            this.SELECTION_BY_CATEGORY_WITH_POINT(data);
+                        }
+                    this.loader = !this.loader;
+                }, 2000);
 
                 setTimeout (() => { this.CHECK_PRODUCT_IN_FAVORITE(this.favorite) }, 200)
             },
@@ -457,6 +470,9 @@
             },
 
             catalogPoint(point) {
+                this.loader = !this.loader;
+                this.catalog = false;
+
                 setTimeout (() => {
                     this.catalog = false;
                     this.SELECTED_ALL_CATEGORIES();
@@ -464,7 +480,8 @@
                     this.nav = true;
                     this.pointDelivery = point;
                     this.deleteProductsFromCart();
-                }, 1000)
+                    this.loader = !this.loader;
+                }, 2000)
             },
 
             deleteProductsFromCart() {

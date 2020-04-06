@@ -19,5 +19,13 @@ class PizzmanAddressSeeder extends Seeder
         PizzmanAddress::create([
             'address_id' => 2
         ]);
+
+        PizzmanAddress::create([
+            'address_id' => 3
+        ]);
+
+        PizzmanAddress::create([
+            'address_id' => 4
+        ]);
     }
 }
